@@ -6,6 +6,7 @@ import { createDonation, createPaymentOrder } from "@/lib/api";
 import { formatCurrencyINR, toNumber } from "@/lib/format";
 import type { CampaignProduct } from "@/lib/types";
 import { useRouter } from "next/navigation";
+import { openRazorpayCheckout } from "@/lib/razorpay/open-checkout";
 
 type DonationFormProps = {
   campaignId: number;
@@ -26,6 +27,7 @@ export function DonationForm({ campaignId, products }: DonationFormProps) {
   const [pan, setPan] = useState("");
   const [address, setAddress] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
   const productTotal = useMemo(() => {
     return products.reduce((sum, product) => {
@@ -68,10 +70,37 @@ export function DonationForm({ campaignId, products }: DonationFormProps) {
         order,
       };
     },
-    onSuccess: ({ donation }) => {
-      // Bootstrap behavior: route to canonical status page after creating donation/order.
-      // Razorpay script integration can be mounted here in the next iteration.
-      router.push(`/donations/status?receipt=${donation.data.receiptNumber}`);
+    onSuccess: async ({ donation, order }) => {
+      const receiptNumber = donation.data.receiptNumber;
+      const statusUrl = `/donations/status?receipt=${receiptNumber}`;
+
+      setIsCheckoutOpen(true);
+      setErrorMessage(null);
+
+      try {
+        await openRazorpayCheckout({
+          keyId: order.data.keyId,
+          gatewayOrderId: order.data.gatewayOrderId,
+          amountMinorUnits: order.data.amount,
+          currency: order.data.currency,
+          prefill: {
+            name: fullName,
+            email,
+            contact: phone,
+          },
+          onClosed: () => {
+            setIsCheckoutOpen(false);
+            router.push(statusUrl);
+          },
+          onError: (e) => {
+            setIsCheckoutOpen(false);
+            setErrorMessage(e.message || "Payment UI failed to open.");
+          },
+        });
+      } catch (e) {
+        setIsCheckoutOpen(false);
+        setErrorMessage(e instanceof Error ? e.message : "Payment UI failed to open.");
+      }
     },
     onError: (err: unknown) => {
       setErrorMessage(err instanceof Error ? err.message : "Donation failed");
@@ -224,14 +253,15 @@ export function DonationForm({ campaignId, products }: DonationFormProps) {
 
       <button
         className="mt-4 w-full rounded bg-zinc-900 px-4 py-2 text-white disabled:opacity-50"
-        disabled={createDonationMutation.isPending}
+        disabled={createDonationMutation.isPending || isCheckoutOpen}
         onClick={() => {
           if (validateBeforeSubmit()) {
+            createDonationMutation.reset(); // clear previous error state
             createDonationMutation.mutate();
           }
         }}
       >
-        Proceed to checkout
+        {isCheckoutOpen ? "Opening checkout..." : "Proceed to checkout"}
       </button>
 
       {errorMessage ? <p className="mt-3 text-sm text-red-600">{errorMessage}</p> : null}

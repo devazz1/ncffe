@@ -42,7 +42,7 @@ Client-side API calls (Axios) send `x-request-id` as `fe-<uuid>` for Nest/Pino c
 
 - **Donation / payment UX** is specified in the repo root `Frontend-technical-doc.md` section **Payment UX spec (Razorpay Checkout)**.
 - Flow: `POST /donations` → `POST /payments/orders` → open **Razorpay Checkout** (browser `checkout.js` popup) using `keyId` + `gatewayOrderId` + `amount` + `currency` from the API → then navigate to `/donations/status?receipt=...`. Razorpay **order creation** stays on Nest; the Next app does not use the Razorpay server SDK for orders.
-- Until Checkout is wired in code, the app may skip the popup and go straight to the status page after order creation.
+- If the Razorpay checkout script fails to load, the app shows an error and does not navigate; otherwise closing the popup routes the user to `/donations/status?receipt=...`.
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
