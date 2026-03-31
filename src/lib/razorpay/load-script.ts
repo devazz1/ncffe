@@ -27,9 +27,10 @@ export function loadRazorpayCheckoutScript(): Promise<void> {
     script.src = SCRIPT_SRC;
     script.async = true;
     script.onload = () => resolve();
-    script.onerror = () =>
+    script.onerror = () => {
+      scriptPromise = null; // allow retry
       reject(new Error("Failed to load Razorpay checkout script."));
-
+    };
     document.body.appendChild(script);
   });
 

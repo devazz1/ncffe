@@ -7,6 +7,11 @@ declare global {
     amount: number;
     currency: string;
     name?: string;
+    description?: string;
+    image?: string;
+    theme?: {
+      color?: string;
+    };
     prefill?: {
       name?: string;
       email?: string;

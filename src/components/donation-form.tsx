@@ -9,13 +9,14 @@ import { useRouter } from "next/navigation";
 import { openRazorpayCheckout } from "@/lib/razorpay/open-checkout";
 
 type DonationFormProps = {
+  campaignName: string;
   campaignId: number;
   products: CampaignProduct[];
 };
 
 type ProductUnitMap = Record<number, number>;
 
-export function DonationForm({ campaignId, products }: DonationFormProps) {
+export function DonationForm({ campaignName, campaignId, products }: DonationFormProps) {
   const router = useRouter();
   const [tab, setTab] = useState<"once" | "monthly">("once");
   const [amount, setAmount] = useState<number>(0);
@@ -88,6 +89,7 @@ export function DonationForm({ campaignId, products }: DonationFormProps) {
             email,
             contact: phone,
           },
+          description: `${campaignName} Donation`,
           onClosed: () => {
             setIsCheckoutOpen(false);
             router.push(statusUrl);
@@ -116,16 +118,21 @@ export function DonationForm({ campaignId, products }: DonationFormProps) {
   }
 
   function validateBeforeSubmit() {
+    const hasProducts = Object.values(units).some((q) => q > 0);
+    if (!hasProducts && amount <= 0) {
+      setErrorMessage("Please select products or enter a custom amount.");
+      return false;
+    }
+    if (total < 300) {
+      setErrorMessage("Total donation amount must be at least INR 300.");
+      return false;
+    }
     if (!fullName || !email || !phone) {
       setErrorMessage("Full name, email, and phone are required.");
       return false;
     }
     if (is80GRequested && (!pan || !address)) {
       setErrorMessage("PAN and address are required for 80G.");
-      return false;
-    }
-    if (total < 300) {
-      setErrorMessage("Total donation amount must be at least INR 300.");
       return false;
     }
     setErrorMessage(null);
@@ -212,6 +219,7 @@ export function DonationForm({ campaignId, products }: DonationFormProps) {
           className="w-full rounded border border-zinc-300 px-3 py-2"
         />
         <input
+          type="tel"
           placeholder="Phone"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}

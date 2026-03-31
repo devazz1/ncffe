@@ -1,4 +1,5 @@
 import { loadRazorpayCheckoutScript } from "@/lib/razorpay/load-script";
+import { PLATFORM_CONFIG } from "@/lib/platform-config";
 
 type Prefill = {
   name: string;
@@ -11,6 +12,7 @@ type OpenCheckoutParams = {
   gatewayOrderId: string;
   amountMinorUnits: number;
   currency: string;
+  description: string;
   prefill: Prefill;
   onClosed: () => void;
   onError?: (error: Error) => void;
@@ -21,6 +23,7 @@ export async function openRazorpayCheckout({
   gatewayOrderId,
   amountMinorUnits,
   currency,
+  description,
   prefill,
   onClosed,
   onError,
@@ -45,9 +48,15 @@ export async function openRazorpayCheckout({
     order_id: gatewayOrderId,
     amount: amountMinorUnits,
     currency,
-    name: "NGO Platform",
+    name: PLATFORM_CONFIG.organization.name || "Nand Care Foundation",
+    description: description || "Nand Care Foundation Donation",
+    image: PLATFORM_CONFIG.organization.logoPath || "/ncf_logo_nobg.png",
+    theme: {
+      color: PLATFORM_CONFIG.brandColors.salmonPink || "#FF847C",
+    },
     prefill,
     handler: () => {
+      // Ignoring handler payload because we are not using it for routing decision.
       // Do not use handler result for routing decision; route always via status page.
       navigateOnce();
     },
