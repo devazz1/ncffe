@@ -16,6 +16,9 @@ export function CategoryCard({ category }: { category: Category }) {
           Open category
         </Link>
       </div>
+      <pre className="mt-3 max-h-96 overflow-auto rounded border border-amber-200 bg-amber-50 p-2 text-left text-xs text-zinc-800">
+        {JSON.stringify(category, null, 2)}
+      </pre>
     </article>
   );
 }

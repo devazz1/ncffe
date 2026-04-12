@@ -10,6 +10,7 @@ import type {
   CreatePaymentOrderResponse,
   DonationStatusResponse,
   Paginated,
+  TopDonationsData,
   UserProfile,
 } from "@/lib/types";
 
@@ -34,6 +35,12 @@ export async function getCampaignProducts(campaignId: number) {
       revalidate: FIVE_MINUTES,
     },
   );
+}
+
+export async function getTopDonations() {
+  return serverGet<ApiEnvelope<TopDonationsData>>("/donations/top", {
+    revalidate: FIVE_MINUTES,
+  });
 }
 
 type RequestOtpPayload = {

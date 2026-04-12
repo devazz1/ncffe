@@ -103,3 +103,12 @@ export type CreatePaymentOrderResponse = {
   currency: string;
   keyId: string;
 };
+
+export type TopDonationItem = {
+  name: string;
+  amount: string;
+};
+
+export type TopDonationsData = {
+  items: TopDonationItem[];
+};
