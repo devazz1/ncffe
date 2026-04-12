@@ -118,3 +118,16 @@ export type UserDonationStatistics = {
   totalAmountDonated: string;
   campaignsSupportedCount: number;
 };
+
+export type MyDonationListItem = {
+  donationId: number;
+  amount: string;
+  currency: string;
+  isMonthly: boolean;
+  is80GRequested: boolean;
+  updatedAt: string;
+  campaign: {
+    name: string;
+    slug: string;
+  };
+};

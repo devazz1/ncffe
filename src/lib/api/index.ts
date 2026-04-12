@@ -1,3 +1,4 @@
+import axios from "axios";
 import { apiClient } from "@/lib/api/client";
 import { serverGet } from "@/lib/api/server";
 import type {
@@ -9,6 +10,7 @@ import type {
   CreateDonationResponse,
   CreatePaymentOrderResponse,
   DonationStatusResponse,
+  MyDonationListItem,
   Paginated,
   TopDonationsData,
   UserDonationStatistics,
@@ -120,4 +122,87 @@ export async function getMyDonationStatistics() {
     "/users/me/statistics",
   );
   return data;
+}
+
+export async function getMyDonations(page = 1, limit = 20) {
+  const { data } = await apiClient.get<ApiEnvelope<Paginated<MyDonationListItem>>>(
+    "/users/me/donations",
+    {
+      params: { page, limit },
+    },
+  );
+  return data;
+}
+
+function parseContentDispositionFilename(header: string | undefined, fallback: string) {
+  if (!header) return fallback;
+  const utf8Match = /filename\*=UTF-8''([^;\s]+)/i.exec(header);
+  if (utf8Match?.[1]) {
+    try {
+      return decodeURIComponent(utf8Match[1].replace(/"/g, ""));
+    } catch {
+      return utf8Match[1];
+    }
+  }
+  const asciiMatch = /filename="([^"]+)"/i.exec(header);
+  if (asciiMatch?.[1]) return asciiMatch[1];
+  const loose = /filename=([^;\s]+)/i.exec(header);
+  if (loose?.[1]) return loose[1].replace(/"/g, "");
+  return fallback;
+}
+
+export async function download80GCertificate(donationId: number) {
+  try {
+    const response = await apiClient.get<Blob>(
+      `/certificates/80g/donation/${donationId}`,
+      {
+        responseType: "blob",
+      },
+    );
+    const blob = response.data;
+    const type = response.headers["content-type"] ?? "";
+    if (type.includes("application/json")) {
+      const text = await blob.text();
+      let message = "Could not download certificate.";
+      try {
+        const parsed = JSON.parse(text) as { message?: string };
+        if (typeof parsed.message === "string") message = parsed.message;
+      } catch {
+        /* ignore */
+      }
+      throw new Error(message);
+    }
+    const filename = parseContentDispositionFilename(
+      response.headers["content-disposition"],
+      `80G-${donationId}.pdf`,
+    );
+    return { blob, filename };
+  } catch (err) {
+    if (axios.isAxiosError(err) && err.response?.data instanceof Blob) {
+      const text = await err.response.data.text();
+      let message = "Could not download certificate.";
+      try {
+        const parsed = JSON.parse(text) as { message?: unknown };
+        const m = parsed.message;
+        if (typeof m === "string") message = m;
+        else if (Array.isArray(m) && m.every((x) => typeof x === "string"))
+          message = m.join(" ");
+      } catch {
+        /* ignore */
+      }
+      throw new Error(message);
+    }
+    if (axios.isAxiosError(err) && err.response?.data && typeof err.response.data === "object") {
+      const d = err.response.data as { message?: string | string[] };
+      const m = d.message;
+      const message =
+        typeof m === "string"
+          ? m
+          : Array.isArray(m)
+            ? m.join(" ")
+            : "Could not download certificate.";
+      throw new Error(message);
+    }
+    throw err;
+  }
 }

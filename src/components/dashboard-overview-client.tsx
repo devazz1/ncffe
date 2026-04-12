@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { DashboardDonationsTable } from "@/components/dashboard-donations-table";
 import { getMyDonationStatistics } from "@/lib/api";
 import { useAuthStore } from "@/lib/auth-store";
 
@@ -45,50 +46,47 @@ export function DashboardOverviewClient() {
 
   if (!token) return null;
 
-  if (statsQuery.isLoading) {
-    return (
-      <section className="rounded-lg border border-zinc-200 bg-white p-6">
-        <h1 className="text-xl font-semibold">Dashboard Overview</h1>
-        <p className="mt-2 text-sm text-zinc-700">Loading your donation statistics...</p>
-      </section>
-    );
-  }
-
-  if (statsQuery.isError || !statsQuery.data?.data) {
-    return (
-      <section className="rounded-lg border border-zinc-200 bg-white p-6">
-        <h1 className="text-xl font-semibold">Dashboard Overview</h1>
-        <p className="mt-2 text-sm text-red-700">
-          Unable to load donation statistics right now. Please try again shortly.
-        </p>
-      </section>
-    );
-  }
-
-  const stats = statsQuery.data.data;
-  const totalAmountDonated = formatInrWithDecimals(parseAmount(stats.totalAmountDonated));
+  const stats = statsQuery.data?.data;
+  const totalAmountDonated = stats
+    ? formatInrWithDecimals(parseAmount(stats.totalAmountDonated))
+    : "";
 
   return (
-    <section className="rounded-lg border border-zinc-200 bg-zinc-50 p-6">
-      <h1 className="text-xl font-semibold">Dashboard Overview</h1>
-      <p className="mt-1 text-sm text-zinc-700">Your impact summary from successful donations.</p>
-      <div className="mt-5 grid gap-4 md:grid-cols-3">
-        <StatCard
-          title="Successful Donations"
-          value={String(stats.successDonationCount)}
-          helper="Count of completed donations."
-        />
-        <StatCard
-          title="Total Amount Donated"
-          value={totalAmountDonated}
-          helper="Sum of successful donation amounts."
-        />
-        <StatCard
-          title="Campaigns Supported"
-          value={String(stats.campaignsSupportedCount)}
-          helper="Distinct campaigns you have supported."
-        />
-      </div>
-    </section>
+    <div className="space-y-6">
+      <section className="rounded-lg border border-zinc-200 bg-zinc-50 p-6">
+        <h1 className="text-xl font-semibold">Dashboard Overview</h1>
+        <p className="mt-1 text-sm text-zinc-700">
+          Your impact summary from successful donations.
+        </p>
+        {statsQuery.isLoading ? (
+          <p className="mt-4 text-sm text-zinc-700">
+            Loading your donation statistics…
+          </p>
+        ) : statsQuery.isError || !stats ? (
+          <p className="mt-4 text-sm text-red-700">
+            Unable to load donation statistics right now. Please try again shortly.
+          </p>
+        ) : (
+          <div className="mt-5 grid gap-4 md:grid-cols-3">
+            <StatCard
+              title="Successful Donations"
+              value={String(stats.successDonationCount)}
+              helper="Count of completed donations."
+            />
+            <StatCard
+              title="Total Amount Donated"
+              value={totalAmountDonated}
+              helper="Sum of successful donation amounts."
+            />
+            <StatCard
+              title="Campaigns Supported"
+              value={String(stats.campaignsSupportedCount)}
+              helper="Distinct campaigns you have supported."
+            />
+          </div>
+        )}
+      </section>
+      <DashboardDonationsTable />
+    </div>
   );
 }
