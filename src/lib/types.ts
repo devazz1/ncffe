@@ -112,3 +112,9 @@ export type TopDonationItem = {
 export type TopDonationsData = {
   items: TopDonationItem[];
 };
+
+export type UserDonationStatistics = {
+  successDonationCount: number;
+  totalAmountDonated: string;
+  campaignsSupportedCount: number;
+};

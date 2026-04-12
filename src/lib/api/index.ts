@@ -11,6 +11,7 @@ import type {
   DonationStatusResponse,
   Paginated,
   TopDonationsData,
+  UserDonationStatistics,
   UserProfile,
 } from "@/lib/types";
 
@@ -110,6 +111,13 @@ export async function getDonationStatus(receipt: string) {
     {
       params: { receipt },
     },
+  );
+  return data;
+}
+
+export async function getMyDonationStatistics() {
+  const { data } = await apiClient.get<ApiEnvelope<UserDonationStatistics>>(
+    "/users/me/statistics",
   );
   return data;
 }

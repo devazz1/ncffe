@@ -4,11 +4,9 @@ import { useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getCurrentUser, updateCurrentUser } from "@/lib/api";
 import { useAuthStore } from "@/lib/auth-store";
-import { AuthModal } from "@/components/auth-modal";
 
 export function DashboardClient() {
   const token = useAuthStore((s) => s.accessToken);
-  const [isLoginOpen, setIsLoginOpen] = useState(!token);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const profileQuery = useQuery({
@@ -24,29 +22,7 @@ export function DashboardClient() {
     },
   });
 
-  if (!token) {
-    return (
-      <section className="mx-auto w-full max-w-3xl rounded-lg border border-zinc-200 bg-white p-6">
-        <h1 className="text-xl font-semibold">Dashboard</h1>
-        <p className="mt-2 text-sm text-zinc-800">
-          You must login to access your dashboard.
-        </p>
-        <button
-          className="mt-4 rounded bg-zinc-900 px-4 py-2 text-white"
-          onClick={() => setIsLoginOpen(true)}
-        >
-          Open login modal
-        </button>
-        <AuthModal
-          key={String(isLoginOpen)}
-          open={isLoginOpen}
-          initialPurpose="login"
-          onClose={() => setIsLoginOpen(false)}
-          onSuccess={() => setIsLoginOpen(false)}
-        />
-      </section>
-    );
-  }
+  if (!token) return null;
 
   if (profileQuery.isLoading) {
     return <p className="mx-auto w-full max-w-3xl">Loading profile...</p>;
@@ -59,8 +35,8 @@ export function DashboardClient() {
   const profile = profileQuery.data.data;
 
   return (
-    <section className="mx-auto w-full max-w-3xl rounded-lg border border-zinc-200 bg-white p-6">
-      <h1 className="text-xl font-semibold">My Dashboard</h1>
+    <section className="rounded-lg border border-zinc-200 bg-white p-6">
+      <h1 className="text-xl font-semibold">My Profile</h1>
       <p className="mt-1 text-sm text-zinc-800">Manage your profile details.</p>
       <form
         className="mt-4 grid gap-3"
@@ -113,13 +89,6 @@ export function DashboardClient() {
         </button>
       </form>
       {errorMessage ? <p className="mt-3 text-sm text-red-600">{errorMessage}</p> : null}
-      <AuthModal
-        key={String(isLoginOpen)}
-        open={isLoginOpen}
-        initialPurpose="login"
-        onClose={() => setIsLoginOpen(false)}
-        onSuccess={() => setIsLoginOpen(false)}
-      />
     </section>
   );
 }
