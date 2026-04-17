@@ -345,10 +345,6 @@ If an AI agent is working on this frontend:
 - `PROJECT.md`
 - `API_CONTRACT.md`
 
-Backend reference (context only):
-
-- `Backend-Project-doc.md`
-
 ---
 
 ## Last Updated
