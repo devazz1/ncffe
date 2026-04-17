@@ -12,6 +12,8 @@
   --font-mono: var(--font-geist-mono);
   --color-cta-from: #d01a1a;
   --color-cta-to: #ffb43c;
+  /* Warm cream — default or hover surfaces (#FFF3ED). */
+  --color-surface-warm: #fff3ed;
 }
 
 /* Composed CTA gradient (same as linear-gradient(90deg, #D01A1A 0%, #FFB43C 100%)). */
