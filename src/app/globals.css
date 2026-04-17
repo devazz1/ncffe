@@ -8,14 +8,27 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-poppins);
   --font-mono: var(--font-geist-mono);
+  --color-cta-from: #d01a1a;
+  --color-cta-to: #ffb43c;
+}
+
+/* Composed CTA gradient (same as linear-gradient(90deg, #D01A1A 0%, #FFB43C 100%)). */
+:root {
+  --cta-gradient: linear-gradient(90deg, var(--color-cta-from) 0%, var(--color-cta-to) 100%);
+}
+
+@layer components {
+  .bg-cta-gradient {
+    background-image: var(--cta-gradient);
+  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   color-scheme: light;
 }
 
