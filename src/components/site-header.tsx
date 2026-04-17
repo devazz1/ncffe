@@ -20,7 +20,7 @@ export function SiteHeader() {
         <nav className="flex items-center gap-4 text-sm">
           <Link href="/about">About</Link>
           <Link href="/stories">Stories</Link>
-          <Link href="/dashboard">Dashboard</Link>
+          {token ? <Link href="/dashboard">Dashboard</Link> : null}
           {!token ? (
             <>
               <button

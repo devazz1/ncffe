@@ -9,10 +9,28 @@ export const apiClient = axios.create({
   },
 });
 
+let onUnauthorized: (() => void) | null = null;
+
+/** Register once from app root (e.g. Providers). Clears session on any API 401. */
+export function setApiUnauthorizedHandler(handler: (() => void) | null) {
+  onUnauthorized = handler;
+}
+
 apiClient.interceptors.request.use((config) => {
   config.headers.set("x-request-id", generateFrontendRequestId());
   return config;
 });
+
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error: unknown) => {
+    if (!axios.isAxiosError(error) || error.response?.status !== 401) {
+      return Promise.reject(error);
+    }
+    onUnauthorized?.();
+    return Promise.reject(error);
+  },
+);
 
 export function setApiAccessToken(token: string | null) {
   if (token) {
