@@ -83,6 +83,14 @@ The project is in a functional-first phase:
 - CSR for user/session-specific pages and workflows.
 - Avoid SSR unless explicitly approved and documented here.
 
+### 5.2.1 Shared public catalog (categories)
+
+- **Single entry point:** `getCategories()` in `web/src/lib/api/index.ts` wraps `serverGet("/categories", { revalidate: 300 })`.
+- **Time-based cache / ISR:** the `fetch` options use `revalidate: 300` (five minutes); no tag-based invalidation unless we add it later.
+- **Per-request deduplication:** `getCategories()` is wrapped in React `cache()` so multiple Server Components in the same render (e.g. root layout + home page) share one in-flight call.
+- **Global chrome:** root `app/layout.tsx` awaits `getCategories()` and passes category items into the header. The category dropdown is implemented as a client component (`CategoriesMenu`) fed by those server-provided props (same pattern as `AboutMenu` for interactivity).
+- **Other consumers:** any future route or component that needs the list should call `getCategories()` again in an RSC; rely on `cache()` and the shared `fetch` Data Cache instead of inventing parallel clients or prop-drilling-only sources of truth.
+
 ## 5.3 API layer split
 
 - `serverGet` (`web/src/lib/api/server.ts`) is used for server-rendered public data.
@@ -130,7 +138,7 @@ This prevents conflicts with top-level dynamic slug handling.
 
 ## 7.1 Public browsing flow
 
-1. Home fetches categories from `GET /categories`.
+1. Root layout and home both use `getCategories()` → `GET /categories` for site-wide category data. The header category menu and the home grid use the same function; `cache()` and the Data Cache avoid redundant work.
 2. User opens category page by slug.
 3. Category page fetches:
    - `GET /categories/slug/:slug`
@@ -227,6 +235,7 @@ Key contract rules:
 
 - `withCredentials` is not enabled currently; auth transport is Bearer token.
 - Env fallback API base URL is `http://localhost:5151/api` when env not set.
+- **Header navigation:** primary nav includes Home, About (dropdown), **Categories** (dropdown from API, sorted by `displayOrder`), Stories. Category links use `/${slug}`. If the categories API fails or returns no items, the Categories control is omitted.
 - Header auth UI behavior:
   - logged out: Register/Login
   - logged in: Dashboard/Logout
@@ -327,6 +336,9 @@ If an AI agent is working on this frontend:
 
 ## 15) Change Log
 
+- 2026-04-18:
+  - Documented shared category fetching: root layout + `getCategories()` with React `cache()` and `revalidate: 300`.
+  - Documented header `CategoriesMenu` (client, server-fed props) and updated public browsing flow + implementation notes.
 - 2026-04-17:
   - Created comprehensive frontend ground-truth document.
   - Added architecture, rendering matrix, flow mapping, API integration map, and maintenance rules.
@@ -349,5 +361,5 @@ If an AI agent is working on this frontend:
 
 ## Last Updated
 
-- Date: 2026-04-17
-- Updated for: review pass, route accuracy fix, DoD, guardrails, and changelog.
+- Date: 2026-04-18
+- Updated for: shared category catalog (`getCategories`, layout, header Categories menu) and documentation of cache/ISR behavior.

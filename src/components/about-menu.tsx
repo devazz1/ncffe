@@ -4,7 +4,7 @@ import { ChevronDown, ChevronUp, CircleArrowOutUpRight } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
-const ITEMS = [
+export const ABOUT_NAV_ITEMS = [
   { label: "The Entity", href: "/about#the-entity" },
   { label: "The Vision & the mission", href: "/about#vision-mission" },
   { label: "The Reach & Scale", href: "/about#reach-scale" },
@@ -36,7 +36,7 @@ export function AboutMenu() {
           className="absolute left-0 z-50 mt-1 min-w-[min(100vw-2rem,17.5rem)] rounded-sm border border-zinc-200 bg-white py-1 shadow-lg"
           role="menu"
         >
-          {ITEMS.map((item, i) => (
+          {ABOUT_NAV_ITEMS.map((item, i) => (
             <div key={item.href}>
               <Link
                 href={item.href}
@@ -51,7 +51,7 @@ export function AboutMenu() {
                   aria-hidden
                 />
               </Link>
-              {i < ITEMS.length - 1 ? (
+              {i < ABOUT_NAV_ITEMS.length - 1 ? (
                 <hr className="my-0 border-zinc-100" aria-hidden />
               ) : null}
             </div>

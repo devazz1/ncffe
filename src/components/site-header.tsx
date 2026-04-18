@@ -1,12 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
 import { AboutMenu } from "@/components/about-menu";
 import { AccountMenu } from "@/components/account-menu";
-import { AuthModal } from "@/components/auth-modal";
 import { CategoriesMenu } from "@/components/categories-menu";
-import { useAuthStore } from "@/lib/auth-store";
+import { MobilePrimaryNav } from "@/components/mobile-primary-nav";
 import type { Category } from "@/lib/types";
 
 type SiteHeaderProps = {
@@ -14,9 +12,6 @@ type SiteHeaderProps = {
 };
 
 export function SiteHeader({ categories }: SiteHeaderProps) {
-  const [isAuthOpen, setIsAuthOpen] = useState(false);
-  const [purpose, setPurpose] = useState<"login" | "register">("login");
-  const token = useAuthStore((s) => s.accessToken);
 
   return (
     <header className="border-b border-zinc-200 bg-white">
@@ -27,53 +22,25 @@ export function SiteHeader({ categories }: SiteHeaderProps) {
           </Link>
         </div>
         <nav
-          className="flex shrink-0 items-center gap-4 text-sm"
+          className="hidden shrink-0 items-center gap-4 text-sm md:flex"
           aria-label="Primary"
         >
           <Link href="/">Home</Link>
           <AboutMenu />
           <CategoriesMenu categories={categories} />
           <Link href="/stories">Stories</Link>
-        </nav>
+        </nav>        
         <div className="flex min-w-0 flex-1 justify-end">
           <nav
             className="flex items-center gap-4 text-sm"
             aria-label="Account"
           >
-            {token ? (
-              <AccountMenu />
-            ) : (
-              <>
-                <button
-                  onClick={() => {
-                    setPurpose("register");
-                    setIsAuthOpen(true);
-                  }}
-                  className="rounded bg-cta-gradient bg-clip-text px-1 py-1 text-transparent"
-                >
-                  Register
-                </button>
-                <span className="h-4 w-px bg-zinc-300"></span>
-                <button
-                  onClick={() => {
-                    setPurpose("login");
-                    setIsAuthOpen(true);
-                  }}
-                  className="rounded bg-cta-gradient bg-clip-text px-1 py-1 text-transparent"
-                >
-                  Login
-                </button>
-              </>
-            )}
+            <AccountMenu />
           </nav>
+          <MobilePrimaryNav categories={categories} />
         </div>
       </div>
-      <AuthModal
-        key={`${String(isAuthOpen)}-${purpose}`}
-        open={isAuthOpen}
-        initialPurpose={purpose}
-        onClose={() => setIsAuthOpen(false)}
-      />
+
     </header>
   );
 }

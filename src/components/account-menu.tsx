@@ -3,11 +3,50 @@
 import { User } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { AuthModal } from "@/components/auth-modal";
 import { useAuthStore } from "@/lib/auth-store";
 
 export function AccountMenu() {
-  const [open, setOpen] = useState(false);
+  const token = useAuthStore((s) => s.accessToken);
   const clearAuth = useAuthStore((s) => s.clearAuth);
+
+  const [open, setOpen] = useState(false);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [purpose, setPurpose] = useState<"login" | "register">("login");
+
+  if (!token) {
+    return (
+      <>
+        <button
+          type="button"
+          onClick={() => {
+            setPurpose("register");
+            setIsAuthOpen(true);
+          }}
+          className="rounded bg-cta-gradient bg-clip-text px-1 py-1 text-transparent"
+        >
+          Register
+        </button>
+        <span className="h-4 w-px bg-zinc-300" aria-hidden />
+        <button
+          type="button"
+          onClick={() => {
+            setPurpose("login");
+            setIsAuthOpen(true);
+          }}
+          className="rounded bg-cta-gradient bg-clip-text px-1 py-1 text-transparent"
+        >
+          Login
+        </button>
+        <AuthModal
+          key={`${String(isAuthOpen)}-${purpose}`}
+          open={isAuthOpen}
+          initialPurpose={purpose}
+          onClose={() => setIsAuthOpen(false)}
+        />
+      </>
+    );
+  }
 
   return (
     <div className="relative">
