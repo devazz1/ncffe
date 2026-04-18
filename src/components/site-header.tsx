@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { AboutMenu } from "@/components/about-menu";
 import { AccountMenu } from "@/components/account-menu";
 import { AuthModal } from "@/components/auth-modal";
 import { useAuthStore } from "@/lib/auth-store";
@@ -23,7 +24,9 @@ export function SiteHeader() {
           className="flex shrink-0 items-center gap-4 text-sm"
           aria-label="Primary"
         >
-          <Link href="/about">About</Link>
+          <Link href="/">Home</Link>
+          <AboutMenu />
+          {/* dropdown list for categorys */}
           <Link href="/stories">Stories</Link>
         </nav>
         <div className="flex min-w-0 flex-1 justify-end">
