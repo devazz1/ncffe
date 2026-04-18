@@ -508,13 +508,13 @@ export function CategoryHeroCarousel({
 
   return (
     <section
-      className={`relative isolate w-full rounded-2xl bg-zinc-900 ${className}`}
+      className={`relative isolate w-full bg-zinc-900 ${className}`}
       aria-roledescription="carousel"
       aria-label="Featured categories"
     >
-      {/* Media + gradients clipped to rounded rect; foreground below stays overflow-visible so strip hovers can overlap */}
+      {/* Media + gradients clipped to rect; foreground below stays overflow-visible so strip hovers can overlap */}
       <div className="relative min-h-[min(640px,calc(100dvh-6rem))] w-full md:min-h-[min(720px,calc(100dvh-5rem))]">
-        <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl">
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
           <HeroBackground
             slide={current}
             isMuted={isMuted}
