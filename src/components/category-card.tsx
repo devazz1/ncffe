@@ -1,3 +1,6 @@
+// Depreciated component, not used anymore
+// will be removed in the future
+
 import Link from "next/link";
 import type { Category } from "@/lib/types";
 

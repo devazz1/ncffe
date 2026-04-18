@@ -1,5 +1,5 @@
 import { getCategories } from "@/lib/api";
-import { CategoryCard } from "@/components/category-card";
+import { CategoryHeroCarousel } from "@/components/category-hero/category-hero-carousel";
 
 export default async function HomePage() {
   let categories = [] as Awaited<ReturnType<typeof getCategories>>["data"]["items"];
@@ -10,23 +10,32 @@ export default async function HomePage() {
     categories = [];
   }
 
+  const heroSlides = categories.map((c) => ({
+    id: c.categoryId,
+    title: c.name,
+    heroPoster: c.heroPoster ?? "",
+    heroVideo: c.heroVideo,
+    description: c.description,
+    detailsHref: `/${c.slug}`,
+    donateHref: `/${c.slug}`,
+  }));
+
   return (
-    <section>
-      <h1 className="text-2xl font-bold">Donation Categories</h1>
-      <p className="mt-1 text-sm text-zinc-800">
-        Browse categories and support active campaigns.
-      </p>
-      <div className="mt-5 grid gap-4 md:grid-cols-2">
-        {categories.length > 0 ? (
-          categories.map((category) => (
-            <CategoryCard key={category.categoryId} category={category} />
-          ))
-        ) : (
-          <p className="text-sm text-zinc-800">
-            Categories are unavailable right now. Check API connectivity and refresh.
-          </p>
-        )}
-      </div>
-    </section>
+    <>
+      {heroSlides.length > 0 ? (
+        <div className="relative left-1/2 mb-10 w-[100vw] max-w-none -translate-x-1/2 px-4 sm:px-6 lg:mb-14 lg:px-8">
+          <CategoryHeroCarousel categories={heroSlides} />
+        </div>
+      ) : null}
+
+      <section>
+        <h1 className="text-2xl font-bold">Donation Categories</h1>
+        <p className="mt-1 text-sm text-zinc-800">
+          Browse categories and support active campaigns.
+          see categories in detailed view
+        </p>
+        <p>See other on going activities</p>
+      </section>
+    </>
   );
 }
