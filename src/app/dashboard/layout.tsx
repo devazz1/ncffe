@@ -23,6 +23,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   if (!token) {
     return (
+      <div className="px-4 py-6">
       <section className="mx-auto w-full max-w-4xl rounded-lg border border-zinc-200 bg-white p-6">
         <h1 className="text-xl font-semibold">Dashboard</h1>
         <p className="mt-2 text-sm text-zinc-800">
@@ -43,11 +44,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           onSuccess={() => setIsLoginOpen(false)}
         />
       </section>
+      </div>
     );
   }
 
   return (
-    <div className="mx-auto grid w-full max-w-6xl gap-6 md:grid-cols-[220px_minmax(0,1fr)]">
+    <div className="mx-auto grid w-full max-w-6xl gap-6 px-4 py-6 md:grid-cols-[220px_minmax(0,1fr)]">
       <aside className="h-fit rounded-lg border border-zinc-200 bg-white p-3">
         <p className="px-2 pb-2 text-sm font-semibold text-zinc-900">Dashboard</p>
         <nav className="grid gap-1">

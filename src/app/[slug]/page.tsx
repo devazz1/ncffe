@@ -5,6 +5,7 @@ import {
   getTopDonations,
 } from "@/lib/api";
 import { DonationForm } from "@/components/donation-form";
+import { SitePageContainer } from "@/components/site-page-container";
 import type { TopDonationItem } from "@/lib/types";
 
 type CategoryPageProps = {
@@ -82,7 +83,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
   if (!category.activeCampaignId) {
     return (
-      <>
+      <SitePageContainer>
         <section className="rounded-lg border border-zinc-200 bg-white p-6">
           <h1 className="text-2xl font-bold">{category.name}</h1>
           <p className="mt-2 text-sm text-zinc-900">
@@ -92,7 +93,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         <div className="mt-6">
           <TopDonationsSection items={topDonationItems} />
         </div>
-      </>
+      </SitePageContainer>
     );
   }
 
@@ -100,7 +101,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const products = productsResponse.data;
 
   return (
-    <>
+    <SitePageContainer>
       <section className="grid gap-6 lg:grid-cols-[1fr_380px]">
         <div className="rounded-lg border border-zinc-200 bg-white p-6">
           <h1 className="text-2xl font-bold">{category.name}</h1>
@@ -126,6 +127,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       <div className="mt-6">
         <TopDonationsSection items={topDonationItems} />
       </div>
-    </>
+    </SitePageContainer>
   );
 }

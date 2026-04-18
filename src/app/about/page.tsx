@@ -1,5 +1,8 @@
+import { SitePageContainer } from "@/components/site-page-container";
+
 export default function AboutPage() {
   return (
+    <SitePageContainer>
     <div className="mx-auto max-w-3xl space-y-10 rounded-lg border border-zinc-200 bg-white p-6">
       <section>
         <h1 className="text-2xl font-bold">About Us</h1>
@@ -32,5 +35,6 @@ export default function AboutPage() {
         <p className="mt-2 text-sm text-zinc-700">Content for this section.</p>
       </section>
     </div>
+    </SitePageContainer>
   );
 }
