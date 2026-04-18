@@ -1,4 +1,5 @@
 import axios from "axios";
+import { cache } from "react";
 import { apiClient } from "@/lib/api/client";
 import { serverGet } from "@/lib/api/server";
 import type {
@@ -19,11 +20,12 @@ import type {
 
 const FIVE_MINUTES = 300;
 
-export async function getCategories() {
+/** Dedupes within a single request; fetch uses time-based ISR (`revalidate`). */
+export const getCategories = cache(async function getCategories() {
   return serverGet<ApiEnvelope<Paginated<Category>>>("/categories", {
     revalidate: FIVE_MINUTES,
   });
-}
+});
 
 export async function getCategoryBySlug(slug: string) {
   return serverGet<ApiEnvelope<Category>>(`/categories/slug/${slug}`, {

@@ -4,6 +4,8 @@ import "./globals.css";
 import { Providers } from "@/components/providers";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { getCategories } from "@/lib/api";
+import type { Category } from "@/lib/types";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -21,11 +23,19 @@ export const metadata: Metadata = {
   description: "Functional public website bootstrap for NGO donation flows",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  let categories: Category[] = [];
+  try {
+    const response = await getCategories();
+    categories = response.data.items;
+  } catch {
+    categories = [];
+  }
+
   return (
     <html
       lang="en"
@@ -34,7 +44,7 @@ export default function RootLayout({
       <body className="min-h-full bg-zinc-50 text-zinc-900">
         <Providers>
           <div className="flex min-h-full flex-col">
-            <SiteHeader />
+            <SiteHeader categories={categories} />
             <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6">{children}</main>
             <SiteFooter />
           </div>

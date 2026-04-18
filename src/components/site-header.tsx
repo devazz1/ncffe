@@ -5,9 +5,15 @@ import { useState } from "react";
 import { AboutMenu } from "@/components/about-menu";
 import { AccountMenu } from "@/components/account-menu";
 import { AuthModal } from "@/components/auth-modal";
+import { CategoriesMenu } from "@/components/categories-menu";
 import { useAuthStore } from "@/lib/auth-store";
+import type { Category } from "@/lib/types";
 
-export function SiteHeader() {
+type SiteHeaderProps = {
+  categories: Category[];
+};
+
+export function SiteHeader({ categories }: SiteHeaderProps) {
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [purpose, setPurpose] = useState<"login" | "register">("login");
   const token = useAuthStore((s) => s.accessToken);
@@ -26,7 +32,7 @@ export function SiteHeader() {
         >
           <Link href="/">Home</Link>
           <AboutMenu />
-          {/* dropdown list for categorys */}
+          <CategoriesMenu categories={categories} />
           <Link href="/stories">Stories</Link>
         </nav>
         <div className="flex min-w-0 flex-1 justify-end">
