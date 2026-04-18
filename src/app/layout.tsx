@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist_Mono, Poppins } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
-import { SiteHeader } from "@/components/site-header";
+import { SiteHeader } from "@/components/header/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { getCategories } from "@/lib/api";
 import type { Category } from "@/lib/types";

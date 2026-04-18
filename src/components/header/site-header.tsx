@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { AboutMenu } from "@/components/about-menu";
-import { AccountMenu } from "@/components/account-menu";
-import { CategoriesMenu } from "@/components/categories-menu";
-import { MobilePrimaryNav } from "@/components/mobile-primary-nav";
+import { AboutMenu } from "@/components/header/about-menu";
+import { AccountMenu } from "@/components/header/account-menu";
+import { CategoriesMenu } from "@/components/header/categories-menu";
+import { MobilePrimaryNav } from "@/components/header/mobile-primary-nav";
 import type { Category } from "@/lib/types";
 
 type SiteHeaderProps = {

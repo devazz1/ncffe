@@ -15,7 +15,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { ABOUT_NAV_ITEMS } from "@/components/about-menu";
+import { ABOUT_NAV_ITEMS } from "@/components/header/about-menu";
 import type { Category } from "@/lib/types";
 
 type MobilePrimaryNavProps = {
