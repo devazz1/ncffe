@@ -1,5 +1,6 @@
 import { getCategories } from "@/lib/api";
 import { CategoryHeroCarousel } from "@/components/category-hero/category-hero-carousel";
+import { ImpactStatsSection } from "@/components/impact-stats-section";
 
 export default async function HomePage() {
   let categories = [] as Awaited<ReturnType<typeof getCategories>>["data"]["items"];
@@ -27,6 +28,10 @@ export default async function HomePage() {
           <CategoryHeroCarousel categories={heroSlides} />
         </div>
       ) : null}
+
+      <div className="relative left-1/2 mb-10 w-[100vw] max-w-none -translate-x-1/2">
+        <ImpactStatsSection />
+      </div>
 
       <section>
         <h1 className="text-2xl font-bold">Donation Categories</h1>
