@@ -1,9 +1,9 @@
 import { getCategories } from "@/lib/api";
 import { CategoryHeroCarousel } from "@/components/category-hero/category-hero-carousel";
 import { ImpactStatsSection } from "@/components/impact-stats-section";
-import { DonateCtaSection } from "@/components/donate-cta-section";
-import { HomeStoriesSection } from "@/components/home-stories-section";
-import { MissionSection } from "@/components/mission-section";
+import { DonateCtaSection } from "@/components/home/donate-cta-section";
+import { HomeStoriesSection } from "@/components/home/home-stories-section";
+import { MissionSection } from "@/components/home/mission-section";
 import { SupportingLivesGallerySection } from "@/components/supporting-lives-gallery-section";
 import { SitePageContainer } from "@/components/site-page-container";
 
