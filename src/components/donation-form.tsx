@@ -33,6 +33,8 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [is80GRequested, setIs80GRequested] = useState(false);
+  const [isAnonymous, setIsAnonymous] = useState(false);
+  const [isIndian, setIsIndian] = useState(true);
   const [pan, setPan] = useState("");
   const [address, setAddress] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -67,11 +69,11 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
         products: selectedProducts.length > 0 ? selectedProducts : undefined,
         currency: "INR",
         isMonthly: tab === "monthly",
-        displayPublicly: false,
+        displayPublicly: !isAnonymous,
         fullName,
         email,
         phone,
-        isIndian: true,
+        isIndian,
         is80GRequested,
         pan: is80GRequested ? pan : undefined,
         address: is80GRequested ? address : undefined,
@@ -168,7 +170,18 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
         </button>
       </div>
 
-      {selectedProductsForSummary.length > 0 ? (
+      <div className="mt-4 space-y-2">
+        <label className="block text-sm font-medium">Donation Amount</label>
+        <input
+          type="number"
+          min={0}
+          value={amount}
+          onChange={(e) => setAmount(Number(e.target.value || 0))}
+          className="w-full rounded border border-zinc-300 px-3 py-2"
+        />
+      </div>
+
+      {selectedProductsForSummary.length > 0 && (
         <div className="mt-4 space-y-3">
           <p className="text-sm font-medium text-zinc-900">Selected products</p>
           {selectedProductsForSummary.map((product) => {
@@ -201,39 +214,47 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
             );
           })}
         </div>
-      ) : null}
+      )}
 
       <div className="mt-4 space-y-2">
-        <label className="block text-sm font-medium">Additional amount (INR)</label>
-        <input
-          type="number"
-          min={0}
-          value={amount}
-          onChange={(e) => setAmount(Number(e.target.value || 0))}
-          className="w-full rounded border border-zinc-300 px-3 py-2"
-        />
-      </div>
-
-      <div className="mt-4 grid gap-2">
-        <input
-          placeholder="Full name"
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
-          className="w-full rounded border border-zinc-300 px-3 py-2"
-        />
-        <input
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full rounded border border-zinc-300 px-3 py-2"
-        />
-        <input
-          type="tel"
-          placeholder="Phone"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          className="w-full rounded border border-zinc-300 px-3 py-2"
-        />
+        <label className="block text-sm font-medium">Your Details</label>
+        <div className="grid gap-2">
+          <input
+            placeholder="Full name"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+            className="w-full rounded border border-zinc-300 px-3 py-2"
+          />
+          <input
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full rounded border border-zinc-300 px-3 py-2"
+          />
+          <input
+            type="tel"
+            placeholder="Phone"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            className="w-full rounded border border-zinc-300 px-3 py-2"
+          />
+        </div>
+        {is80GRequested && (
+          <div className="grid gap-2">
+            <input
+              placeholder="PAN"
+              value={pan}
+              onChange={(e) => setPan(e.target.value)}
+              className="w-full rounded border border-zinc-300 px-3 py-2"
+            />
+            <textarea
+              placeholder="Address"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              className="w-full rounded border border-zinc-300 px-3 py-2"
+            />
+          </div>
+        )}
       </div>
 
       <label className="mt-3 flex items-center gap-2 text-sm">
@@ -245,22 +266,36 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
         Request 80G
       </label>
 
-      {is80GRequested ? (
-        <div className="mt-3 grid gap-2">
+      <label className="mt-3 flex items-center gap-2 text-sm">
+        <input
+          type="checkbox"
+          checked={isAnonymous}
+          onChange={(e) => setIsAnonymous(e.target.checked)}
+        />
+        Make my donation Anonymous
+      </label>
+
+      <fieldset className="mt-3 space-y-2 border-0 p-0">
+        <legend className="sr-only">Donor residency</legend>
+        <label className="flex items-center gap-2 text-sm">
           <input
-            placeholder="PAN"
-            value={pan}
-            onChange={(e) => setPan(e.target.value)}
-            className="w-full rounded border border-zinc-300 px-3 py-2"
+            type="radio"
+            name="isIndian"
+            checked={isIndian}
+            onChange={() => setIsIndian(true)}
           />
-          <textarea
-            placeholder="Address"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            className="w-full rounded border border-zinc-300 px-3 py-2"
+          Indian Individual
+        </label>
+        <label className="flex items-center gap-2 text-sm">
+          <input
+            type="radio"
+            name="isIndian"
+            checked={!isIndian}
+            onChange={() => setIsIndian(false)}
           />
-        </div>
-      ) : null}
+          Not an Indian Individual
+        </label>
+      </fieldset>
 
       <div className="mt-4 rounded border border-zinc-200 bg-zinc-50 p-3">
         <p className="text-sm text-zinc-900">Product total: {formatCurrencyINR(productTotal)}</p>
