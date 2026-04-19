@@ -7,6 +7,11 @@ import { formatCurrencyINR, toNumber } from "@/lib/format";
 import type { CampaignProduct } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { openRazorpayCheckout } from "@/lib/razorpay/open-checkout";
+import {
+  EMPTY_PRODUCT_UNITS,
+  getUnitsForCampaign,
+  useCampaignProductCartStore,
+} from "@/stores/campaign-product-cart-store";
 
 type DonationFormProps = {
   campaignName: string;
@@ -14,13 +19,16 @@ type DonationFormProps = {
   products: CampaignProduct[];
 };
 
-type ProductUnitMap = Record<number, number>;
-
 export function DonationForm({ campaignName, campaignId, products }: DonationFormProps) {
   const router = useRouter();
+  const units = useCampaignProductCartStore(
+    (s) => s.unitsByCampaign[campaignId] ?? EMPTY_PRODUCT_UNITS,
+  );
+  const removeProduct = useCampaignProductCartStore((s) => s.removeProduct);
+  const clearCampaign = useCampaignProductCartStore((s) => s.clearCampaign);
+
   const [tab, setTab] = useState<"once" | "monthly">("once");
   const [amount, setAmount] = useState<number>(0);
-  const [units, setUnits] = useState<ProductUnitMap>({});
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -39,11 +47,16 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
 
   const total = productTotal + amount;
 
+  const selectedProductsForSummary = useMemo(() => {
+    return products.filter((p) => (units[p.campaignProductId] ?? 0) > 0);
+  }, [products, units]);
+
   const createDonationMutation = useMutation({
     mutationFn: async () => {
-      const selectedProducts = Object.entries(units)
-        .map(([campaignProductId, quantity]) => ({
-          campaignProductId: Number(campaignProductId),
+      const cartUnits = getUnitsForCampaign(campaignId);
+      const selectedProducts = Object.entries(cartUnits)
+        .map(([id, quantity]) => ({
+          campaignProductId: Number(id),
           quantity,
         }))
         .filter((item) => item.quantity > 0);
@@ -92,6 +105,7 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
           description: `${campaignName} Donation`,
           onClosed: () => {
             setIsCheckoutOpen(false);
+            clearCampaign(campaignId);
             router.push(statusUrl);
           },
           onError: (e) => {
@@ -108,14 +122,6 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
       setErrorMessage(err instanceof Error ? err.message : "Donation failed");
     },
   });
-
-  function changeQty(productId: number, delta: number) {
-    setUnits((prev) => {
-      const current = prev[productId] ?? 0;
-      const next = Math.max(0, current + delta);
-      return { ...prev, [productId]: next };
-    });
-  }
 
   function validateBeforeSubmit() {
     const hasProducts = Object.values(units).some((q) => q > 0);
@@ -146,12 +152,14 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
 
       <div className="mt-3 flex gap-2">
         <button
+          type="button"
           onClick={() => setTab("once")}
           className={`rounded px-3 py-1 text-sm ${tab === "once" ? "bg-zinc-900 text-white" : "border border-zinc-300"}`}
         >
           Donate once
         </button>
         <button
+          type="button"
           onClick={() => setTab("monthly")}
           className="rounded border border-zinc-300 px-3 py-1 text-sm opacity-60"
           title="Monthly flow not implemented yet"
@@ -160,39 +168,40 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
         </button>
       </div>
 
-      <div className="mt-4 space-y-3">
-        {products.map((product) => {
-          const qty = units[product.campaignProductId] ?? 0;
-          return (
-            <div
-              key={product.campaignProductId}
-              className="rounded border border-zinc-200 p-3"
-            >
-              <div className="flex items-center justify-between">
-                <p className="font-medium">{product.name}</p>
-                <p className="text-sm text-zinc-800">
-                  {formatCurrencyINR(toNumber(product.unitPrice))}
-                </p>
+      {selectedProductsForSummary.length > 0 ? (
+        <div className="mt-4 space-y-3">
+          <p className="text-sm font-medium text-zinc-900">Selected products</p>
+          {selectedProductsForSummary.map((product) => {
+            const qty = units[product.campaignProductId] ?? 0;
+            const lineTotal = qty * toNumber(product.unitPrice);
+            return (
+              <div
+                key={product.campaignProductId}
+                className="rounded border border-zinc-200 p-3"
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <p className="font-medium">{product.name}</p>
+                    <p className="text-xs text-zinc-600">
+                      {formatCurrencyINR(toNumber(product.unitPrice))} × {qty} ={" "}
+                      {formatCurrencyINR(lineTotal)}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      removeProduct(campaignId, product.campaignProductId)
+                    }
+                    className="shrink-0 text-sm text-red-600 underline"
+                  >
+                    Remove
+                  </button>
+                </div>
               </div>
-              <div className="mt-2 flex items-center gap-2">
-                <button
-                  onClick={() => changeQty(product.campaignProductId, -1)}
-                  className="rounded border border-zinc-300 px-2"
-                >
-                  -
-                </button>
-                <span className="w-8 text-center">{qty}</span>
-                <button
-                  onClick={() => changeQty(product.campaignProductId, 1)}
-                  className="rounded border border-zinc-300 px-2"
-                >
-                  +
-                </button>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      ) : null}
 
       <div className="mt-4 space-y-2">
         <label className="block text-sm font-medium">Additional amount (INR)</label>
@@ -260,6 +269,7 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
       </div>
 
       <button
+        type="button"
         className="mt-4 w-full rounded bg-zinc-900 px-4 py-2 text-white disabled:opacity-50"
         disabled={createDonationMutation.isPending || isCheckoutOpen}
         onClick={() => {

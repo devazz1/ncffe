@@ -57,7 +57,7 @@ The project is in a functional-first phase:
 - HTTP client (client side): Axios
 - Server/public data fetching: Next `fetch` via `serverGet`
 - Server state: TanStack Query
-- Minimal global state: Zustand `persist` (`ngo-auth`)
+- Minimal global state: Zustand — `persist` for auth (`ngo-auth`); ephemeral **campaign product cart** (no persistence, see §5.5)
 - Forms/validation libraries available: React Hook Form + Zod
 - Deployment target: Vercel (with ISR strategy)
 
@@ -72,6 +72,7 @@ The project is in a functional-first phase:
 - `web/src/lib/api`: API integration (`client.ts`, `server.ts`, `index.ts`, `error-message.ts`)
 - `web/src/lib/razorpay`: script loader + checkout opener
 - `web/src/lib`: env/config/types/utilities/store helpers
+- `web/src/stores`: client-only Zustand stores (auth persist, campaign product cart)
 - `web/src/types`: global type declarations
 - `web/docs`: project documentation
 
@@ -117,6 +118,30 @@ The project is in a functional-first phase:
   - remove Authorization header,
   - clear TanStack Query cache.
 - This keeps auth invalidation deterministic across UI.
+
+### 5.5 Campaign product cart (client selection state)
+
+Purpose: share **product quantities** between the category page (`/[slug]`) and **`DonationForm`** without coupling all UI into one component. Selection must stay **scoped per `campaignId`** so payloads only contain valid `campaignProductId` values for that campaign (invalid mixes are rejected by the backend).
+
+**Store:** `web/src/stores/campaign-product-cart-store.ts`
+
+- Shape: `unitsByCampaign[campaignId][campaignProductId] = quantity` (quantities ≥ 0; zero-qty keys are omitted).
+- **Actions:**
+  - **`adjustQty(campaignId, campaignProductId, delta)`** — used by **`CampaignProductCard`** (+ / −) and conceptually matches “change quantity.”
+  - **`removeProduct(campaignId, campaignProductId)`** — removes that product from the cart in one step (used by **Remove** in the donation form summary).
+  - **`clearCampaign(campaignId)`** — wipes that campaign’s cart.
+- **`getUnitsForCampaign(campaignId)`** — read a snapshot for **`POST /donations`** line building (same render contract as `DonationProductInput[]` in `types.ts`).
+- **Not persisted** — unlike auth, no localStorage; avoids stale carts across sessions and wrong-campaign confusion.
+
+**Lifecycle / cleanup**
+
+- **`CampaignCartScope`** (`web/src/components/campaign-cart-scope.tsx`) wraps the category layout block that includes both product cards and the donation form. On **unmount** (e.g. user navigates away from the category), it calls **`clearCampaign(campaignId)`**.
+- **`DonationForm`** calls **`clearCampaign(campaignId)`** from the Razorpay **`onClosed`** handler before navigating to **`/donations/status`** so checkout completion does not leave stale lines.
+
+**UI split**
+
+- **`CampaignProductCard`** — full + / − controls on the category page (and anywhere else you mount it with the same `campaignId` + `CampaignProduct`).
+- **`DonationForm`** — does **not** duplicate the full card list; it shows a **“Selected products”** summary (name, line math, **Remove**) only when at least one quantity is > 0, plus additional amount, donor fields, totals, and checkout.
 
 ---
 
@@ -168,7 +193,7 @@ This prevents conflicts with top-level dynamic slug handling.
 
 ## 7.3 Donation + payment flow
 
-1. User selects product quantities and/or additional amount.
+1. User selects product quantities (via **`CampaignProductCard`** on **`/[slug]`** and/or implicitly reflected in **`DonationForm`** summary) and/or enters an additional amount. Quantities live in the **campaign product cart** store (see §5.5).
 2. Frontend validates total and required user details.
 3. Create donation:
    - `POST /donations`
@@ -250,7 +275,7 @@ Key contract rules:
   - logged in: Dashboard/Logout
 - Donation form includes:
   - once/monthly tabs (monthly UI present but not complete business flow),
-  - product quantity controls,
+  - **selected-products summary** (driven by **`campaign-product-cart-store`**; full + / − lives on **`CampaignProductCard`** on the category page),
   - additional amount,
   - 80G conditional PAN + address validation.
 - Dashboard includes donation table with 80G certificate download action.
@@ -286,6 +311,7 @@ Always update these sections when applicable:
 - End-to-end flow steps
 - Integrated endpoint list
 - Current implementation notes
+- **§5.5 (campaign product cart)** if donation product selection, cart lifecycle, or `[slug]` product UI changes
 - Known gaps and planned next work
 
 ---
@@ -325,6 +351,8 @@ Any feature or refactor is complete only when all are true:
   - Always route through `/donations/status` reconciliation.
 - Contract drift risk:
   - When backend API changes, update endpoint mapping and flow sections in this file in the same task.
+- Donation product-line risk:
+  - Campaign product quantities must stay tied to **`campaignId`** (see §5.5). Do not mix IDs across campaigns or bypass **`clearCampaign`** without an explicit alternative.
 
 ---
 
@@ -347,6 +375,7 @@ If an AI agent is working on this frontend:
 ## 15) Change Log
 
 - 2026-04-20:
+  - Documented **campaign product cart**: Zustand store keyed by **`campaignId`**, **`CampaignCartScope`** / Razorpay cleanup, **`CampaignProductCard`** vs donation form summary (§5.5); updated §4, §5.1, §7.3 step 1, §9.
   - Documented client-side API error handling: **`getApiErrorMessage`**, axios `message` vs **`response.data.message`**, and use in **`AuthModal`** (§5.3.1, §7.2, §9).
 - 2026-04-18:
   - Documented shared category fetching: root layout + `getCategories()` with React `cache()` and `revalidate: 300`.
@@ -374,4 +403,4 @@ If an AI agent is working on this frontend:
 ## Last Updated
 
 - Date: 2026-04-20
-- Updated for: **`getApiErrorMessage`** helper and documenting how axios errors map to backend **`message`** fields (auth modal aligned).
+- Updated for: **Campaign product cart** architecture (Zustand, lifecycle, UI split) and **`getApiErrorMessage`** / axios vs backend **`message`** fields.
