@@ -1,6 +1,7 @@
 import { getCategories } from "@/lib/api";
 import { CategoryHeroCarousel } from "@/components/category-hero/category-hero-carousel";
 import { ImpactStatsSection } from "@/components/impact-stats-section";
+import { HomeStoriesSection } from "@/components/home-stories-section";
 import { MissionSection } from "@/components/mission-section";
 import { SitePageContainer } from "@/components/site-page-container";
 
@@ -37,6 +38,10 @@ export default async function HomePage() {
 
       <div className="mb-10">
         <MissionSection />
+      </div>
+
+      <div className="mb-10">
+        <HomeStoriesSection />
       </div>
 
       <SitePageContainer>
