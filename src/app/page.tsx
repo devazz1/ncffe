@@ -4,6 +4,7 @@ import { ImpactStatsSection } from "@/components/impact-stats-section";
 import { DonateCtaSection } from "@/components/donate-cta-section";
 import { HomeStoriesSection } from "@/components/home-stories-section";
 import { MissionSection } from "@/components/mission-section";
+import { SupportingLivesGallerySection } from "@/components/supporting-lives-gallery-section";
 import { SitePageContainer } from "@/components/site-page-container";
 
 export default async function HomePage() {
@@ -50,6 +51,10 @@ export default async function HomePage() {
 
       <div className="mb-10">
         <DonateCtaSection donateHref={donateCtaHref} />
+      </div>
+
+      <div className="mb-10">
+        <SupportingLivesGallerySection />
       </div>
 
       <SitePageContainer>
