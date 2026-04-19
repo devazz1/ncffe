@@ -1,8 +1,10 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { X } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { requestOtp, verifyOtp } from "@/lib/api";
+import { getApiErrorMessage } from "@/lib/api/error-message";
 import { useAuthStore } from "@/lib/auth-store";
 import type { AuthPurpose } from "@/lib/types";
 
@@ -28,11 +30,13 @@ export function AuthModal({
   const [step, setStep] = useState<"request" | "verify">("request");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const canSubmitVerify = useMemo(() => {
-    if (!email || !code) return false;
+  const canSubmitVerify = useMemo(() => !!email && !!code, [email, code]);
+
+  const canRequestOtp = useMemo(() => {
+    if (!email) return false;
     if (purpose === "register") return !!fullName && !!phone;
     return true;
-  }, [email, code, fullName, phone, purpose]);
+  }, [email, purpose, fullName, phone]);
 
   const requestOtpMutation = useMutation({
     mutationFn: () => requestOtp({ email, purpose }),
@@ -41,7 +45,7 @@ export function AuthModal({
       setStep("verify");
     },
     onError: (err: unknown) => {
-      setErrorMessage(err instanceof Error ? err.message : "Failed to request OTP");
+      setErrorMessage(getApiErrorMessage(err, "Failed to request OTP"));
     },
   });
 
@@ -61,53 +65,74 @@ export function AuthModal({
       onSuccess?.();
     },
     onError: (err: unknown) => {
-      setErrorMessage(err instanceof Error ? err.message : "Failed to verify OTP");
+      setErrorMessage(getApiErrorMessage(err, "Failed to verify OTP"));
     },
   });
 
   if (!open) return null;
 
+  const modalTitle =
+    step === "verify" ? "OTP" : purpose === "login" ? "Login" : "Register";
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
       <div className="w-full max-w-md rounded-lg bg-white p-5 shadow-lg">
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-semibold">Authenticate</h2>
-          <button onClick={onClose} className="rounded border border-zinc-300 px-2 py-1 text-sm">
-            Close
+        <div className="mb-2 flex items-center justify-between">
+          <h2 className="text-lg font-semibold">{modalTitle}</h2>
+          <button type="button" onClick={onClose} aria-label="Close"
+            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-zinc-300 text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900"
+          >
+            <X className="h-4 w-4" strokeWidth={2} aria-hidden />
           </button>
         </div>
-        <div className="mb-3 flex gap-2">
-          <button
-            className={`rounded px-3 py-1 text-sm ${purpose === "login" ? "bg-zinc-900 text-white" : "border border-zinc-300"}`}
-            onClick={() => {
-              setPurpose("login");
-              setStep("request");
-            }}
-          >
-            Login
-          </button>
-          <button
-            className={`rounded px-3 py-1 text-sm ${purpose === "register" ? "bg-zinc-900 text-white" : "border border-zinc-300"}`}
-            onClick={() => {
-              setPurpose("register");
-              setStep("request");
-            }}
-          >
-            Register
-          </button>
-        </div>
-
+        <p className="mb-4 text-sm leading-relaxed text-zinc-600">
+          {step === "verify" ? (
+            <>
+              Enter your 6 digit One time password received on email{" "}
+              <span className="break-all font-medium text-zinc-800">{email}</span>{" "}
+              <button
+                type="button"
+                className="cursor-pointer font-medium underline decoration-cta-from underline-offset-2 transition-opacity hover:opacity-90"
+                onClick={() => setStep("request")}
+              >
+                <span className="bg-cta-gradient bg-clip-text text-transparent">
+                  Edit
+                </span>
+              </button>
+            </>
+          ) : purpose === "login" ? (
+            "Enter your Registered Email to login"
+          ) : (
+            "Fill out the details to register"
+          )}
+        </p>
         {step === "request" ? (
           <div className="space-y-3">
             <input
-              placeholder="Email"
+              placeholder="Email id*"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full rounded border border-zinc-300 px-3 py-2"
             />
+            {purpose === "register" && (
+              <>
+                <input
+                  placeholder="Full name *"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  className="w-full rounded border border-zinc-300 px-3 py-2"
+                />
+                <input
+                  placeholder="Mobile Number *"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  className="w-full rounded border border-zinc-300 px-3 py-2"
+                />
+              </>
+            )}
             <button
-              className="w-full rounded bg-zinc-900 px-4 py-2 text-white disabled:opacity-50"
-              disabled={!email || requestOtpMutation.isPending}
+              className="w-full rounded bg-cta-gradient px-4 py-2 text-white disabled:opacity-50"
+              disabled={!canRequestOtp || requestOtpMutation.isPending}
               onClick={() => requestOtpMutation.mutate()}
             >
               Request OTP
@@ -121,39 +146,53 @@ export function AuthModal({
               onChange={(e) => setCode(e.target.value)}
               className="w-full rounded border border-zinc-300 px-3 py-2"
             />
-            {purpose === "register" && (
-              <>
-                <input
-                  placeholder="Full name"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  className="w-full rounded border border-zinc-300 px-3 py-2"
-                />
-                <input
-                  placeholder="Phone"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="w-full rounded border border-zinc-300 px-3 py-2"
-                />
-              </>
-            )}
             <button
-              className="w-full rounded bg-zinc-900 px-4 py-2 text-white disabled:opacity-50"
+              className="w-full rounded bg-cta-gradient px-4 py-2 text-white disabled:opacity-50"
               disabled={!canSubmitVerify || verifyOtpMutation.isPending}
               onClick={() => verifyOtpMutation.mutate()}
             >
               Verify OTP
             </button>
-            <button
-              className="w-full rounded border border-zinc-300 px-4 py-2"
-              onClick={() => setStep("request")}
-            >
-              Back
-            </button>
           </div>
         )}
 
         {errorMessage ? <p className="mt-3 text-sm text-red-600">{errorMessage}</p> : null}
+
+        <p className="mt-4 text-center text-sm text-zinc-600">
+          {purpose === "login" ? (
+            <>
+              Don&apos;t have an account?{" "}
+              <button
+                type="button"
+                className="font-medium text-zinc-900 underline decoration-cta-from underline-offset-2 hover:text-zinc-700 cursor-pointer"
+                onClick={() => {
+                  setPurpose("register");
+                  setStep("request");
+                }}
+              >
+                <span className="bg-cta-gradient bg-clip-text text-transparent">
+                  Registe
+                </span>
+              </button>
+            </>
+          ) : (
+            <>
+              Do you have an account?{" "}
+              <button
+                type="button"
+                className="cursor-pointer font-medium underline decoration-cta-from underline-offset-2 transition-opacity hover:opacity-90"
+                onClick={() => {
+                  setPurpose("login");
+                  setStep("request");
+                }}
+              >
+                <span className="bg-cta-gradient bg-clip-text text-transparent">
+                  Login
+                </span>
+              </button>
+            </>
+          )}
+        </p>
       </div>
     </div>
   );

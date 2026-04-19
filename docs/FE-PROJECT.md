@@ -69,7 +69,7 @@ The project is in a functional-first phase:
 
 - `web/src/app`: route files and layouts
 - `web/src/components`: reusable UI/client components
-- `web/src/lib/api`: API integration (`client.ts`, `server.ts`, `index.ts`)
+- `web/src/lib/api`: API integration (`client.ts`, `server.ts`, `index.ts`, `error-message.ts`)
 - `web/src/lib/razorpay`: script loader + checkout opener
 - `web/src/lib`: env/config/types/utilities/store helpers
 - `web/src/types`: global type declarations
@@ -100,6 +100,13 @@ The project is in a functional-first phase:
   - Uses shared base URL from env.
   - Supports global bearer token injection.
   - Handles global 401 session invalidation via app-registered callback.
+
+### 5.3.1 Client API errors and user-visible messages
+
+- Axios rejects failed HTTP responses with an **`AxiosError`**. Its **`error.message`** is the generic axios summary (for example `"Request failed with status code 400"`), **not** the backend JSON body.
+- User-facing copy from the API lives under **`error.response.data`**, typically **`message`** (NestJS-style: string, or sometimes an array of validation strings).
+- **`getApiErrorMessage`** (`web/src/lib/api/error-message.ts`) reads `response.data.message` when present and falls back to `Error.message` or a caller-supplied default. Use it in mutation/UI `onError` handlers (and anywhere else axios errors are shown to users).
+- **`AuthModal`** OTP mutations use this helper so 4xx responses show the server text (for example “No account found for this email…”).
 
 ## 5.4 Auth/session model (current)
 
@@ -156,6 +163,8 @@ This prevents conflicts with top-level dynamic slug handling.
 4. On success:
    - save `accessToken` to Zustand,
    - Axios auto-sync applies bearer token.
+5. On failure (either step):
+   - surface **`getApiErrorMessage`** so the modal shows **`response.data.message`** from the API when present (see §5.3.1).
 
 ## 7.3 Donation + payment flow
 
@@ -245,6 +254,7 @@ Key contract rules:
   - additional amount,
   - 80G conditional PAN + address validation.
 - Dashboard includes donation table with 80G certificate download action.
+- **Axios/API errors in UI:** do not rely on `err.message` alone for axios failures; use **`getApiErrorMessage`** (`web/src/lib/api/error-message.ts`) so backend `message` fields are shown (auth modal already follows this).
 
 ---
 
@@ -336,6 +346,8 @@ If an AI agent is working on this frontend:
 
 ## 15) Change Log
 
+- 2026-04-20:
+  - Documented client-side API error handling: **`getApiErrorMessage`**, axios `message` vs **`response.data.message`**, and use in **`AuthModal`** (§5.3.1, §7.2, §9).
 - 2026-04-18:
   - Documented shared category fetching: root layout + `getCategories()` with React `cache()` and `revalidate: 300`.
   - Documented header `CategoriesMenu` (client, server-fed props) and updated public browsing flow + implementation notes.
@@ -361,5 +373,5 @@ If an AI agent is working on this frontend:
 
 ## Last Updated
 
-- Date: 2026-04-18
-- Updated for: shared category catalog (`getCategories`, layout, header Categories menu) and documentation of cache/ISR behavior.
+- Date: 2026-04-20
+- Updated for: **`getApiErrorMessage`** helper and documenting how axios errors map to backend **`message`** fields (auth modal aligned).
