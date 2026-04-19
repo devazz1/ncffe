@@ -1,6 +1,7 @@
 import { getCategories } from "@/lib/api";
 import { CategoryHeroCarousel } from "@/components/category-hero/category-hero-carousel";
 import { ImpactStatsSection } from "@/components/impact-stats-section";
+import { DonateCtaSection } from "@/components/donate-cta-section";
 import { HomeStoriesSection } from "@/components/home-stories-section";
 import { MissionSection } from "@/components/mission-section";
 import { SitePageContainer } from "@/components/site-page-container";
@@ -13,6 +14,9 @@ export default async function HomePage() {
   } catch {
     categories = [];
   }
+
+  const donateCtaHref =
+    categories.length > 0 ? `/${categories[0].slug}` : "/";
 
   const heroSlides = categories.map((c) => ({
     id: c.categoryId,
@@ -42,6 +46,10 @@ export default async function HomePage() {
 
       <div className="mb-10">
         <HomeStoriesSection />
+      </div>
+
+      <div className="mb-10">
+        <DonateCtaSection donateHref={donateCtaHref} />
       </div>
 
       <SitePageContainer>
