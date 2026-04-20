@@ -107,7 +107,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   return (
     <SitePageContainer>
       <CampaignCartScope campaignId={campaignId}>
-        <section className="grid gap-6 lg:grid-cols-[1fr_380px]">
+        <section className="grid gap-6 lg:grid-cols-[1fr_minmax(380px,525px)]">
           <div className="rounded-lg border border-zinc-200 bg-white p-6">
             <h1 className="text-2xl font-bold">{category.name}</h1>
             <p className="mt-2 text-sm text-zinc-900">

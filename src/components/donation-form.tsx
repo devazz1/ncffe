@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { Trash2 } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { createDonation, createPaymentOrder } from "@/lib/api";
 import { formatCurrencyINR, toNumber } from "@/lib/format";
@@ -12,6 +13,8 @@ import {
   getUnitsForCampaign,
   useCampaignProductCartStore,
 } from "@/stores/campaign-product-cart-store";
+
+const DONATION_AMOUNT_PRESETS = [300, 500, 1000, 1500] as const;
 
 type DonationFormProps = {
   campaignName: string;
@@ -149,163 +152,206 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
 
   return (
     <section className="rounded-lg border border-zinc-200 bg-white p-4">
-      <h3 className="text-lg font-semibold">Donate</h3>
-      <p className="text-sm text-zinc-800">Choose products and/or add custom amount.</p>
+      <h3 className="text-lg font-semibold text-center">Donation</h3>
 
-      <div className="mt-3 flex gap-2">
+      <div className="mt-3 flex justify-center">
         <button
           type="button"
           onClick={() => setTab("once")}
-          className={`rounded px-3 py-1 text-sm ${tab === "once" ? "bg-zinc-900 text-white" : "border border-zinc-300"}`}
+          className={`rounded-l px-3 py-1 text-sm ${tab === "once" ? "bg-cta-gradient text-white" : "border border-zinc-300"}`}
         >
-          Donate once
+          One Time
         </button>
         <button
           type="button"
           onClick={() => setTab("monthly")}
-          className="rounded border border-zinc-300 px-3 py-1 text-sm opacity-60"
+          className="rounded-r border border-zinc-300 px-3 py-1 text-sm opacity-60"
           title="Monthly flow not implemented yet"
         >
-          Donate monthly
+          Monthly
         </button>
       </div>
 
-      <div className="mt-4 space-y-2">
-        <label className="block text-sm font-medium">Donation Amount</label>
-        <input
-          type="number"
-          min={0}
-          value={amount}
-          onChange={(e) => setAmount(Number(e.target.value || 0))}
-          className="w-full rounded border border-zinc-300 px-3 py-2"
-        />
-      </div>
-
-      {selectedProductsForSummary.length > 0 && (
-        <div className="mt-4 space-y-3">
-          <p className="text-sm font-medium text-zinc-900">Selected products</p>
-          {selectedProductsForSummary.map((product) => {
-            const qty = units[product.campaignProductId] ?? 0;
-            const lineTotal = qty * toNumber(product.unitPrice);
-            return (
-              <div
-                key={product.campaignProductId}
-                className="rounded border border-zinc-200 p-3"
-              >
-                <div className="flex items-start justify-between gap-2">
-                  <div>
-                    <p className="font-medium">{product.name}</p>
-                    <p className="text-xs text-zinc-600">
-                      {formatCurrencyINR(toNumber(product.unitPrice))} × {qty} ={" "}
-                      {formatCurrencyINR(lineTotal)}
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      removeProduct(campaignId, product.campaignProductId)
-                    }
-                    className="shrink-0 text-sm text-red-600 underline"
-                  >
-                    Remove
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
-
-      <div className="mt-4 space-y-2">
-        <label className="block text-sm font-medium">Your Details</label>
-        <div className="grid gap-2">
-          <input
-            placeholder="Full name"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            className="w-full rounded border border-zinc-300 px-3 py-2"
-          />
-          <input
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded border border-zinc-300 px-3 py-2"
-          />
-          <input
-            type="tel"
-            placeholder="Phone"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            className="w-full rounded border border-zinc-300 px-3 py-2"
-          />
-        </div>
-        {is80GRequested && (
-          <div className="grid gap-2">
+      <div className="mt-4 grid gap-2 md:grid-cols-2 md:items-start md:gap-4">
+        {/* section for donation amount and products */}
+        <div className="flex flex-col gap-4">
+          <div className="space-y-2">
+            <label className="block text-sm font-medium">Donation Amount</label>
             <input
-              placeholder="PAN"
-              value={pan}
-              onChange={(e) => setPan(e.target.value)}
+              type="number"
+              min={0}
+              value={amount}
+              onChange={(e) => setAmount(Number(e.target.value || 0))}
               className="w-full rounded border border-zinc-300 px-3 py-2"
             />
-            <textarea
-              placeholder="Address"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              className="w-full rounded border border-zinc-300 px-3 py-2"
-            />
+            <div className="flex flex-wrap gap-2 pt-1">
+              {DONATION_AMOUNT_PRESETS.map((preset) => {
+                const isSelected = amount === preset;
+                return (
+                  <button
+                    key={preset}
+                    type="button"
+                    onClick={() => setAmount(preset)}
+                    className={`rounded-lg border px-3 py-1.5 text-sm transition ${
+                      isSelected
+                        ? "border-zinc-900 bg-zinc-900 text-white"
+                        : "border-zinc-300 bg-surface-warm text-zinc-800 hover:border-zinc-400"
+                    }`}
+                  >
+                    ₹{preset}
+                  </button>
+                );
+              })}
+            </div>
           </div>
-        )}
+
+          <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
+            {selectedProductsForSummary.length > 0 && (
+              <p className="text-sm font-semibold text-zinc-900">Product Added</p>
+            )}
+
+            {selectedProductsForSummary.length === 0 ? (
+              <div className="mt-3 flex min-h-20 items-center justify-center rounded-lg bg-zinc-50">
+                <p className="text-sm text-zinc-600">No Product Added yet</p>
+              </div>
+            ) : (
+              <ul className="mt-3 divide-y divide-zinc-200">
+                {selectedProductsForSummary.map((product) => {
+                  const qty = units[product.campaignProductId] ?? 0;
+                  const lineTotal = qty * toNumber(product.unitPrice);
+                  const unitPrice = toNumber(product.unitPrice);
+                  return (
+                    <li key={product.campaignProductId} className="flex gap-3 py-3 first:pt-0">
+                      <div className="min-w-0 flex-1">
+                        <p className="font-medium text-zinc-900">{product.name}</p>
+                        <p className="mt-0.5 text-xs text-zinc-600">
+                          {formatCurrencyINR(unitPrice)} × {qty}
+                        </p>
+                      </div>
+                      <div className="flex shrink-0 items-start gap-3">
+                        <span className="text-sm font-medium tabular-nums text-zinc-900">
+                          {formatCurrencyINR(lineTotal)}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            removeProduct(campaignId, product.campaignProductId)
+                          }
+                          className="rounded p-1 text-zinc-500 transition hover:bg-zinc-200 hover:text-red-600"
+                          aria-label={`Remove ${product.name}`}
+                        >
+                          <Trash2 size={18} className="shrink-0" aria-hidden />
+                        </button>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+            {total > 0 && (
+              <div className="mt-4 space-y-2 border-t border-zinc-300 pt-3">
+                <div className="flex justify-between text-sm text-zinc-900">
+                  <span>Product total</span>
+                  <span className="tabular-nums">{formatCurrencyINR(productTotal)}</span>
+                </div>
+                <div className="flex justify-between font-semibold text-zinc-900">
+                  <span>Total</span>
+                  <span className="tabular-nums">{formatCurrencyINR(total)}</span>
+                </div>
+                <p className="text-xs text-zinc-600">Minimum total: INR 300</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* section 2 for donor details */}
+        <div className="flex flex-col gap-3">
+          <div className="space-y-2">
+            <label className="block text-sm font-medium">Your Details</label>
+            <div className="grid gap-2">
+              <input
+                placeholder="Full name"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                className="w-full rounded border border-zinc-300 px-3 py-2"
+              />
+              <input
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full rounded border border-zinc-300 px-3 py-2"
+              />
+              <input
+                type="tel"
+                placeholder="Phone"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="w-full rounded border border-zinc-300 px-3 py-2"
+              />
+            </div>
+            {is80GRequested && (
+              <div className="grid gap-2">
+                <input
+                  placeholder="PAN"
+                  value={pan}
+                  onChange={(e) => setPan(e.target.value)}
+                  className="w-full rounded border border-zinc-300 px-3 py-2"
+                />
+                <textarea
+                  placeholder="Address"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  className="w-full rounded border border-zinc-300 px-3 py-2"
+                />
+              </div>
+            )}
+          </div>
+
+          <label className="flex items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              checked={is80GRequested}
+              onChange={(e) => setIs80GRequested(e.target.checked)}
+            />
+            Request 80G
+          </label>
+
+          <label className="flex items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              checked={isAnonymous}
+              onChange={(e) => setIsAnonymous(e.target.checked)}
+            />
+            Make my donation Anonymous
+          </label>
+
+          <fieldset className="space-y-2 border-0 p-0">
+            <legend className="sr-only">Donor residency</legend>
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="radio"
+                name="isIndian"
+                checked={isIndian}
+                onChange={() => setIsIndian(true)}
+              />
+              Indian Individual
+            </label>
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="radio"
+                name="isIndian"
+                checked={!isIndian}
+                onChange={() => setIsIndian(false)}
+              />
+              Not an Indian Individual
+            </label>
+          </fieldset>
+
+        </div>
       </div>
-
-      <label className="mt-3 flex items-center gap-2 text-sm">
-        <input
-          type="checkbox"
-          checked={is80GRequested}
-          onChange={(e) => setIs80GRequested(e.target.checked)}
-        />
-        Request 80G
-      </label>
-
-      <label className="mt-3 flex items-center gap-2 text-sm">
-        <input
-          type="checkbox"
-          checked={isAnonymous}
-          onChange={(e) => setIsAnonymous(e.target.checked)}
-        />
-        Make my donation Anonymous
-      </label>
-
-      <fieldset className="mt-3 space-y-2 border-0 p-0">
-        <legend className="sr-only">Donor residency</legend>
-        <label className="flex items-center gap-2 text-sm">
-          <input
-            type="radio"
-            name="isIndian"
-            checked={isIndian}
-            onChange={() => setIsIndian(true)}
-          />
-          Indian Individual
-        </label>
-        <label className="flex items-center gap-2 text-sm">
-          <input
-            type="radio"
-            name="isIndian"
-            checked={!isIndian}
-            onChange={() => setIsIndian(false)}
-          />
-          Not an Indian Individual
-        </label>
-      </fieldset>
-
-      <div className="mt-4 rounded border border-zinc-200 bg-zinc-50 p-3">
-        <p className="text-sm text-zinc-900">Product total: {formatCurrencyINR(productTotal)}</p>
-        <p className="font-semibold">Total: {formatCurrencyINR(total)}</p>
-        <p className="text-xs text-zinc-800">Minimum total: INR 300</p>
-      </div>
-
       <button
         type="button"
-        className="mt-4 w-full rounded bg-zinc-900 px-4 py-2 text-white disabled:opacity-50"
+        className="mt-4 w-full rounded bg-cta-gradient px-4 py-2 text-white disabled:opacity-50"
         disabled={createDonationMutation.isPending || isCheckoutOpen}
         onClick={() => {
           if (validateBeforeSubmit()) {
@@ -317,7 +363,7 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
         {isCheckoutOpen ? "Opening checkout..." : "Proceed to checkout"}
       </button>
 
-      {errorMessage ? <p className="mt-3 text-sm text-red-600">{errorMessage}</p> : null}
+      {errorMessage ? <p className="text-sm text-red-600">{errorMessage}</p> : null}
     </section>
   );
 }
