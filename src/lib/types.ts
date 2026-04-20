@@ -25,6 +25,11 @@ export type CampaignProduct = {
   imageUrl: string;
 };
 
+export type CampaignSuccessDonations = {
+  count: number;
+  totalAmount: string;
+};
+
 export type CampaignSummary = {
   campaignId: number;
   categoryId: number;
@@ -32,7 +37,15 @@ export type CampaignSummary = {
   slug: string;
   description: string | null;
   goalAmount: string;
+  startDate: string;
+  endDate: string | null;
+  allowDonationBeforeStart: boolean;
+  allowDonationAfterEnd: boolean;
   campaignStatus: "draft" | "published" | "paused" | "archived";
+  heroVideo: string | null;
+  heroPoster: string | null;
+  bodyDetails: unknown;
+  successDonations: CampaignSuccessDonations;
   allowMonthly?: boolean;
   allowForeignDonation?: boolean;
 };
