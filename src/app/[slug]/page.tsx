@@ -5,7 +5,7 @@ import {
   getTopDonations,
 } from "@/lib/api";
 import { CampaignCartScope } from "@/components/campaign-cart-scope";
-import { CampaignProductCard } from "@/components/campaign-product-card";
+import { CategoryCampaignOverview } from "@/components/category-campaign-overview";
 import { DonationForm } from "@/components/donation-form";
 import { SitePageContainer } from "@/components/site-page-container";
 import type { TopDonationItem } from "@/lib/types";
@@ -108,35 +108,11 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     <SitePageContainer>
       <CampaignCartScope campaignId={campaignId}>
         <section className="grid gap-6 lg:grid-cols-[1fr_minmax(380px,525px)]">
-          <div className="rounded-lg border border-zinc-200 bg-white p-6">
-            <h1 className="text-2xl font-bold">{category.name}</h1>
-            <p className="mt-2 text-sm text-zinc-900">
-              {category.description ?? "No category description available."}
-            </p>
-            {category.activeCampaign ? (
-              <div className="mt-4 rounded border border-zinc-200 bg-zinc-50 p-4 text-sm">
-                <p className="font-semibold">Active campaign</p>
-                <p className="mt-1">{category.activeCampaign.name}</p>
-                <p className="text-zinc-800">
-                  Status: {category.activeCampaign.campaignStatus}
-                </p>
-              </div>
-            ) : null}
-            {products.length > 0 ? (
-              <div className="mt-6 space-y-3">
-                <h2 className="text-sm font-semibold text-zinc-900">
-                  Support with products
-                </h2>
-                {products.map((product) => (
-                  <CampaignProductCard
-                    key={product.campaignProductId}
-                    campaignId={campaignId}
-                    product={product}
-                  />
-                ))}
-              </div>
-            ) : null}
-          </div>
+          <CategoryCampaignOverview
+            category={category}
+            campaignId={campaignId}
+            products={products}
+          />
           <DonationForm
             campaignName={category.activeCampaign?.name ?? ""}
             campaignId={campaignId}
