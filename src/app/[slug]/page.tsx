@@ -1,4 +1,6 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
+import { ChevronRight } from "lucide-react";
 import {
   getCampaignProducts,
   getCategoryBySlug,
@@ -46,26 +48,59 @@ function TopDonationsSection({ items }: { items: TopDonationItem[] }) {
     >
       <h2
         id="top-donations-heading"
-        className="text-lg font-semibold text-zinc-900"
+        className="text-lg text-center font-semibold text-zinc-900"
       >
-        Top donations
+        Our Top Supporters
       </h2>
-      <p className="mt-1 text-sm text-zinc-600">
-        Largest successful donations, highest first.
-      </p>
-      <ul className="mt-4 divide-y divide-zinc-100">
+
+      <ul className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 md:grid-cols-4">
         {items.map((item, index) => (
           <li
             key={`${item.name}-${item.amount}-${index}`}
-            className="flex items-center justify-between gap-4 py-3 text-sm first:pt-0 last:pb-0"
+            className="flex min-w-0 items-center justify-between gap-2.5 rounded-md bg-[#d6f2ff] px-2.5 py-2.5 text-sm text-black"
           >
-            <span className="font-medium text-zinc-900">{item.name}</span>
-            <span className="tabular-nums text-zinc-800">
+            <span className="min-w-0 flex-1 truncate font-medium" title={item.name}>
+              {item.name}
+            </span>
+            <span className="shrink-0 tabular-nums">
               {formatTopDonationInr(item.amount)}
             </span>
           </li>
         ))}
       </ul>
+    </section>
+  );
+}
+
+function SupportRealImpactCta() {
+  return (
+    <section
+      className="mt-6 flex flex-col gap-8 rounded-3xl border border-[#ffd5c7] bg-linear-to-br from-white to-[#ffd7a4] p-8"
+      aria-labelledby="support-impact-heading"
+    >
+      <div className="flex flex-col gap-2">
+        <h2
+          id="support-impact-heading"
+          className="text-lg font-semibold leading-tight tracking-tight text-[#d11f19] sm:text-xl md:text-[1.75rem] md:leading-snug"
+        >
+          Support us in Creating Real impact
+        </h2>
+        <p className="text-sm leading-relaxed text-zinc-950 md:text-base">
+          Your generosity can transform lives. Join thousands of donors who are
+          creating lasting change in communities across India.
+        </p>
+      </div>
+      <div>
+        <Link
+          href="#donation"
+          className="inline-flex h-10 min-w-50 max-w-full items-center justify-between gap-3 rounded bg-cta-gradient px-4 text-sm font-semibold text-white transition hover:opacity-95"
+        >
+          <span className="min-w-0 shrink leading-6">Start Monthly Donation</span>
+          <span className="flex size-5 shrink-0 items-center justify-center" aria-hidden>
+            <ChevronRight className="size-4 text-white" strokeWidth={2} />
+          </span>
+        </Link>
+      </div>
     </section>
   );
 }
@@ -120,9 +155,14 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           />
         </section>
       </CampaignCartScope>
-      <div className="mt-6">
-        <TopDonationsSection items={topDonationItems} />
-      </div>
+      <section className="grid gap-6 lg:grid-cols-[1fr_minmax(380px,525px)]">
+        <div>
+          <div className="mt-6">
+            <TopDonationsSection items={topDonationItems} />
+          </div>
+          <SupportRealImpactCta />
+        </div>
+      </section>
     </SitePageContainer>
   );
 }

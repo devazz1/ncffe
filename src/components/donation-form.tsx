@@ -151,7 +151,7 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
   }
 
   return (
-    <section className="rounded-lg border border-zinc-200 bg-white p-4">
+    <section id="donation" className="rounded-lg border border-zinc-200 bg-white p-4">
       <h3 className="text-lg font-semibold text-center">Donation</h3>
 
       <div className="mt-3 flex justify-center">
