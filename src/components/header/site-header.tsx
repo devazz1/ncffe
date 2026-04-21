@@ -15,7 +15,7 @@ export function SiteHeader({ categories }: SiteHeaderProps) {
 
   return (
     <header className="border-b border-zinc-200 bg-white">
-      <div className="mx-auto flex w-full max-w-screen-2xl items-center px-6 py-3">
+      <div className="mx-auto flex w-full max-w-screen-2xl items-center px-4 py-3 md:px-16">
         <div className="flex min-w-0 flex-1 justify-start">
           <Link href="/" className="font-semibold">
             NGO Platform

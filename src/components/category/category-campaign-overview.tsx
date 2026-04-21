@@ -140,12 +140,12 @@ export function CategoryCampaignOverview({
     <div>
       <HeroMedia heroVideo={heroVideo} heroPoster={heroPoster} name={name} />
 
-      <h1 className="text-2xl font-bold mt-4">{name}</h1>
+      <h1 className="text-2xl font-semibold mt-4">{name}</h1>
 
       <div className="mt-3 flex flex-col items-start justify-between gap-4 md:min-h-24 md:flex-row md:justify-between">
         <div className="space-y-1">
-          <div className="inline-flex items-center gap-2 whitespace-nowrap">
-            <Users className="size-4" />
+          <div className="inline-flex items-center gap-1 whitespace-nowrap">
+            <Users className="size-4 text-[#FF847C]" />
             <span className="text-sm text-zinc-500">
               {donationCount ?? 0} Peoples helped us
             </span>
@@ -160,7 +160,7 @@ export function CategoryCampaignOverview({
 
         <div className="w-[197px] max-w-full space-y-1">
           <div className="flex items-center justify-between gap-2 text-sm">
-            <span className="font-medium text-slate-600">
+            <span className="font-medium text-slate-400">
               {formatIndianCurrencyCompact(normalizedAmountRaised)}
             </span>
             <span className="text-zinc-900">
@@ -176,13 +176,13 @@ export function CategoryCampaignOverview({
         </div>
       </div>
 
-      <p className="text-sm text-zinc-900">
-        {description ?? "No category description available."}
+      <p className="text-sm text-zinc-500">
+        {description ?? " "}
       </p>
 
       {products.length > 0 && (
         <div className="mt-6 space-y-3">
-          <h2 className="text-sm font-semibold text-zinc-900">
+          <h2 className="text-xl font-medium">
             Donate a price of product
           </h2>
           <div className="flex flex-wrap gap-2">

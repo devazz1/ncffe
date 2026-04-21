@@ -8,7 +8,7 @@ type SitePageContainerProps = {
 export function SitePageContainer({ children, className }: SitePageContainerProps) {
   return (
     <div
-      className={["mx-auto w-full max-w-screen-2xl px-6 py-6", className]
+      className={["mx-auto w-full max-w-screen-2xl px-4 py-6 md:px-16", className]
         .filter(Boolean)
         .join(" ")}
     >

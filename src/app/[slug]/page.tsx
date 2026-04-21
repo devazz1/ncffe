@@ -1,16 +1,26 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ChevronRight } from "lucide-react";
+import { CircleChevronRight } from "lucide-react";
 import {
   getCampaignProducts,
   getCategoryBySlug,
   getTopDonations,
 } from "@/lib/api";
 import { CampaignCartScope } from "@/components/campaign-cart-scope";
-import { CategoryCampaignOverview } from "@/components/category-campaign-overview";
+import { CategoryAboutCampaignSection } from "@/components/category/category-about-campaign-section";
+import { CategoryCampaignOverview } from "@/components/category/category-campaign-overview";
 import { DonationForm } from "@/components/donation-form";
+import { CategoryFaqSection } from "@/components/category/category-faq-section";
+import { CategoryHowWeWorkSection } from "@/components/category/category-how-we-work-section";
+import { CategoryImpactSection } from "@/components/category/category-impact-section";
+import { CategoryTopDonationsSection } from "@/components/category/category-top-donations-section";
+import {
+  ABOUT_CAMPAIGN_DUMMY,
+  CAMPAIGN_FAQ_DUMMY,
+  HOW_WE_WORK_DUMMY,
+  IMPACT_DUMMY,
+} from "@/data/campaign";
 import { SitePageContainer } from "@/components/site-page-container";
-import type { TopDonationItem } from "@/lib/types";
 
 type CategoryPageProps = {
   params: Promise<{ slug: string }>;
@@ -24,54 +34,6 @@ const RESERVED_SLUGS = new Set([
   "api",
 ]);
 
-function formatTopDonationInr(amount: string) {
-  const n = Number(amount);
-  if (!Number.isFinite(n)) {
-    return amount;
-  }
-  return new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 2,
-  }).format(n);
-}
-
-function TopDonationsSection({ items }: { items: TopDonationItem[] }) {
-  if (items.length === 0) {
-    return null;
-  }
-
-  return (
-    <section
-      className="rounded-lg border border-zinc-200 bg-white p-6"
-      aria-labelledby="top-donations-heading"
-    >
-      <h2
-        id="top-donations-heading"
-        className="text-lg text-center font-semibold text-zinc-900"
-      >
-        Our Top Supporters
-      </h2>
-
-      <ul className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 md:grid-cols-4">
-        {items.map((item, index) => (
-          <li
-            key={`${item.name}-${item.amount}-${index}`}
-            className="flex min-w-0 items-center justify-between gap-2.5 rounded-md bg-[#d6f2ff] px-2.5 py-2.5 text-sm text-black"
-          >
-            <span className="min-w-0 flex-1 truncate font-medium" title={item.name}>
-              {item.name}
-            </span>
-            <span className="shrink-0 tabular-nums">
-              {formatTopDonationInr(item.amount)}
-            </span>
-          </li>
-        ))}
-      </ul>
-    </section>
-  );
-}
-
 function SupportRealImpactCta() {
   return (
     <section
@@ -81,11 +43,11 @@ function SupportRealImpactCta() {
       <div className="flex flex-col gap-2">
         <h2
           id="support-impact-heading"
-          className="text-lg font-semibold leading-tight tracking-tight text-[#d11f19] sm:text-xl md:text-[1.75rem] md:leading-snug"
+          className="text-base font-medium leading-tight tracking-tight text-[#d11f19] sm:text-xl md:leading-snug"
         >
           Support us in Creating Real impact
         </h2>
-        <p className="text-sm leading-relaxed text-zinc-950 md:text-base">
+        <p className="text-sm leading-relaxed">
           Your generosity can transform lives. Join thousands of donors who are
           creating lasting change in communities across India.
         </p>
@@ -97,7 +59,7 @@ function SupportRealImpactCta() {
         >
           <span className="min-w-0 shrink leading-6">Start Monthly Donation</span>
           <span className="flex size-5 shrink-0 items-center justify-center" aria-hidden>
-            <ChevronRight className="size-4 text-white" strokeWidth={2} />
+            <CircleChevronRight className="size-4 text-white" strokeWidth={2} />
           </span>
         </Link>
       </div>
@@ -128,7 +90,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           </p>
         </section>
         <div className="mt-6">
-          <TopDonationsSection items={topDonationItems} />
+          <CategoryTopDonationsSection items={topDonationItems} />
         </div>
       </SitePageContainer>
     );
@@ -157,9 +119,11 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       </CampaignCartScope>
       <section className="grid gap-6 lg:grid-cols-[1fr_minmax(380px,525px)]">
         <div>
-          <div className="mt-6">
-            <TopDonationsSection items={topDonationItems} />
-          </div>
+          <CategoryAboutCampaignSection items={ABOUT_CAMPAIGN_DUMMY} />
+          <CategoryImpactSection stats={IMPACT_DUMMY} />
+          <CategoryHowWeWorkSection steps={HOW_WE_WORK_DUMMY} />
+          <CategoryFaqSection items={CAMPAIGN_FAQ_DUMMY} />
+          <CategoryTopDonationsSection items={topDonationItems} />
           <SupportRealImpactCta />
         </div>
       </section>
