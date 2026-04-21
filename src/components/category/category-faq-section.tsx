@@ -3,10 +3,10 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 
-import type { BodyFaqEntry } from "@/lib/types";
+import type { BodyFaqItem } from "@/lib/types";
 
 type CategoryFaqSectionProps = {
-  items: ReadonlyArray<BodyFaqEntry>;
+  items: ReadonlyArray<BodyFaqItem>;
 };
 
 export function CategoryFaqSection({ items }: CategoryFaqSectionProps) {

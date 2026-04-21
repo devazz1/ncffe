@@ -1,8 +1,8 @@
-import type { BodyImpactStat } from "@/lib/types";
+import type { BodyImpactItem } from "@/lib/types";
 import { Star } from "lucide-react";
 
 type CategoryImpactSectionProps = {
-  stats: ReadonlyArray<BodyImpactStat>;
+  stats: ReadonlyArray<BodyImpactItem>;
 };
 
 /**

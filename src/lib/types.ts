@@ -60,12 +60,6 @@ export type BodyDetails = {
   howWeWork: ReadonlyArray<BodyHowWeWorkItem>;
   faq: ReadonlyArray<BodyFaqItem>;
 };
-// ... //
-
-// Backward-compatible aliases for existing imports.
-export type BodyImpactStat = BodyImpactItem;
-export type BodyHowWeWorkStep = BodyHowWeWorkItem;
-export type BodyFaqEntry = BodyFaqItem;
 
 export type CampaignSummary = {
   campaignId: number;
