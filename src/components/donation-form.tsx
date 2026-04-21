@@ -151,7 +151,7 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
   }
 
   return (
-    <section id="donation" className="rounded-lg border border-zinc-200 bg-white p-4">
+    <section id="donation" className="rounded-lg border border-zinc-200 bg-white p-4 self-start">
       <h3 className="text-lg font-semibold text-center">Donation</h3>
 
       <div className="mt-3 flex justify-center">
@@ -174,7 +174,7 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
 
       <div className="mt-4 grid gap-2 md:grid-cols-2 md:items-start md:gap-4">
         {/* section for donation amount and products */}
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 h-full">
           <div className="space-y-2">
             <label className="block text-sm font-medium">Donation Amount</label>
             <input
@@ -205,7 +205,7 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
             </div>
           </div>
 
-          <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
+          <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4 h-full">
             {selectedProductsForSummary.length > 0 && (
               <p className="text-sm font-semibold text-zinc-900">Product Added</p>
             )}
@@ -307,26 +307,8 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
             )}
           </div>
 
-          <label className="flex items-center gap-2 text-sm">
-            <input
-              type="checkbox"
-              checked={is80GRequested}
-              onChange={(e) => setIs80GRequested(e.target.checked)}
-            />
-            Request 80G
-          </label>
-
-          <label className="flex items-center gap-2 text-sm">
-            <input
-              type="checkbox"
-              checked={isAnonymous}
-              onChange={(e) => setIsAnonymous(e.target.checked)}
-            />
-            Make my donation Anonymous
-          </label>
-
           <fieldset className="space-y-2 border-0 p-0">
-            <legend className="sr-only">Donor residency</legend>
+            <legend className="text-sm font-medium mb-1">Donor residency</legend>
             <label className="flex items-center gap-2 text-sm">
               <input
                 type="radio"
@@ -346,6 +328,45 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
               Not an Indian Individual
             </label>
           </fieldset>
+
+          <div className="space-y-3">
+            <p className="text-sm font-medium text-zinc-900">Do you want 80G Tax Certificate</p>
+            <div className="inline-flex gap-2 rounded-lg bg-[#FFECDC] p-1">
+              <button
+                type="button"
+                aria-pressed={!is80GRequested}
+                onClick={() => setIs80GRequested(false)}
+                className={`min-w-14.5 rounded-lg px-4 py-2 text-sm font-medium transition ${
+                  !is80GRequested
+                    ? "bg-white text-zinc-900 shadow-sm"
+                    : "bg-transparent text-zinc-700 hover:bg-white/50"
+                }`}
+              >
+                NO
+              </button>
+              <button
+                type="button"
+                aria-pressed={is80GRequested}
+                onClick={() => setIs80GRequested(true)}
+                className={`min-w-14.5 rounded-lg px-4 py-2 text-sm font-medium transition ${
+                  is80GRequested
+                    ? "bg-white text-zinc-900 shadow-sm"
+                    : "bg-transparent text-zinc-700 hover:bg-white/50"
+                }`}
+              >
+                YES
+              </button>
+            </div>
+          </div>
+
+          <label className="flex items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              checked={isAnonymous}
+              onChange={(e) => setIsAnonymous(e.target.checked)}
+            />
+            <span className="text-sm text-zinc-600">Make my donation Anonymous</span>
+          </label>
 
         </div>
       </div>

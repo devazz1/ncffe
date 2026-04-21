@@ -9,11 +9,11 @@ import {
 import { CampaignCartScope } from "@/components/campaign-cart-scope";
 import { CategoryAboutCampaignSection } from "@/components/category/category-about-campaign-section";
 import { CategoryCampaignOverview } from "@/components/category/category-campaign-overview";
-import { DonationForm } from "@/components/donation-form";
 import { CategoryFaqSection } from "@/components/category/category-faq-section";
 import { CategoryHowWeWorkSection } from "@/components/category/category-how-we-work-section";
 import { CategoryImpactSection } from "@/components/category/category-impact-section";
 import { CategoryTopDonationsSection } from "@/components/category/category-top-donations-section";
+import { DonationForm } from "@/components/donation-form";
 import {
   ABOUT_DUMMY,
   FAQ_DUMMY,
