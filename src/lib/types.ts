@@ -30,6 +30,43 @@ export type CampaignSuccessDonations = {
   totalAmount: string;
 };
 
+// category/campaign body details
+export type BodyAboutItem = {
+  videoUrl?: string | null;
+  imageUrl?: string | null;
+  heading?: string | null;
+  description?: string | null;
+};
+
+export type BodyImpactItem = {
+  value: string;
+  label: string;
+  iconSvg?: string | null;
+};
+
+export type BodyHowWeWorkItem = {
+  title: string;
+  description: string;
+};
+
+export type BodyFaqItem = {
+  question: string;
+  answer: string;
+};
+
+export type BodyDetails = {
+  about: ReadonlyArray<BodyAboutItem>;
+  impact: ReadonlyArray<BodyImpactItem>;
+  howWeWork: ReadonlyArray<BodyHowWeWorkItem>;
+  faq: ReadonlyArray<BodyFaqItem>;
+};
+// ... //
+
+// Backward-compatible aliases for existing imports.
+export type BodyImpactStat = BodyImpactItem;
+export type BodyHowWeWorkStep = BodyHowWeWorkItem;
+export type BodyFaqEntry = BodyFaqItem;
+
 export type CampaignSummary = {
   campaignId: number;
   categoryId: number;
@@ -44,7 +81,7 @@ export type CampaignSummary = {
   campaignStatus: "draft" | "published" | "paused" | "archived";
   heroVideo: string | null;
   heroPoster: string | null;
-  bodyDetails: unknown;
+  bodyDetails: BodyDetails | null;
   successDonations: CampaignSuccessDonations;
   allowMonthly?: boolean;
   allowForeignDonation?: boolean;
@@ -58,7 +95,7 @@ export type Category = {
   displayOrder: number;
   heroVideo: string | null;
   heroPoster: string | null;
-  bodyDetails: unknown;
+  bodyDetails: BodyDetails | null;
   activeCampaignId: number | null;
   activeCampaign: CampaignSummary | null;
 };

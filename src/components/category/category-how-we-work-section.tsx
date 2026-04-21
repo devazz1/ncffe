@@ -1,9 +1,9 @@
 import { CircleCheck } from "lucide-react";
 
-import type { HowWeWorkStep } from "@/data/campaign";
+import type { BodyHowWeWorkStep } from "@/lib/types";
 
 type CategoryHowWeWorkSectionProps = {
-  steps: HowWeWorkStep[];
+  steps: ReadonlyArray<BodyHowWeWorkStep>;
 };
 
 export function CategoryHowWeWorkSection({ steps }: CategoryHowWeWorkSectionProps) {

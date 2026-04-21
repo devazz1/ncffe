@@ -15,11 +15,12 @@ import { CategoryHowWeWorkSection } from "@/components/category/category-how-we-
 import { CategoryImpactSection } from "@/components/category/category-impact-section";
 import { CategoryTopDonationsSection } from "@/components/category/category-top-donations-section";
 import {
-  ABOUT_CAMPAIGN_DUMMY,
-  CAMPAIGN_FAQ_DUMMY,
+  ABOUT_DUMMY,
+  FAQ_DUMMY,
   HOW_WE_WORK_DUMMY,
   IMPACT_DUMMY,
-} from "@/data/campaign";
+} from "@/data/category";
+import type { BodyDetails } from "@/lib/types";
 import { SitePageContainer } from "@/components/site-page-container";
 
 type CategoryPageProps = {
@@ -33,6 +34,20 @@ const RESERVED_SLUGS = new Set([
   "donations",
   "api",
 ]);
+
+function isBodyDetails(value: unknown): value is Partial<BodyDetails> {
+  if (!value || typeof value !== "object") {
+    return false;
+  }
+
+  const details = value as Record<string, unknown>;
+  return (
+    (!("about" in details) || Array.isArray(details.about)) &&
+    (!("impact" in details) || Array.isArray(details.impact)) &&
+    (!("howWeWork" in details) || Array.isArray(details.howWeWork)) &&
+    (!("faq" in details) || Array.isArray(details.faq))
+  );
+}
 
 function SupportRealImpactCta() {
   return (
@@ -99,6 +114,15 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const productsResponse = await getCampaignProducts(category.activeCampaignId);
   const products = productsResponse.data;
 
+  const bodyDetailsSource = category.bodyDetails;
+  const bodyDetails = isBodyDetails(bodyDetailsSource)
+    ? bodyDetailsSource
+    : undefined;
+  const aboutItems = bodyDetails?.about ?? ABOUT_DUMMY;
+  const impactStats = bodyDetails?.impact ?? IMPACT_DUMMY;
+  const howWeWorkSteps = bodyDetails?.howWeWork ?? HOW_WE_WORK_DUMMY;
+  const faqItems = bodyDetails?.faq ?? FAQ_DUMMY;
+
   const campaignId = category.activeCampaignId;
 
   return (
@@ -119,10 +143,10 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       </CampaignCartScope>
       <section className="grid gap-6 lg:grid-cols-[1fr_minmax(380px,525px)]">
         <div>
-          <CategoryAboutCampaignSection items={ABOUT_CAMPAIGN_DUMMY} />
-          <CategoryImpactSection stats={IMPACT_DUMMY} />
-          <CategoryHowWeWorkSection steps={HOW_WE_WORK_DUMMY} />
-          <CategoryFaqSection items={CAMPAIGN_FAQ_DUMMY} />
+          <CategoryAboutCampaignSection items={aboutItems} />
+          <CategoryImpactSection stats={impactStats} />
+          <CategoryHowWeWorkSection steps={howWeWorkSteps} />
+          <CategoryFaqSection items={faqItems} />
           <CategoryTopDonationsSection items={topDonationItems} />
           <SupportRealImpactCta />
         </div>

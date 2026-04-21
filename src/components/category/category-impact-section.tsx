@@ -1,8 +1,8 @@
-import type { CampaignImpactStat } from "@/data/campaign";
+import type { BodyImpactStat } from "@/lib/types";
 import { Star } from "lucide-react";
 
 type CategoryImpactSectionProps = {
-  stats: CampaignImpactStat[];
+  stats: ReadonlyArray<BodyImpactStat>;
 };
 
 /**

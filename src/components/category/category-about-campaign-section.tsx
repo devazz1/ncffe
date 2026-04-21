@@ -1,9 +1,9 @@
-import type { CampaignAboutItem } from "@/data/campaign";
+import type { BodyAboutItem } from "@/lib/types";
 
 import { MediaContentBlock } from "@/components/media-content-block";
 
 type CategoryAboutCampaignSectionProps = {
-  items: CampaignAboutItem[];
+  items: ReadonlyArray<BodyAboutItem>;
 };
 
 export function CategoryAboutCampaignSection({
