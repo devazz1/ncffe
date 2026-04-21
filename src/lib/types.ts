@@ -60,6 +60,7 @@ export type BodyDetails = {
   howWeWork: ReadonlyArray<BodyHowWeWorkItem>;
   faq: ReadonlyArray<BodyFaqItem>;
 };
+// ... //
 
 export type CampaignSummary = {
   campaignId: number;
