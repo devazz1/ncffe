@@ -2,7 +2,7 @@
 
 import { ChevronDown, ChevronUp, CircleArrowOutUpRight } from "lucide-react";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Category } from "@/lib/types";
 
 type CategoriesMenuProps = {
@@ -11,6 +11,29 @@ type CategoriesMenuProps = {
 
 export function CategoriesMenu({ categories }: CategoriesMenuProps) {
   const [open, setOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+
+    const handlePointerDown = (event: PointerEvent) => {
+      if (!menuRef.current?.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [open]);
 
   const sorted = useMemo(
     () => [...categories].sort((a, b) => a.displayOrder - b.displayOrder),
@@ -22,7 +45,7 @@ export function CategoriesMenu({ categories }: CategoriesMenuProps) {
   }
 
   return (
-    <div className="relative">
+    <div ref={menuRef} className="relative">
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
