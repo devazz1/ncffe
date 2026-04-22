@@ -19,7 +19,11 @@ export function SiteHeader({ categories }: SiteHeaderProps) {
 
   return (
     <header
-      className={isHomePage ? "bg-linear-to-b from-black/90 to-transparent" : "bg-white"}
+      className={
+        isHomePage
+          ? "absolute inset-x-0 top-0 z-40 text-zinc-50 bg-linear-to-b from-black/90 to-transparent"
+          : "bg-white"
+      }
     >
       <div className="mx-auto flex w-full max-w-screen-2xl items-center px-4 py-3 md:px-16">
         <div className="flex min-w-0 flex-1 justify-start">
@@ -32,8 +36,8 @@ export function SiteHeader({ categories }: SiteHeaderProps) {
               className="h-10 w-10 rounded-[10px] object-cover bg-white"
             />
             <div>
-              <p className="text-xs text-zinc-900">Nand Care</p>
-              <p className="text-sm font-semibold text-zinc-900">Foundation</p>
+              <p className="text-xs">Nand Care</p>
+              <p className="text-sm font-semibold">Foundation</p>
             </div>
           </div>
         </div>
