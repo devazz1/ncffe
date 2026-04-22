@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { DashboardDonationsTable } from "@/components/dashboard-donations-table";
+import { DashboardDonationsTable } from "@/components/dashboard/dashboard-donations-table";
 import { getMyDonationStatistics } from "@/lib/api";
 import { useAuthStore } from "@/lib/auth-store";
 
