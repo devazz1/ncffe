@@ -46,7 +46,7 @@ export default async function RootLayout({
           <div className="flex min-h-full flex-col">
             <SiteHeader categories={categories} />
             <main className="flex-1">{children}</main>
-            <SiteFooter />
+            <SiteFooter categories={categories} />
           </div>
         </Providers>
       </body>
