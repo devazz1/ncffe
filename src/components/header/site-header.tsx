@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { AboutMenu } from "@/components/header/about-menu";
 import { AccountMenu } from "@/components/header/account-menu";
 import { CategoriesMenu } from "@/components/header/categories-menu";
@@ -13,9 +14,13 @@ type SiteHeaderProps = {
 };
 
 export function SiteHeader({ categories }: SiteHeaderProps) {
+  const pathname = usePathname();
+  const isHomePage = pathname === "/";
 
   return (
-    <header className="border-b border-zinc-200 bg-white">
+    <header
+      className={isHomePage ? "bg-linear-to-b from-black/90 to-transparent" : "bg-white"}
+    >
       <div className="mx-auto flex w-full max-w-screen-2xl items-center px-4 py-3 md:px-16">
         <div className="flex min-w-0 flex-1 justify-start">
           <div className="flex items-center gap-3">
