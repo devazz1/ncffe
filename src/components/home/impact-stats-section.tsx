@@ -33,10 +33,10 @@ const STATS: StatItem[] = [
 export function ImpactStatsSection() {
   return (
     <section
-      className="bg-zinc-100 py-10 sm:py-12 lg:py-14"
+      className="py-10 sm:py-12 lg:py-14"
       aria-labelledby="impact-stats-heading"
     >
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="">
         <h2 id="impact-stats-heading" className="sr-only">
           Our impact at a glance
         </h2>
@@ -46,14 +46,14 @@ export function ImpactStatsSection() {
               key={label}
               className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm sm:p-6 lg:p-7"
             >
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#FFF3E0]">
+              <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-[#FFF3E0]">
                 <Icon
-                  className="h-6 w-6 text-[#FF6D00]"
+                  className="h-8 w-8 text-[#FF6D00]"
                   strokeWidth={1.75}
                   aria-hidden
                 />
               </div>
-              <p className="mt-5 text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl">
+              <p className="mt-5 text-2xl font-medium tracking-tight text-zinc-900 sm:text-3xl">
                 {value}
               </p>
               <p className="mt-1 text-sm leading-snug text-zinc-600 sm:text-base">

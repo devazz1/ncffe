@@ -25,7 +25,7 @@ export function SiteHeader({ categories }: SiteHeaderProps) {
           : "bg-white"
       }
     >
-      <div className="mx-auto flex w-full max-w-screen-2xl items-center px-4 py-3 md:px-16">
+      <div className="mx-auto flex w-full max-w-screen-2xl items-center px-4 py-3 md:px-12">
         <div className="flex min-w-0 flex-1 justify-start">
           <div className="flex items-center gap-3">
             <Image

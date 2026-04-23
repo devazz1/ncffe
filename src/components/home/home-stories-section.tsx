@@ -42,31 +42,29 @@ function StoryCard({ story, index }: { story: Story; index: number }) {
 export function HomeStoriesSection() {
   return (
     <section
-      className="bg-white py-10 lg:py-14"
+    className="pb-6 md:pb-16"
       aria-labelledby="home-stories-heading"
     >
-      <div className="mx-auto max-w-[1920px] px-3 sm:px-6 lg:px-16">
-        <div className="flex flex-col gap-10">
-          <div className="flex flex-row items-center justify-between gap-10">
-            <h2
-              id="home-stories-heading"
-              className="text-xl font-bold tracking-tight text-zinc-900 md:text-4xl lg:text-5xl"
-            >
-              Stories
-            </h2>
-            <Link
-              href={VIEW_MORE_HREF}
-              className="inline-flex h-8 min-w-[4.75rem] shrink-0 items-center justify-center rounded-lg bg-cta-gradient px-2 text-xs font-semibold text-white transition hover:opacity-95 md:h-[3.875rem] md:min-w-[9rem] md:rounded-xl md:px-5 md:text-lg"
-            >
-              View More
-            </Link>
-          </div>
+      <div className="flex flex-col gap-10">
+        <div className="flex flex-row items-center justify-between gap-10">
+          <h2
+            id="home-stories-heading"
+            className="text-xl tracking-tight text-zinc-900 md:text-2xl lg:text-3xl"
+          >
+            Stories
+          </h2>
+          <Link
+            href={VIEW_MORE_HREF}
+            className="inline-flex h-8 min-w-[4.75rem] shrink-0 items-center justify-center rounded-lg bg-cta-gradient px-2 text-xs text-white transition hover:opacity-95 md:h-13 md:min-w-28 md:rounded-xl md:px-5 md:text-base"
+          >
+            View More
+          </Link>
+        </div>
 
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-2 md:gap-6 lg:grid-cols-4 lg:gap-6">
-            {STORIES.map((story, index) => (
-              <StoryCard key={story.id} story={story} index={index} />
-            ))}
-          </div>
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-2 md:gap-6 lg:grid-cols-4 lg:gap-6">
+          {STORIES.map((story, index) => (
+            <StoryCard key={story.id} story={story} index={index} />
+          ))}
         </div>
       </div>
     </section>

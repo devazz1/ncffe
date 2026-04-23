@@ -13,7 +13,7 @@ export function DonateCtaSection({ donateHref = "/" }: DonateCtaSectionProps) {
       className="relative overflow-visible bg-gradient-to-b from-orange-100 to-orange-50 py-7 lg:py-28"
       aria-labelledby="donate-cta-heading"
     >
-      <div className="mx-auto max-w-[1920px] px-4 sm:px-6 lg:px-16">
+      <div className="mx-auto w-full max-w-screen-2xl px-4 py-6 md:px-12">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-12 xl:gap-16">
           <div className="order-1 flex min-w-0 flex-col gap-5 lg:max-w-[900px] lg:gap-12">
             <div className="flex flex-col gap-1.5">

@@ -25,12 +25,12 @@ export default async function HomePage() {
   return (
     <>
       {heroSlides.length > 0 ? (
-        <div className="mb-10 lg:mb-14">
+        <div className="mb-5 lg:mb-10">
           <CategoryHeroCarousel categories={heroSlides} />
         </div>
       ) : null}
 
-      <div className="mb-10">
+      <div className="mx-auto w-full max-w-screen-2xl px-4 py-6 md:px-12">
         <ImpactStatsSection />
       </div>
 
@@ -38,7 +38,7 @@ export default async function HomePage() {
         <MissionSection />
       </div>
 
-      <div className="mb-10">
+      <div className="mx-auto w-full max-w-screen-2xl px-4 py-6 md:px-12">
         <HomeStoriesSection />
       </div>
 
