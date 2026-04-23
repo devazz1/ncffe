@@ -3,67 +3,93 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 
 type DonateCtaSectionProps = {
-  /** Primary donation target (e.g. first campaign category). */
   donateHref?: string;
 };
 
 export function DonateCtaSection({ donateHref = "/" }: DonateCtaSectionProps) {
   return (
     <section
-      className="relative overflow-visible bg-gradient-to-b from-orange-100 to-orange-50 py-7 lg:py-28"
+      className="relative overflow-visible bg-[#fdf0e0] lg:h-[468px]"
       aria-labelledby="donate-cta-heading"
+      style={{
+        background: "linear-gradient(to right, #FFEDD7, #FFFAF4)",
+      }}
     >
-      <div className="mx-auto w-full max-w-screen-2xl px-4 py-6 md:px-12">
-        <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-12 xl:gap-16">
-          <div className="order-1 flex min-w-0 flex-col gap-5 lg:max-w-[900px] lg:gap-12">
-            <div className="flex flex-col gap-1.5">
+      <div className="mx-auto w-full max-w-screen-2xl px-6 md:px-12 h-full">
+        <div className="flex flex-col lg:flex-row lg:items-stretch h-full">
+
+          {/* ── Left column ── */}
+          <div className="flex flex-1 flex-col justify-center gap-6 py-12 lg:py-0 lg:gap-10 lg:max-w-[55%]">
+            {/* Heading */}
+            <div className="flex flex-col gap-3">
               <h2
                 id="donate-cta-heading"
-                className="text-xl font-bold leading-snug tracking-tight text-red-800 lg:text-4xl xl:text-5xl xl:leading-tight"
+                className="text-2xl font-light leading-snug tracking-tight text-red-700 lg:text-4xl xl:text-5xl xl:leading-tight"
               >
                 Ready to{" "}
-                <span className="font-extrabold text-red-600">Make</span> a
-                Difference?
+                <span className="font-extrabold text-red-600">Make</span>{" "}
+                a Difference?
               </h2>
-              <p className="text-sm leading-snug text-zinc-950 lg:text-lg lg:leading-relaxed">
-                Your generosity can transform lives. Join thousands of donors who
-                are creating lasting change in communities across India.
+              <p className="max-w-md text-sm leading-relaxed text-zinc-700 lg:text-base lg:leading-relaxed">
+                Your generosity can transform lives. Join thousands of donors
+                who are creating lasting change in communities across India.
               </p>
             </div>
 
+            {/* CTA Button */}
             <div>
               <Link
                 href={donateHref}
-                className="inline-flex h-12 w-[169px] max-w-full items-center justify-between gap-3 rounded-[4px] bg-cta-gradient px-3 text-sm font-semibold text-white transition hover:opacity-95 lg:h-17 lg:w-[266px] lg:gap-3 lg:px-6 lg:text-lg lg:leading-9"
+                className="inline-flex items-center justify-between gap-3 rounded px-5 py-3 text-sm font-semibold text-white transition-opacity hover:opacity-90 lg:px-7 lg:py-4 lg:text-lg"
+                style={{
+                  background: "linear-gradient(135deg, #e84c1e 0%, #f5a623 100%)",
+                  minWidth: "160px",
+                }}
               >
-                <span className="min-w-0 shrink text-left leading-6 lg:leading-9">
-                  Start Donating
-                </span>
+                <span>Start Donating</span>
                 <span
-                  className="flex size-4 shrink-0 items-center justify-center lg:size-7.5"
+                  className="flex size-5 items-center justify-center rounded-full border border-white/40"
                   aria-hidden
                 >
-                  <ChevronRight
-                    className="size-3.5 text-white lg:size-[1.5625rem]"
-                    strokeWidth={2}
-                  />
+                  <ChevronRight className="size-3.5" strokeWidth={2.5} />
                 </span>
               </Link>
             </div>
           </div>
 
-          <div className="order-2 flex justify-center lg:min-w-0 lg:flex-1 lg:justify-end">
-            <div className="relative aspect-[253/270] w-full max-w-[253px] lg:aspect-auto lg:h-[658px] lg:w-[617px] lg:max-w-none lg:-translate-y-40 lg:self-start">
+          {/* ── Right column – image overflows top ── */}
+          <div className="relative hidden lg:flex lg:w-[45%] lg:items-end lg:justify-end">
+            {/*
+              The image is anchored to the bottom of the section
+              and overflows above via a negative top offset.
+            */}
+            <div
+              className="absolute bottom-0 right-0"
+              style={{ width: "617px", maxWidth: "100%" }}
+            >
               <Image
                 src="/ncf-img-kid-food-02.png"
                 alt="Children with meals from community feeding programs."
-                fill
-                className="object-contain object-bottom lg:object-right-bottom"
-                sizes="(max-width: 1024px) 253px, 617px"
+                width={617}
+                height={658}
+                className="h-auto w-full object-cover object-bottom mix-blend-multiply"
                 priority={false}
               />
             </div>
           </div>
+
+          {/* Mobile image (centered, no overflow) */}
+          <div className="flex justify-center lg:hidden">
+            <Image
+              src="/ncf-img-kid-food-02.png"
+              alt="Children with meals from community feeding programs."
+              width={320}
+              height={340}
+              className="h-auto w-64 object-cover mix-blend-multiply"
+              priority={false}
+            />
+          </div>
+
         </div>
       </div>
     </section>

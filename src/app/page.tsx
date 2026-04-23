@@ -6,7 +6,7 @@ import { DonateCtaSection } from "@/components/home/donate-cta-section";
 import { HomeStoriesSection } from "@/components/home/home-stories-section";
 import { MissionSection } from "@/components/home/mission-section";
 import { SupportingLivesGallerySection } from "@/components/supporting-lives-gallery-section";
-import { SitePageContainer } from "@/components/site-page-container";
+// import { SitePageContainer } from "@/components/site-page-container";
 
 export default async function HomePage() {
   let categories = [] as Awaited<ReturnType<typeof getCategories>>["data"]["items"];
@@ -42,24 +42,13 @@ export default async function HomePage() {
         <HomeStoriesSection />
       </div>
 
-      <div className="mb-10">
+      <div className="mb-10 mt-10">
         <DonateCtaSection donateHref={donateCtaHref} />
       </div>
 
-      <div className="mb-10">
+      <div>
         <SupportingLivesGallerySection />
       </div>
-
-      <SitePageContainer>
-        <section>
-          <h1 className="text-2xl font-bold">Donation Categories</h1>
-          <p className="mt-1 text-sm text-zinc-800">
-            Browse categories and support active campaigns.
-            see categories in detailed view
-          </p>
-          <p>See other on going activities</p>
-        </section>
-      </SitePageContainer>
     </>
   );
 }
