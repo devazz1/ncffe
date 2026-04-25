@@ -1,4 +1,4 @@
-import { getCategories } from "@/lib/api";
+import { getCategories, getStories } from "@/lib/api";
 import { CategoryHeroCarousel } from "@/components/home-category-hero/category-hero-carousel";
 import { categoryToHeroSlide } from "@/components/home-category-hero/hero-category-slide";
 import { ImpactStatsSection } from "@/components/home/impact-stats-section";
@@ -6,15 +6,20 @@ import { DonateCtaSection } from "@/components/home/donate-cta-section";
 import { HomeStoriesSection } from "@/components/home/home-stories-section";
 import { MissionSection } from "@/components/home/mission-section";
 import { SupportingLivesGallerySection } from "@/components/supporting-lives-gallery-section";
-// import { SitePageContainer } from "@/components/site-page-container";
 
 export default async function HomePage() {
   let categories = [] as Awaited<ReturnType<typeof getCategories>>["data"]["items"];
+  let stories = [] as Awaited<ReturnType<typeof getStories>>["data"]["items"];
   try {
-    const response = await getCategories();
-    categories = response.data.items;
+    const [categoriesResponse, storiesResponse] = await Promise.all([
+      getCategories(),
+      getStories(1, 4),
+    ]);
+    categories = categoriesResponse.data.items;
+    stories = storiesResponse.data.items;
   } catch {
     categories = [];
+    stories = [];
   }
 
   const donateCtaHref =
@@ -39,7 +44,7 @@ export default async function HomePage() {
       </div>
 
       <div className="mx-auto w-full max-w-screen-2xl px-4 py-6 md:px-12">
-        <HomeStoriesSection />
+        <HomeStoriesSection stories={stories} />
       </div>
 
       <div className="mb-10 mt-10">

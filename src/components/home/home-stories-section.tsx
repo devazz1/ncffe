@@ -1,28 +1,28 @@
-import Image from "next/image";
 import Link from "next/link";
 
-import { STORIES, type Story } from "@/data/stories";
+import type { Story } from "@/lib/types";
 
 const VIEW_MORE_HREF = "/stories";
 
-/** Homepage grid: first two `STORIES` slots on small screens (`md` shows full list). */
 function StoryCard({ story, index }: { story: Story; index: number }) {
   const showOnMobile = index < 2;
+  const imageUrl = story.heroPoster?.trim() ?? "";
 
   return (
     <article className={showOnMobile ? "" : "hidden md:block"}>
       <Link
-        href={`${VIEW_MORE_HREF}#${story.id}`}
+        href={VIEW_MORE_HREF}
         className="group flex flex-col gap-4 md:gap-5"
       >
         <div className="relative aspect-3/2 w-full overflow-hidden rounded-2xl bg-zinc-100">
-          <Image
-            src={story.imageSrc}
-            alt={story.title}
-            fill
-            className="object-cover transition duration-300 group-hover:scale-[1.02]"
-            sizes="(max-width: 768px) 50vw, 25vw"
-          />
+          {imageUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element -- CMS-provided URLs
+            <img
+              src={imageUrl}
+              alt={story.title}
+              className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]"
+            />
+          ) : null}
           <div
             className="pointer-events-none absolute inset-0 rounded-2xl bg-black/20"
             aria-hidden
@@ -32,14 +32,24 @@ function StoryCard({ story, index }: { story: Story; index: number }) {
           <h3 className="text-sm font-semibold leading-snug text-black md:text-lg">
             {story.title}
           </h3>
-          <p className="text-xs leading-snug text-zinc-600 md:text-sm">{story.description}</p>
+          <p className="text-xs leading-snug text-zinc-600 md:text-sm">
+            {story.description ?? ""}
+          </p>
         </div>
       </Link>
     </article>
   );
 }
 
-export function HomeStoriesSection() {
+type HomeStoriesSectionProps = {
+  stories: Story[];
+};
+
+export function HomeStoriesSection({ stories }: HomeStoriesSectionProps) {
+  if (stories.length === 0) {
+    return null;
+  }
+
   return (
     <section
     className="pb-6 md:pb-16"
@@ -62,8 +72,8 @@ export function HomeStoriesSection() {
         </div>
 
         <div className="grid grid-cols-2 gap-3 md:grid-cols-2 md:gap-6 lg:grid-cols-4 lg:gap-6">
-          {STORIES.map((story, index) => (
-            <StoryCard key={story.id} story={story} index={index} />
+          {stories.map((story, index) => (
+            <StoryCard key={story.storyId} story={story} index={index} />
           ))}
         </div>
       </div>

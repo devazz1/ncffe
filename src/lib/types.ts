@@ -95,6 +95,17 @@ export type Category = {
   activeCampaign: CampaignSummary | null;
 };
 
+export type Story = {
+  storyId: number;
+  heroVideo: string | null;
+  heroPoster: string | null;
+  title: string;
+  description: string | null;
+  bodyDetails: unknown | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type Paginated<T> = {
   items: T[];
   meta: {

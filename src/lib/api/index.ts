@@ -13,12 +13,16 @@ import type {
   DonationStatusResponse,
   MyDonationListItem,
   Paginated,
+  Story,
   TopDonationsData,
   UserDonationStatistics,
   UserProfile,
 } from "@/lib/types";
 
 const FIVE_MINUTES = 300;
+// const ONE_HOUR = 3600;
+const TWO_HOURS = 7200;
+// const SIX_HOURS = 21600;
 
 /** Dedupes within a single request; fetch uses time-based ISR (`revalidate`). */
 export const getCategories = cache(async function getCategories() {
@@ -46,6 +50,15 @@ export async function getTopDonations() {
   return serverGet<ApiEnvelope<TopDonationsData>>("/donations/top", {
     revalidate: FIVE_MINUTES,
   });
+}
+
+export async function getStories(page = 1, limit = 20) {
+  return serverGet<ApiEnvelope<Paginated<Story>>>(
+    `/stories?page=${page}&limit=${limit}`,
+    {
+      revalidate: TWO_HOURS,
+    },
+  );
 }
 
 type RequestOtpPayload = {
