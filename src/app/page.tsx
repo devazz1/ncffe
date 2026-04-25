@@ -1,4 +1,4 @@
-import { getCategories, getStories } from "@/lib/api";
+import { getCategories, getStories, getTopDonations } from "@/lib/api";
 import { CategoryHeroCarousel } from "@/components/home-category-hero/category-hero-carousel";
 import { categoryToHeroSlide } from "@/components/home-category-hero/hero-category-slide";
 import { ImpactStatsSection } from "@/components/home/impact-stats-section";
@@ -10,16 +10,22 @@ import { SupportingLivesGallerySection } from "@/components/supporting-lives-gal
 export default async function HomePage() {
   let categories = [] as Awaited<ReturnType<typeof getCategories>>["data"]["items"];
   let stories = [] as Awaited<ReturnType<typeof getStories>>["data"]["items"];
+  let topDonationItems: Awaited<
+    ReturnType<typeof getTopDonations>
+  >["data"]["items"] = [];
   try {
-    const [categoriesResponse, storiesResponse] = await Promise.all([
+    const [categoriesResponse, storiesResponse, topDonationsResponse] = await Promise.all([
       getCategories(),
       getStories(1, 4),
+      getTopDonations(),
     ]);
     categories = categoriesResponse.data.items;
     stories = storiesResponse.data.items;
+    topDonationItems = topDonationsResponse.data.items;
   } catch {
     categories = [];
     stories = [];
+    topDonationItems = [];
   }
 
   const donateCtaHref =
@@ -31,7 +37,7 @@ export default async function HomePage() {
     <>
       {heroSlides.length > 0 ? (
         <div className="mb-5 lg:mb-10">
-          <CategoryHeroCarousel categories={heroSlides} />
+          <CategoryHeroCarousel categories={heroSlides} topDonationItems={topDonationItems} />
         </div>
       ) : null}
 

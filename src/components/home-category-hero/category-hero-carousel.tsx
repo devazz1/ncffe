@@ -8,8 +8,10 @@ import {
   useRef,
   useState,
 } from "react";
+import type { TopDonationItem } from "@/lib/types";
 
 import { CategoryCardStrip } from "./category-card-strip";
+import { CategoryDonationModal } from "./category-donation-modal";
 import { HeroOverlayContent } from "./hero-overlay-content";
 import type { HeroCategorySlide } from "./hero-category-slide";
 
@@ -17,6 +19,7 @@ const IMAGE_DURATION_MS = 5000;
 
 export type CategoryHeroCarouselProps = {
   categories: HeroCategorySlide[];
+  topDonationItems: TopDonationItem[];
   className?: string;
 };
 
@@ -68,6 +71,7 @@ function HeroBackground({
 
 export function CategoryHeroCarousel({
   categories,
+  topDonationItems,
   className = "",
 }: CategoryHeroCarouselProps) {
   const slides = useMemo(
@@ -82,6 +86,8 @@ export function CategoryHeroCarousel({
   const [isPhone, setIsPhone] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [slideLoopNonce, setSlideLoopNonce] = useState(0);
+  const [donationModalSlide, setDonationModalSlide] =
+    useState<HeroCategorySlide | null>(null);
 
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -212,8 +218,8 @@ export function CategoryHeroCarousel({
         <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex justify-start p-4 pb-15 md:p-8 md:pb-48 lg:px-14">
           <HeroOverlayContent
             title={current.title}
-            donateHref={current.donateHref}
             detailsHref={current.detailsHref}
+            onDonateClick={() => setDonationModalSlide(current)}
             isMuted={isMuted}
             hasVideo={hasVideo}
             onVolumeClick={() => setIsMuted((m) => !m)}
@@ -230,8 +236,15 @@ export function CategoryHeroCarousel({
           onHover={setHoveredIndex}
           onLeave={() => setHoveredIndex(null)}
           onPick={pickSlide}
+          onDonateClick={setDonationModalSlide}
         />
       </div>
+      <CategoryDonationModal
+        open={donationModalSlide != null}
+        slide={donationModalSlide}
+        topDonationItems={topDonationItems}
+        onClose={() => setDonationModalSlide(null)}
+      />
     </section>
   );
 }

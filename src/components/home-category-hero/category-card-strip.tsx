@@ -26,7 +26,13 @@ export function posterFor(slide: HeroCategorySlide): string {
   return p ? p : FALLBACK_POSTER;
 }
 
-function StripExpandedCard({ slide }: { slide: HeroCategorySlide }) {
+function StripExpandedCard({
+  slide,
+  onDonateClick,
+}: {
+  slide: HeroCategorySlide;
+  onDonateClick: (slide: HeroCategorySlide) => void;
+}) {
   return (
     <div className="flex max-h-[min(72vh,720px)] flex-col overflow-hidden rounded-b-xl border border-zinc-200/80 bg-white shadow-2xl">
       <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden bg-zinc-200">
@@ -43,7 +49,17 @@ function StripExpandedCard({ slide }: { slide: HeroCategorySlide }) {
           <p className="flex-1 text-sm font-semibold leading-snug text-zinc-900">
             {slide.title}
           </p>
-          <CategoryHeroHeartIcon className="size-9 shrink-0" />
+          <button
+            type="button"
+            aria-label={`Donate to ${slide.name}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              onDonateClick(slide);
+            }}
+            className="rounded-full transition hover:opacity-90"
+          >
+            <CategoryHeroHeartIcon className="size-9 shrink-0" />
+          </button>
         </div>
         <p className="flex items-center gap-1.5 text-xs text-zinc-600">
           <Users className="size-3.5 shrink-0 text-zinc-500" aria-hidden />
@@ -76,6 +92,7 @@ export function CategoryCardStrip({
   onHover,
   onLeave,
   onPick,
+  onDonateClick,
   className = "",
 }: {
   slides: HeroCategorySlide[];
@@ -85,6 +102,7 @@ export function CategoryCardStrip({
   onHover: (index: number) => void;
   onLeave: () => void;
   onPick: (index: number) => void;
+  onDonateClick: (slide: HeroCategorySlide) => void;
   className?: string;
 }) {
   const slotRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -272,7 +290,7 @@ export function CategoryCardStrip({
               }}
               onMouseLeave={() => onLeave()}
             >
-              <StripExpandedCard slide={hoveredSlide} />
+              <StripExpandedCard slide={hoveredSlide} onDonateClick={onDonateClick} />
             </div>,
             document.body,
           )
