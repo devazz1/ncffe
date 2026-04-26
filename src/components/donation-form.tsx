@@ -6,6 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import { createDonation, createPaymentOrder } from "@/lib/api";
 import { isValidEmailFormat, normalizeEmail } from "@/lib/email";
 import { formatCurrencyINR, toNumber } from "@/lib/format";
+import { formatPhoneForApi, isValidPhoneFormat } from "@/lib/phone";
 import type { CampaignProduct } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { openRazorpayCheckout } from "@/lib/razorpay/open-checkout";
@@ -60,6 +61,7 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
   const createDonationMutation = useMutation({
     mutationFn: async () => {
       const normalizedEmail = normalizeEmail(email);
+      const formattedPhone = formatPhoneForApi(phone);
       const cartUnits = getUnitsForCampaign(campaignId);
       const selectedProducts = Object.entries(cartUnits)
         .map(([id, quantity]) => ({
@@ -77,7 +79,7 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
         displayPublicly: !isAnonymous,
         fullName,
         email: normalizedEmail,
-        phone,
+        phone: formattedPhone,
         isIndian,
         is80GRequested,
         pan: is80GRequested ? pan : undefined,
@@ -107,7 +109,7 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
           prefill: {
             name: fullName,
             email: normalizeEmail(email),
-            contact: phone,
+            contact: formatPhoneForApi(phone),
           },
           description: `${campaignName} Donation`,
           onClosed: () => {
@@ -146,6 +148,10 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
     }
     if (!isValidEmailFormat(email)) {
       setErrorMessage("Please enter a valid email address.");
+      return false;
+    }
+    if (!isValidPhoneFormat(phone)) {
+      setErrorMessage("Please enter a valid phone number.");
       return false;
     }
     if (is80GRequested && (!pan || !address)) {

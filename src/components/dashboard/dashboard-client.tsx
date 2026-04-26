@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getCurrentUser, updateCurrentUser } from "@/lib/api";
 import { useAuthStore } from "@/lib/auth-store";
+import { formatPhoneForApi, isValidPhoneFormat } from "@/lib/phone";
 
 export function DashboardClient() {
   const token = useAuthStore((s) => s.accessToken);
@@ -43,9 +44,17 @@ export function DashboardClient() {
         onSubmit={(e) => {
           e.preventDefault();
           const form = new FormData(e.currentTarget);
+          const phone = String(form.get("phone") ?? "");
+
+          if (phone && !isValidPhoneFormat(phone)) {
+            setErrorMessage("Please enter a valid phone number.");
+            return;
+          }
+
+          setErrorMessage(null);
           const payload = {
             fullName: String(form.get("fullName") ?? ""),
-            phone: String(form.get("phone") ?? ""),
+            phone: formatPhoneForApi(phone),
             address: String(form.get("address") ?? ""),
             pan: String(form.get("pan") ?? ""),
           };
@@ -65,6 +74,7 @@ export function DashboardClient() {
         <input
           defaultValue={profile.phone ?? ""}
           name="phone"
+          type="tel"
           className="rounded border border-zinc-300 px-3 py-2"
           placeholder="Phone"
         />
