@@ -29,7 +29,7 @@ export default async function HomePage() {
   }
 
   const donateCtaHref =
-    categories.length > 0 ? `/${categories[0].slug}` : "/";
+    categories.length > 0 ? `/cause/${categories[0].slug}` : "/";
 
   const heroSlides = categories.map(categoryToHeroSlide);
 

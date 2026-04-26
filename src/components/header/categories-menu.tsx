@@ -68,7 +68,7 @@ export function CategoriesMenu({ categories }: CategoriesMenuProps) {
           {sorted.map((category, i) => (
             <div key={category.categoryId}>
               <Link
-                href={`/${category.slug}`}
+                href={`/cause/${category.slug}`}
                 className="flex items-center justify-between gap-3 px-3 py-2 text-sm text-zinc-800 hover:bg-surface-warm"
                 onClick={() => setOpen(false)}
                 role="menuitem"

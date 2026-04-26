@@ -73,7 +73,7 @@ export function SiteFooter({ categories }: SiteFooterProps) {
                   categoryLinks.map((category) => (
                     <Link
                       key={category.categoryId}
-                      href={`/${category.slug}`}
+                      href={`/cause/${category.slug}`}
                       className="block transition hover:text-zinc-900/75"
                     >
                       {category.name}

@@ -28,14 +28,6 @@ type CategoryPageProps = {
   params: Promise<{ slug: string }>;
 };
 
-const RESERVED_SLUGS = new Set([
-  "about",
-  "stories",
-  "dashboard",
-  "donations",
-  "api",
-]);
-
 function isBodyDetails(value: unknown): value is Partial<BodyDetails> {
   if (!value || typeof value !== "object") {
     return false;
@@ -85,9 +77,6 @@ function SupportRealImpactCta() {
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { slug } = await params;
-  if (RESERVED_SLUGS.has(slug)) {
-    notFound();
-  }
 
   let categoryResponse: Awaited<ReturnType<typeof getCategoryBySlug>>;
   let topDonationsResponse: Awaited<ReturnType<typeof getTopDonations>>;

@@ -156,7 +156,7 @@ export function MobilePrimaryNav({ categories }: MobilePrimaryNavProps) {
                     {sortedCategories.map((category) => (
                       <Link
                         key={category.categoryId}
-                        href={`/${category.slug}`}
+                        href={`/cause/${category.slug}`}
                         className="flex items-center justify-between gap-2 px-4 py-2.5 text-zinc-800 hover:bg-white"
                         onClick={close}
                       >
