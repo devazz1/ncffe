@@ -2,6 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { FolderDown } from "lucide-react";
 import { download80GCertificate, getMyDonations } from "@/lib/api";
 import { useAuthStore } from "@/lib/auth-store";
 
@@ -116,13 +117,23 @@ export function DashboardDonationsTable() {
                       {row.is80GRequested ? (
                         <button
                           type="button"
-                          className="rounded border border-zinc-300 bg-white px-3 py-1.5 text-xs font-medium text-zinc-900 hover:bg-zinc-50 disabled:opacity-60"
+                          className="inline-flex items-center gap-2 rounded px-2 py-1 text-sm font-medium hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-60"
                           disabled={downloadingId === row.donationId}
                           onClick={() => void handleDownload(row.donationId)}
                         >
                           {downloadingId === row.donationId
-                            ? "Downloading…"
-                            : "Download 80G"}
+                            ? "Downloading..."
+                            : (
+                                <>
+                                  <FolderDown
+                                    size={18}
+                                    className="shrink-0 text-orange-500"
+                                    aria-hidden="true"
+                                  />
+                                  <span className="text-red-600">Download</span>
+                                  <span className="text-orange-500">80G</span>
+                                </>
+                              )}
                         </button>
                       ) : (
                         <span className="text-zinc-400">—</span>

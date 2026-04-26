@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { Heart, Sprout, Users } from "lucide-react";
 import { DashboardDonationsTable } from "@/components/dashboard/dashboard-donations-table";
 import { getMyDonationStatistics } from "@/lib/api";
 import { useAuthStore } from "@/lib/auth-store";
@@ -32,6 +33,62 @@ function StatCard({ title, value, helper }: StatCardProps) {
       <p className="mt-2 text-2xl font-semibold text-zinc-900">{value}</p>
       {helper ? <p className="mt-1 text-xs text-zinc-500">{helper}</p> : null}
     </article>
+  );
+}
+
+function ImpactStatsCard({
+  contributions,
+  totalDonated,
+  campaignsSupported,
+}: {
+  contributions: number;
+  totalDonated: string;
+  campaignsSupported: number;
+}) {
+  return (
+    <aside className="rounded-3xl border border-zinc-200 bg-white p-6">
+      <div className="relative flex flex-col gap-10 md:gap-12">
+        <article className="group relative flex transition-transform duration-300 hover:-translate-y-1 md:justify-end">
+          <div className="flex w-full items-center gap-4 rounded-2xl p-1 transition-shadow duration-300 group-hover:shadow-sm md:max-w-[78%]">
+            <div className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-rose-500 text-white">
+              <Heart size={20} />
+            </div>
+            <div>
+              <p className="text-base font-medium text-zinc-500">Total donations made</p>
+              <p className="text-xl font-semibold text-rose-500">
+                {contributions} Contribution{contributions === 1 ? "" : "s"}
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <article className="group relative flex transition-transform duration-300 hover:-translate-y-1 md:justify-start">
+          <div className="flex w-full items-center gap-4 rounded-2xl p-1 transition-shadow duration-300 group-hover:shadow-sm md:max-w-[78%]">
+            <div className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-lime-600 text-white">
+              <Users size={20} />
+            </div>
+            <div>
+              <p className="text-base font-medium text-zinc-500">Lives supported</p>
+              <p className="text-xl font-semibold text-lime-600">{Math.ceil(Number(totalDonated) / 500)}</p>
+            </div>
+          </div>
+        </article>
+
+        <article className="group relative flex transition-transform duration-300 hover:-translate-y-1 md:justify-end">
+          <div className="flex w-full items-center gap-4 rounded-2xl p-1 transition-shadow duration-300 group-hover:shadow-sm md:max-w-[78%]">
+            <div className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-sky-500 text-white">
+              <Sprout size={20} />
+            </div>
+            <div>
+              <p className="text-base font-medium text-zinc-500">Cause you supported</p>
+              <p className="text-xl font-semibold text-amber-600">
+                {campaignsSupported} campaign{campaignsSupported === 1 ? "" : "s"}
+              </p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </aside>
   );
 }
 
@@ -85,7 +142,28 @@ export function DashboardOverviewClient() {
           </div>
         )}
       </section>
-      <DashboardDonationsTable />
+      <section className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_380px]">
+        <div className="min-w-0">
+          <DashboardDonationsTable />
+        </div>
+        {statsQuery.isLoading ? (
+          <aside className="rounded-3xl border border-zinc-200 bg-zinc-50 p-6">
+            <p className="text-sm text-zinc-700">Loading impact stats…</p>
+          </aside>
+        ) : statsQuery.isError || !stats ? (
+          <aside className="rounded-3xl border border-red-200 bg-red-50 p-6">
+            <p className="text-sm text-red-700">
+              Unable to load impact stats right now.
+            </p>
+          </aside>
+        ) : (
+          <ImpactStatsCard
+            contributions={stats.successDonationCount}
+            totalDonated={stats.totalAmountDonated}
+            campaignsSupported={stats.campaignsSupportedCount}
+          />
+        )}
+      </section>
     </div>
   );
 }
