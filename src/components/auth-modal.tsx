@@ -7,6 +7,7 @@ import { requestOtp, verifyOtp } from "@/lib/api";
 import { getApiErrorMessage } from "@/lib/api/error-message";
 import { useAuthStore } from "@/lib/auth-store";
 import { isValidEmailFormat, normalizeEmail } from "@/lib/email";
+import { isValidNameFormat, normalizeName } from "@/lib/name";
 import { formatPhoneForApi, isValidPhoneFormat } from "@/lib/phone";
 import type { AuthPurpose } from "@/lib/types";
 
@@ -33,14 +34,15 @@ export function AuthModal({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const isEmailValid = useMemo(() => isValidEmailFormat(email), [email]);
+  const isNameValid = useMemo(() => isValidNameFormat(fullName), [fullName]);
   const isPhoneValid = useMemo(() => isValidPhoneFormat(phone), [phone]);
   const canSubmitVerify = useMemo(() => isEmailValid && !!code, [isEmailValid, code]);
 
   const canRequestOtp = useMemo(() => {
     if (!isEmailValid) return false;
-    if (purpose === "register") return !!fullName && !!phone && isPhoneValid;
+    if (purpose === "register") return !!fullName && isNameValid && !!phone && isPhoneValid;
     return true;
-  }, [isEmailValid, purpose, fullName, phone, isPhoneValid]);
+  }, [isEmailValid, purpose, fullName, isNameValid, phone, isPhoneValid]);
 
   const requestOtpMutation = useMutation({
     mutationFn: () => requestOtp({ email: normalizeEmail(email), purpose }),
@@ -59,7 +61,7 @@ export function AuthModal({
         email: normalizeEmail(email),
         purpose,
         code,
-        fullName: purpose === "register" ? fullName : undefined,
+        fullName: purpose === "register" ? normalizeName(fullName) : undefined,
         phone: purpose === "register" ? formatPhoneForApi(phone) : undefined,
       }),
     onSuccess: (response) => {
@@ -130,6 +132,9 @@ export function AuthModal({
                   onChange={(e) => setFullName(e.target.value)}
                   className="w-full rounded border border-zinc-300 px-3 py-2"
                 />
+                {!!fullName && !isNameValid ? (
+                  <p className="text-sm text-red-600">Please enter a valid full name.</p>
+                ) : null}
                 <input
                   type="tel"
                   placeholder="Mobile Number *"

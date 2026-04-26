@@ -6,6 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import { createDonation, createPaymentOrder } from "@/lib/api";
 import { isValidEmailFormat, normalizeEmail } from "@/lib/email";
 import { formatCurrencyINR, toNumber } from "@/lib/format";
+import { isValidNameFormat, normalizeName } from "@/lib/name";
 import { isValidPanFormat, normalizePan } from "@/lib/pan";
 import { formatPhoneForApi, isValidPhoneFormat } from "@/lib/phone";
 import type { CampaignProduct } from "@/lib/types";
@@ -62,6 +63,7 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
   const createDonationMutation = useMutation({
     mutationFn: async () => {
       const normalizedEmail = normalizeEmail(email);
+      const normalizedFullName = normalizeName(fullName);
       const formattedPhone = formatPhoneForApi(phone);
       const normalizedPan = normalizePan(pan);
       const cartUnits = getUnitsForCampaign(campaignId);
@@ -79,7 +81,7 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
         currency: "INR",
         isMonthly: tab === "monthly",
         displayPublicly: !isAnonymous,
-        fullName,
+        fullName: normalizedFullName,
         email: normalizedEmail,
         phone: formattedPhone,
         isIndian,
@@ -146,6 +148,10 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
     }
     if (!fullName || !email || !phone) {
       setErrorMessage("Full name, email, and phone are required.");
+      return false;
+    }
+    if (!isValidNameFormat(fullName)) {
+      setErrorMessage("Please enter a valid full name.");
       return false;
     }
     if (!isValidEmailFormat(email)) {

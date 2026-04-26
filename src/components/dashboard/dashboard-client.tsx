@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getCurrentUser, updateCurrentUser } from "@/lib/api";
 import { useAuthStore } from "@/lib/auth-store";
+import { isValidNameFormat, normalizeName } from "@/lib/name";
 import { isValidPanFormat, normalizePan } from "@/lib/pan";
 import { formatPhoneForApi, isValidPhoneFormat } from "@/lib/phone";
 
@@ -45,9 +46,14 @@ export function DashboardClient() {
         onSubmit={(e) => {
           e.preventDefault();
           const form = new FormData(e.currentTarget);
+          const fullName = String(form.get("fullName") ?? "");
           const phone = String(form.get("phone") ?? "");
           const pan = String(form.get("pan") ?? "");
 
+          if (fullName && !isValidNameFormat(fullName)) {
+            setErrorMessage("Please enter a valid full name.");
+            return;
+          }
           if (phone && !isValidPhoneFormat(phone)) {
             setErrorMessage("Please enter a valid phone number.");
             return;
@@ -59,7 +65,7 @@ export function DashboardClient() {
 
           setErrorMessage(null);
           const payload = {
-            fullName: String(form.get("fullName") ?? ""),
+            fullName: normalizeName(fullName),
             phone: formatPhoneForApi(phone),
             address: String(form.get("address") ?? ""),
             pan: normalizePan(pan),
