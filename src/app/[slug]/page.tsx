@@ -6,6 +6,7 @@ import {
   getCategoryBySlug,
   getTopDonations,
 } from "@/lib/api";
+import { ServerHttpError } from "@/lib/api/server";
 import { CampaignCartScope } from "@/components/campaign-cart-scope";
 import { CategoryAboutCampaignSection } from "@/components/category/category-about-campaign-section";
 import { CategoryCampaignOverview } from "@/components/category/category-campaign-overview";
@@ -88,10 +89,25 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     notFound();
   }
 
-  const [categoryResponse, topDonationsResponse] = await Promise.all([
-    getCategoryBySlug(slug),
-    getTopDonations(),
-  ]);
+  let categoryResponse: Awaited<ReturnType<typeof getCategoryBySlug>>;
+  let topDonationsResponse: Awaited<ReturnType<typeof getTopDonations>>;
+
+  try {
+    [categoryResponse, topDonationsResponse] = await Promise.all([
+      getCategoryBySlug(slug),
+      getTopDonations(),
+    ]);
+  } catch (error) {
+    if (
+      error instanceof ServerHttpError &&
+      error.status === 404 &&
+      error.path === `/categories/slug/${slug}`
+    ) {
+      notFound();
+    }
+    throw error;
+  }
+
   const category = categoryResponse.data;
   const topDonationItems = topDonationsResponse.data.items;
 

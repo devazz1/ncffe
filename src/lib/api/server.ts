@@ -14,6 +14,18 @@ type FetchOptions = {
   revalidate?: number;
 };
 
+export class ServerHttpError extends Error {
+  status: number;
+  path: string;
+
+  constructor(status: number, path: string) {
+    super(`Server fetch failed: ${status} ${path}`);
+    this.name = "ServerHttpError";
+    this.status = status;
+    this.path = path;
+  }
+}
+
 export async function serverGet<T>(
   path: string,
   options: FetchOptions = {},
@@ -24,7 +36,7 @@ export async function serverGet<T>(
   });
 
   if (!response.ok) {
-    throw new Error(`Server fetch failed: ${response.status} ${path}`);
+    throw new ServerHttpError(response.status, path);
   }
 
   return (await response.json()) as T;
