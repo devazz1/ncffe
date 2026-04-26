@@ -6,6 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import { createDonation, createPaymentOrder } from "@/lib/api";
 import { isValidEmailFormat, normalizeEmail } from "@/lib/email";
 import { formatCurrencyINR, toNumber } from "@/lib/format";
+import { isValidPanFormat, normalizePan } from "@/lib/pan";
 import { formatPhoneForApi, isValidPhoneFormat } from "@/lib/phone";
 import type { CampaignProduct } from "@/lib/types";
 import { useRouter } from "next/navigation";
@@ -62,6 +63,7 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
     mutationFn: async () => {
       const normalizedEmail = normalizeEmail(email);
       const formattedPhone = formatPhoneForApi(phone);
+      const normalizedPan = normalizePan(pan);
       const cartUnits = getUnitsForCampaign(campaignId);
       const selectedProducts = Object.entries(cartUnits)
         .map(([id, quantity]) => ({
@@ -82,7 +84,7 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
         phone: formattedPhone,
         isIndian,
         is80GRequested,
-        pan: is80GRequested ? pan : undefined,
+        pan: is80GRequested ? normalizedPan : undefined,
         address: is80GRequested ? address : undefined,
       });
 
@@ -156,6 +158,10 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
     }
     if (is80GRequested && (!pan || !address)) {
       setErrorMessage("PAN and address are required for 80G.");
+      return false;
+    }
+    if (is80GRequested && !isValidPanFormat(pan)) {
+      setErrorMessage("Please enter a valid PAN (e.g. ABCDE1234F).");
       return false;
     }
     setErrorMessage(null);
@@ -307,7 +313,9 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
                 <input
                   placeholder="PAN"
                   value={pan}
-                  onChange={(e) => setPan(e.target.value)}
+                  onChange={(e) => setPan(normalizePan(e.target.value))}
+                  maxLength={10}
+                  autoCapitalize="characters"
                   className="w-full rounded border border-zinc-300 px-3 py-2"
                 />
                 <textarea

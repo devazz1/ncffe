@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getCurrentUser, updateCurrentUser } from "@/lib/api";
 import { useAuthStore } from "@/lib/auth-store";
+import { isValidPanFormat, normalizePan } from "@/lib/pan";
 import { formatPhoneForApi, isValidPhoneFormat } from "@/lib/phone";
 
 export function DashboardClient() {
@@ -45,9 +46,14 @@ export function DashboardClient() {
           e.preventDefault();
           const form = new FormData(e.currentTarget);
           const phone = String(form.get("phone") ?? "");
+          const pan = String(form.get("pan") ?? "");
 
           if (phone && !isValidPhoneFormat(phone)) {
             setErrorMessage("Please enter a valid phone number.");
+            return;
+          }
+          if (pan && !isValidPanFormat(pan)) {
+            setErrorMessage("Please enter a valid PAN (e.g. ABCDE1234F).");
             return;
           }
 
@@ -56,7 +62,7 @@ export function DashboardClient() {
             fullName: String(form.get("fullName") ?? ""),
             phone: formatPhoneForApi(phone),
             address: String(form.get("address") ?? ""),
-            pan: String(form.get("pan") ?? ""),
+            pan: normalizePan(pan),
           };
           updateMutation.mutate(payload, {
             onSuccess: () => {
@@ -87,6 +93,11 @@ export function DashboardClient() {
         <input
           defaultValue={profile.pan ?? ""}
           name="pan"
+          maxLength={10}
+          autoCapitalize="characters"
+          onChange={(e) => {
+            e.currentTarget.value = normalizePan(e.currentTarget.value);
+          }}
           className="rounded border border-zinc-300 px-3 py-2"
           placeholder="PAN"
         />
