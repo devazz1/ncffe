@@ -28,27 +28,57 @@ export default function AboutEntityPage() {
           </p>
         </section>
       </SitePageContainer>
-      <section className="mx-auto bg-white mb-10">
-        <div className="grid items-center mx-auto w-full max-w-screen-2xl gap-8 px-4 py-6 md:grid-cols-[1fr_420px] md:gap-10 md:px-12">
-          <p className="min-w-0 text-lg text-justify font-normal leading-relaxed text-zinc-800 md:text-4xl md:leading-tight">
-            Working at the intersection of{" "}
-            <span className="text-[#d3221c]">
-              education, nutrition, healthcare, and livelihood
-            </span>{" "}
-            the foundation focuses on communities that remain largely excluded from mainstream development - particularly families in coal mining settlements, tribal villages, and remote rural clusters.
-          </p>
 
-          <div className="mx-auto w-full max-w-105 md:ml-auto">
-            <div className="relative aspect-3/4 w-full overflow-hidden rounded-2xl bg-zinc-50">
-              <Image
-                src="/india-map.png"
-                alt="India map of foundation reach"
-                fill
-                className="object-contain p-2"
-                sizes="(max-width: 768px) 100vw, 420px"
-                priority
-              />
+      <section className="mx-auto bg-white mb-10">
+        <div className="mx-auto w-full max-w-screen-2xl px-4 py-6 md:px-12">
+          <div className="grid items-center gap-8 md:grid-cols-[420px_1fr] md:gap-10">
+            <div className="mx-auto w-full max-w-105">
+              <div className="grid grid-cols-2 gap-2">
+                <div className="relative aspect-square overflow-hidden rounded-2xl rounded-br-none">
+                  <Image
+                    src="/gallery/image_r11.png"
+                    alt="Community support activity"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 50vw, 200px"
+                  />
+                </div>
+                <div className="relative aspect-square overflow-hidden rounded-2xl rounded-bl-none">
+                  <Image
+                    src="/gallery/image_r12.png"
+                    alt="Nutrition and family outreach"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 50vw, 200px"
+                  />
+                </div>
+                <div className="relative aspect-square overflow-hidden rounded-2xl rounded-tr-none">
+                  <Image
+                    src="/gallery/image_r21.png"
+                    alt="Livelihood-focused program"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 50vw, 200px"
+                  />
+                </div>
+                <div className="relative aspect-square overflow-hidden rounded-2xl rounded-tl-none">
+                  <Image
+                    src="/gallery/image_r22.png"
+                    alt="Healthcare awareness camp"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 50vw, 200px"
+                  />
+                </div>
+              </div>
             </div>
+            <p className="text-lg font-light leading-relaxed text-zinc-800 md:text-4xl md:leading-tight">
+              Working at the intersection of{" "}
+              <span className="text-[#d3221c] font-normal">
+                education, nutrition, healthcare, and livelihood,
+              </span>{" "}
+              the foundation focuses on communities that remain largely excluded from mainstream development — particularly families in coal mining settlements, tribal villages, and remote rural clusters.
+            </p>
           </div>
         </div>
       </section>
