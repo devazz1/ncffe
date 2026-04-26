@@ -5,11 +5,11 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 export const ABOUT_NAV_ITEMS = [
-  { label: "The Entity", href: "/about#the-entity" },
-  { label: "The Vision & the mission", href: "/about#vision-mission" },
-  { label: "The Reach & Scale", href: "/about#reach-scale" },
-  { label: "The Board", href: "/about#the-board" },
-  { label: "The Advisory Council", href: "/about#advisory-council" },
+  { label: "The Entity", href: "/about/entity" },
+  { label: "The Vision & the mission", href: "/about/vision-mission" },
+  { label: "The Reach & Scale", href: "/about/reach-scale" },
+  { label: "The Board", href: "/about/the-board" },
+  { label: "The Advisory Council", href: "/about/advisory-council" },
 ] as const;
 
 export function AboutMenu() {
