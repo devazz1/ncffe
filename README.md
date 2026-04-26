@@ -28,7 +28,7 @@ npm run dev
 ## Implemented routes
 
 - `/` - Home (ISR)
-- `/[slug]` - Category page (ISR)
+- `/cause/[slug]` - Category page (ISR)
 - `/about` - Static
 - `/stories` - Static
 - `/dashboard` - CSR guarded by login modal
@@ -36,7 +36,7 @@ npm run dev
 
 ## API request correlation
 
-Client-side API calls (Axios) send `x-request-id` as `fe-<uuid>` for Nest/Pino correlation. Server-side `fetch` used for ISR **does not** set that header, because Next.js would treat each request as a distinct cache key and break Data Cache / revalidate for routes like `/[slug]`.
+Client-side API calls (Axios) send `x-request-id` as `fe-<uuid>` for Nest/Pino correlation. Server-side `fetch` used for ISR **does not** set that header, because Next.js would treat each request as a distinct cache key and break Data Cache / revalidate for routes like `/cause/[slug]`.
 
 ## Notes
 

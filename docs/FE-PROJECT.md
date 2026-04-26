@@ -125,7 +125,7 @@ The project is in a functional-first phase:
 
 ### 5.5 Campaign product cart (client selection state)
 
-Purpose: share **product quantities** between the category page (`/[slug]`) and **`DonationForm`** without coupling all UI into one component. Selection must stay **scoped per `campaignId`** so payloads only contain valid `campaignProductId` values for that campaign (invalid mixes are rejected by the backend).
+Purpose: share **product quantities** between the category page (`/cause/[slug]`) and **`DonationForm`** without coupling all UI into one component. Selection must stay **scoped per `campaignId`** so payloads only contain valid `campaignProductId` values for that campaign (invalid mixes are rejected by the backend).
 
 **Store:** `web/src/stores/campaign-product-cart-store.ts`
 
@@ -154,7 +154,7 @@ Purpose: share **product quantities** between the category page (`/[slug]`) and 
 | Route | Purpose | Rendering | Status |
 |---|---|---|---|
 | `/` | Category listing | ISR (`revalidate: 300`) | Implemented |
-| `/[slug]` | Category page + donation form | ISR (`revalidate: 300`) | Implemented |
+| `/cause/[slug]` | Category page + donation form | ISR (`revalidate: 300`) | Implemented |
 | `/about` | About NGO | SSG | Implemented |
 | `/stories` | NGO stories | SSG | Implemented |
 | `/donations/status` | Payment result reconciliation | CSR | Implemented |
@@ -162,11 +162,7 @@ Purpose: share **product quantities** between the category page (`/[slug]`) and 
 | `/dashboard/overview` | User donation overview | CSR | Implemented |
 | `/dashboard/profile` | User profile edit | CSR | Implemented |
 
-Reserved-route protection exists in dynamic category route for:
-
-- `about`, `stories`, `dashboard`, `donations`, `api`
-
-This prevents conflicts with top-level dynamic slug handling.
+Category pages now live under `/cause/[slug]`, so route conflicts with top-level pages are avoided structurally (no reserved-slug guard needed).
 
 ---
 
@@ -204,7 +200,7 @@ This prevents conflicts with top-level dynamic slug handling.
 
 ## 7.3 Donation + payment flow
 
-1. User selects product quantities (via **`CampaignProductCard`** on **`/[slug]`** and/or implicitly reflected in **`DonationForm`** summary) and/or enters an additional amount. Quantities live in the **campaign product cart** store (see §5.5).
+1. User selects product quantities (via **`CampaignProductCard`** on **`/cause/[slug]`** and/or implicitly reflected in **`DonationForm`** summary) and/or enters an additional amount. Quantities live in the **campaign product cart** store (see §5.5).
 2. Frontend validates total and required user details.
 3. Create donation:
    - `POST /donations`
@@ -280,7 +276,7 @@ Key contract rules:
 
 - `withCredentials` is not enabled currently; auth transport is Bearer token.
 - Env fallback API base URL is `http://localhost:5151/api` when env not set.
-- **Header navigation:** primary nav includes Home, About (dropdown), **Categories** (dropdown from API, sorted by `displayOrder`), Stories. Category links use `/${slug}`. If the categories API fails or returns no items, the Categories control is omitted.
+- **Header navigation:** primary nav includes Home, About (dropdown), **Categories** (dropdown from API, sorted by `displayOrder`), Stories. Category links use `/cause/${slug}`. If the categories API fails or returns no items, the Categories control is omitted.
 - Header auth UI behavior:
   - logged out: Register/Login
   - logged in: Dashboard/Logout
@@ -326,7 +322,7 @@ Always update these sections when applicable:
 - End-to-end flow steps
 - Integrated endpoint list
 - Current implementation notes
-- **§5.5 (campaign product cart)** if donation product selection, cart lifecycle, or `[slug]` product UI changes
+- **§5.5 (campaign product cart)** if donation product selection, cart lifecycle, or `/cause/[slug]` product UI changes
 - Known gaps and planned next work
 
 ---
@@ -391,6 +387,8 @@ If an AI agent is working on this frontend:
 ## 15) Change Log
 
 - 2026-04-26:
+  - Migrated category route from top-level `"/[slug]"` to `"/cause/[slug]"`.
+  - Updated category link references to use `/cause/${slug}` and removed reserved-slug routing guard documentation.
   - Documented current auth/session behavior after dashboard refresh/logout fixes:
     - centralized token/header sync in auth store,
     - rehydrate-time header restore + hydration flag,
