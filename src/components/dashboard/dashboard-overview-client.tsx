@@ -22,15 +22,15 @@ function formatInrWithDecimals(value: number) {
 type StatCardProps = {
   title: string;
   value: string;
-  helper: string;
+  helper?: string;
 };
 
 function StatCard({ title, value, helper }: StatCardProps) {
   return (
     <article className="rounded-lg border border-zinc-200 bg-white p-5">
-      <p className="text-sm text-zinc-600">{title}</p>
+      <p className="text-sm text-zinc-500">{title}</p>
       <p className="mt-2 text-2xl font-semibold text-zinc-900">{value}</p>
-      <p className="mt-1 text-xs text-zinc-500">{helper}</p>
+      {helper ? <p className="mt-1 text-xs text-zinc-500">{helper}</p> : null}
     </article>
   );
 }
@@ -53,8 +53,8 @@ export function DashboardOverviewClient() {
 
   return (
     <div className="space-y-6">
-      <section className="rounded-lg border border-zinc-200 bg-zinc-50 p-6">
-        <h1 className="text-xl font-semibold">Dashboard Overview</h1>
+      <section className="rounded-lg p-6">
+        <h1 className="text-2xl font-semibold">Dashboard Overview</h1>
         <p className="mt-1 text-sm text-zinc-700">
           Your impact summary from successful donations.
         </p>
@@ -71,17 +71,16 @@ export function DashboardOverviewClient() {
             <StatCard
               title="Successful Donations"
               value={String(stats.successDonationCount)}
-              helper="Count of completed donations."
             />
             <StatCard
               title="Total Amount Donated"
               value={totalAmountDonated}
-              helper="Sum of successful donation amounts."
+              // helper="Sum of successful donation amounts."
             />
             <StatCard
               title="Campaigns Supported"
               value={String(stats.campaignsSupportedCount)}
-              helper="Distinct campaigns you have supported."
+              // helper="Distinct campaigns you have supported."
             />
           </div>
         )}
