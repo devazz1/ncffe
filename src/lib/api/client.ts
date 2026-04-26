@@ -11,7 +11,7 @@ export const apiClient = axios.create({
 
 let onUnauthorized: (() => void) | null = null;
 
-/** Register once from app root (e.g. Providers). Clears session on any API 401. */
+/** Register once from app root (e.g. Providers). Clears session for authenticated API 401s. */
 export function setApiUnauthorizedHandler(handler: (() => void) | null) {
   onUnauthorized = handler;
 }
@@ -25,6 +25,12 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error: unknown) => {
     if (!axios.isAxiosError(error) || error.response?.status !== 401) {
+      return Promise.reject(error);
+    }
+    const authHeader = error.config?.headers?.Authorization;
+    const hadBearerToken =
+      typeof authHeader === "string" && authHeader.trim().toLowerCase().startsWith("bearer ");
+    if (!hadBearerToken) {
       return Promise.reject(error);
     }
     onUnauthorized?.();

@@ -6,7 +6,7 @@ import {
   QueryClientProvider,
   QueryCache,
 } from "@tanstack/react-query";
-import { setApiAccessToken, setApiUnauthorizedHandler } from "@/lib/api/client";
+import { setApiUnauthorizedHandler } from "@/lib/api/client";
 import { useAuthStore } from "@/lib/auth-store";
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -22,17 +22,15 @@ export function Providers({ children }: { children: React.ReactNode }) {
         },
       }),
   );
-  const token = useAuthStore((s) => s.accessToken);
   const clearAuth = useAuthStore((s) => s.clearAuth);
 
   useEffect(() => {
-    setApiAccessToken(token);
-  }, [token]);
-
-  useEffect(() => {
     const handler = () => {
+      const authState = useAuthStore.getState();
+      if (!authState.accessToken) {
+        return;
+      }
       clearAuth();
-      setApiAccessToken(null);
       queryClient.clear();
     };
     setApiUnauthorizedHandler(handler);

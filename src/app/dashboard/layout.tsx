@@ -20,8 +20,19 @@ const DASHBOARD_LINKS: { href: string; label: string; icon: LucideIcon }[] = [
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const token = useAuthStore((s) => s.accessToken);
+  const isHydrated = useAuthStore((s) => s.hasHydrated);
   const pathname = usePathname();
   const [isLoginOpen, setIsLoginOpen] = useState(!token);
+
+  if (!isHydrated) {
+    return (
+      <div className="px-4 py-6">
+        <section className="mx-auto w-full max-w-4xl rounded-lg border border-zinc-200 bg-white p-6">
+          <p className="text-sm text-zinc-600">Loading dashboard...</p>
+        </section>
+      </div>
+    );
+  }
 
   if (!token) {
     return (

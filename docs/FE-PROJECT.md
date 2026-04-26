@@ -112,12 +112,16 @@ The project is in a functional-first phase:
 ## 5.4 Auth/session model (current)
 
 - Access token is stored in Zustand persist store (`ngo-auth`) in localStorage.
-- `Providers` syncs token to Axios default Authorization header.
-- Any API 401 triggers:
-  - clear auth token,
-  - remove Authorization header,
-  - clear TanStack Query cache.
-- This keeps auth invalidation deterministic across UI.
+- Auth state is centralized in `web/src/lib/auth-store.ts`:
+  - `setAccessToken(token)` updates Zustand state and Axios bearer header together.
+  - `clearAuth()` clears Zustand token and removes Axios bearer header together.
+  - `onRehydrateStorage` reapplies persisted token to Axios header on app refresh and marks hydration complete (`hasHydrated`).
+- Unauthorized handling is centralized in `web/src/lib/api/client.ts` + `Providers`:
+  - Axios response interceptor triggers global unauthorized callback only for `401` responses from requests that included a `Bearer` Authorization header.
+  - `Providers` unauthorized callback clears auth and TanStack Query cache only when a token exists.
+  - Result: unauthenticated/public 401 responses do not force logout.
+- Dashboard auth gate waits for auth-store hydration before rendering login-required UI, preventing refresh-time auth flicker/races.
+- This keeps token/header sync and invalidation deterministic across routes.
 
 ### 5.5 Campaign product cart (client selection state)
 
@@ -187,9 +191,16 @@ This prevents conflicts with top-level dynamic slug handling.
    - `POST /auth/otp/verify`
 4. On success:
    - save `accessToken` to Zustand,
-   - Axios auto-sync applies bearer token.
+   - `setAccessToken` immediately applies Axios bearer token.
+5. On page refresh:
+   - persisted token is rehydrated from `ngo-auth`,
+   - Axios bearer header is restored during store rehydration,
+   - dashboard route gate waits until hydration completes before deciding logged-in/logged-out state.
 5. On failure (either step):
    - surface **`getApiErrorMessage`** so the modal shows **`response.data.message`** from the API when present (see §5.3.1).
+6. On unauthorized API response:
+   - only authenticated-request `401` (request had Bearer header) triggers global logout.
+   - non-auth/public `401` does not clear session.
 
 ## 7.3 Donation + payment flow
 
@@ -217,7 +228,7 @@ This prevents conflicts with top-level dynamic slug handling.
 
 ## 7.5 Dashboard flow
 
-- Dashboard route gate checks token presence.
+- Dashboard route gate checks auth hydration + token presence.
 - If not authenticated:
   - show dashboard login prompt + login modal.
 - If authenticated:
@@ -273,6 +284,10 @@ Key contract rules:
 - Header auth UI behavior:
   - logged out: Register/Login
   - logged in: Dashboard/Logout
+- Refresh/session behavior:
+  - auth token persists in `ngo-auth` localStorage.
+  - Axios Authorization header is rebuilt from persisted token on rehydrate.
+  - global logout is only for authenticated-request `401` responses.
 - Donation form includes:
   - once/monthly tabs (monthly UI present but not complete business flow),
   - **selected-products summary** (driven by **`campaign-product-cart-store`**; full + / − lives on **`CampaignProductCard`** on the category page),
@@ -345,6 +360,7 @@ Any feature or refactor is complete only when all are true:
   - Keep revalidation strategy stable for public routes.
 - Session invalidation risk:
   - Do not bypass `setApiAccessToken` / `setApiUnauthorizedHandler`.
+  - Keep `401` logout logic restricted to authenticated requests; avoid global logout on public/anonymous `401`.
   - Avoid token handling directly in individual page components.
 - Payment routing risk:
   - Never route final payment UX solely from Razorpay client handler payload.
@@ -374,6 +390,12 @@ If an AI agent is working on this frontend:
 
 ## 15) Change Log
 
+- 2026-04-26:
+  - Documented current auth/session behavior after dashboard refresh/logout fixes:
+    - centralized token/header sync in auth store,
+    - rehydrate-time header restore + hydration flag,
+    - authenticated-request-only `401` auto-logout behavior,
+    - dashboard hydration-aware auth gate.
 - 2026-04-20:
   - Documented **campaign product cart**: Zustand store keyed by **`campaignId`**, **`CampaignCartScope`** / Razorpay cleanup, **`CampaignProductCard`** vs donation form summary (§5.5); updated §4, §5.1, §7.3 step 1, §9.
   - Documented client-side API error handling: **`getApiErrorMessage`**, axios `message` vs **`response.data.message`**, and use in **`AuthModal`** (§5.3.1, §7.2, §9).
@@ -402,5 +424,5 @@ If an AI agent is working on this frontend:
 
 ## Last Updated
 
-- Date: 2026-04-20
-- Updated for: **Campaign product cart** architecture (Zustand, lifecycle, UI split) and **`getApiErrorMessage`** / axios vs backend **`message`** fields.
+- Date: 2026-04-26
+- Updated for: auth/session stabilization on dashboard refresh (`ngo-auth` rehydrate sync, hydration-aware dashboard gate, and authenticated-request-only `401` auto-logout), plus earlier campaign cart and API error-message behavior.

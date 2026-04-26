@@ -8,11 +8,16 @@ import { useAuthStore } from "@/lib/auth-store";
 
 export function AccountMenu() {
   const token = useAuthStore((s) => s.accessToken);
+  const isHydrated = useAuthStore((s) => s.hasHydrated);
   const clearAuth = useAuthStore((s) => s.clearAuth);
 
   const [open, setOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [purpose, setPurpose] = useState<"login" | "register">("login");
+
+  if (!isHydrated) {
+    return null;
+  }
 
   if (!token) {
     return (
