@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { Trash2 } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { createDonation, createPaymentOrder } from "@/lib/api";
+import { isValidEmailFormat, normalizeEmail } from "@/lib/email";
 import { formatCurrencyINR, toNumber } from "@/lib/format";
 import type { CampaignProduct } from "@/lib/types";
 import { useRouter } from "next/navigation";
@@ -58,6 +59,7 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
 
   const createDonationMutation = useMutation({
     mutationFn: async () => {
+      const normalizedEmail = normalizeEmail(email);
       const cartUnits = getUnitsForCampaign(campaignId);
       const selectedProducts = Object.entries(cartUnits)
         .map(([id, quantity]) => ({
@@ -74,7 +76,7 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
         isMonthly: tab === "monthly",
         displayPublicly: !isAnonymous,
         fullName,
-        email,
+        email: normalizedEmail,
         phone,
         isIndian,
         is80GRequested,
@@ -104,7 +106,7 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
           currency: order.data.currency,
           prefill: {
             name: fullName,
-            email,
+            email: normalizeEmail(email),
             contact: phone,
           },
           description: `${campaignName} Donation`,
@@ -140,6 +142,10 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
     }
     if (!fullName || !email || !phone) {
       setErrorMessage("Full name, email, and phone are required.");
+      return false;
+    }
+    if (!isValidEmailFormat(email)) {
+      setErrorMessage("Please enter a valid email address.");
       return false;
     }
     if (is80GRequested && (!pan || !address)) {
@@ -276,6 +282,7 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
                 className="w-full rounded border border-zinc-300 px-3 py-2"
               />
               <input
+                type="email"
                 placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}

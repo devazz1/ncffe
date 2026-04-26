@@ -6,6 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import { requestOtp, verifyOtp } from "@/lib/api";
 import { getApiErrorMessage } from "@/lib/api/error-message";
 import { useAuthStore } from "@/lib/auth-store";
+import { isValidEmailFormat, normalizeEmail } from "@/lib/email";
 import type { AuthPurpose } from "@/lib/types";
 
 type AuthModalProps = {
@@ -30,16 +31,17 @@ export function AuthModal({
   const [step, setStep] = useState<"request" | "verify">("request");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const canSubmitVerify = useMemo(() => !!email && !!code, [email, code]);
+  const isEmailValid = useMemo(() => isValidEmailFormat(email), [email]);
+  const canSubmitVerify = useMemo(() => isEmailValid && !!code, [isEmailValid, code]);
 
   const canRequestOtp = useMemo(() => {
-    if (!email) return false;
+    if (!isEmailValid) return false;
     if (purpose === "register") return !!fullName && !!phone;
     return true;
-  }, [email, purpose, fullName, phone]);
+  }, [isEmailValid, purpose, fullName, phone]);
 
   const requestOtpMutation = useMutation({
-    mutationFn: () => requestOtp({ email, purpose }),
+    mutationFn: () => requestOtp({ email: normalizeEmail(email), purpose }),
     onSuccess: () => {
       setErrorMessage(null);
       setStep("verify");
@@ -52,7 +54,7 @@ export function AuthModal({
   const verifyOtpMutation = useMutation({
     mutationFn: () =>
       verifyOtp({
-        email,
+        email: normalizeEmail(email),
         purpose,
         code,
         fullName: purpose === "register" ? fullName : undefined,
@@ -109,11 +111,15 @@ export function AuthModal({
         {step === "request" ? (
           <div className="space-y-3">
             <input
+              type="email"
               placeholder="Email id*"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full rounded border border-zinc-300 px-3 py-2"
             />
+            {!!email && !isEmailValid ? (
+              <p className="text-sm text-red-600">Please enter a valid email address.</p>
+            ) : null}
             {purpose === "register" && (
               <>
                 <input
