@@ -1,6 +1,8 @@
 "use client";
 
 import type { ReactNode } from "react";
+import type { LucideIcon } from "lucide-react";
+import { LayoutDashboard, UserRound } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -11,9 +13,9 @@ type DashboardLayoutProps = {
   children: ReactNode;
 };
 
-const DASHBOARD_LINKS = [
-  { href: "/dashboard/overview", label: "Overview" },
-  { href: "/dashboard/profile", label: "My Profile" },
+const DASHBOARD_LINKS: { href: string; label: string; icon: LucideIcon }[] = [
+  { href: "/dashboard/overview", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/dashboard/profile", label: "My profile", icon: UserRound },
 ];
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
@@ -49,22 +51,23 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   }
 
   return (
-    <div className="mx-auto grid w-full max-w-6xl gap-6 px-4 py-6 md:grid-cols-[220px_minmax(0,1fr)]">
-      <aside className="h-fit rounded-lg border border-zinc-200 bg-white p-3">
-        <p className="px-2 pb-2 text-sm font-semibold text-zinc-900">Dashboard</p>
+    <div className="mx-auto w-full max-w-screen-2xl px-4 py-6 gap-6 grid md:px-12 md:grid-cols-[220px_minmax(0,1fr)]">
+      <aside className="h-fit p-3">
         <nav className="grid gap-1">
           {DASHBOARD_LINKS.map((item) => {
             const isActive = pathname === item.href;
+            const Icon = item.icon;
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`rounded px-3 py-2 text-sm ${
+                className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-colors ${
                   isActive
-                    ? "bg-zinc-900 text-white"
-                    : "text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900"
+                    ? "bg-orange-100 text-orange-500"
+                    : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
                 }`}
               >
+                <Icon className="h-5 w-5 shrink-0" />
                 {item.label}
               </Link>
             );
