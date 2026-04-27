@@ -6,6 +6,7 @@ import { AboutMenu } from "@/components/header/about-menu";
 import { AccountMenu } from "@/components/header/account-menu";
 import { CategoriesMenu } from "@/components/header/categories-menu";
 import { MobilePrimaryNav } from "@/components/header/mobile-primary-nav";
+import { ProgramMenu } from "@/components/header/program-menu";
 import type { Category } from "@/lib/types";
 import Image from "next/image";
 
@@ -47,6 +48,7 @@ export function SiteHeader({ categories }: SiteHeaderProps) {
         >
           <Link href="/">Home</Link>
           <AboutMenu />
+          <ProgramMenu />
           <CategoriesMenu categories={categories} />
           <Link href="/stories">Stories</Link>
         </nav>        

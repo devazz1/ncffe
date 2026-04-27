@@ -16,6 +16,7 @@ import {
   useState,
 } from "react";
 import { ABOUT_NAV_ITEMS } from "@/components/header/about-menu";
+import { PROGRAM_NAV_ITEMS } from "@/components/header/program-menu";
 import type { Category } from "@/lib/types";
 
 type MobilePrimaryNavProps = {
@@ -125,6 +126,34 @@ export function MobilePrimaryNav({ categories }: MobilePrimaryNavProps) {
                 </summary>
                 <div className="border-t border-zinc-100 pb-2 pt-1">
                   {ABOUT_NAV_ITEMS.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className="flex items-center justify-between gap-2 px-4 py-2.5 text-zinc-800 hover:bg-white"
+                      onClick={close}
+                    >
+                      <span className="min-w-0">{item.label}</span>
+                      <CircleArrowOutUpRight
+                        className="size-4 shrink-0 text-zinc-400"
+                        strokeWidth={2}
+                        aria-hidden
+                      />
+                    </Link>
+                  ))}
+                </div>
+              </details>
+
+              <details className="group rounded-lg border border-transparent open:border-zinc-100 open:bg-zinc-50/80">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-2 rounded-lg px-3 py-3 text-zinc-900 [&::-webkit-details-marker]:hidden">
+                  <span>Programs</span>
+                  <ChevronDown
+                    className="size-4 shrink-0 transition-transform duration-200 group-open:rotate-180"
+                    strokeWidth={2}
+                    aria-hidden
+                  />
+                </summary>
+                <div className="border-t border-zinc-100 pb-2 pt-1">
+                  {PROGRAM_NAV_ITEMS.map((item) => (
                     <Link
                       key={item.href}
                       href={item.href}
