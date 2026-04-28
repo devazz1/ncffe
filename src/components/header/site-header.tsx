@@ -6,6 +6,7 @@ import { AboutMenu } from "@/components/header/about-menu";
 import { AccountMenu } from "@/components/header/account-menu";
 import { CategoriesMenu } from "@/components/header/categories-menu";
 import { MobilePrimaryNav } from "@/components/header/mobile-primary-nav";
+import { PrimaryNavUnderline } from "@/components/header/primary-nav-underline";
 import { ProgramMenu } from "@/components/header/program-menu";
 import type { Category } from "@/lib/types";
 import Image from "next/image";
@@ -46,11 +47,23 @@ export function SiteHeader({ categories }: SiteHeaderProps) {
           className="hidden shrink-0 items-center gap-4 text-sm md:flex"
           aria-label="Primary"
         >
-          <Link href="/">Home</Link>
+          <Link
+            href="/"
+            className="group inline-flex flex-col items-start rounded px-1 py-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-400"
+          >
+            Home
+            <PrimaryNavUnderline />
+          </Link>
           <AboutMenu />
           <ProgramMenu />
           <CategoriesMenu categories={categories} />
-          <Link href="/stories">Stories</Link>
+          <Link
+            href="/stories"
+            className="group inline-flex flex-col items-start rounded px-1 py-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-400"
+          >
+            Stories
+            <PrimaryNavUnderline />
+          </Link>
         </nav>        
         <div className="flex min-w-0 flex-1 justify-end">
           <nav

@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronDown, ChevronUp, CircleArrowOutUpRight } from "lucide-react";
+import { PrimaryNavUnderline } from "@/components/header/primary-nav-underline";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
@@ -66,16 +67,19 @@ export function ProgramMenu() {
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-0.5 rounded px-1 py-1 text-sm hover:cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-400"
+        className="group inline-flex flex-col items-start rounded px-1 py-1 text-left text-sm hover:cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-400"
         aria-expanded={open}
         aria-haspopup="menu"
       >
-        Programs
-        {open ? (
-          <ChevronUp className="size-4 shrink-0" strokeWidth={2} aria-hidden />
-        ) : (
-          <ChevronDown className="size-4 shrink-0" strokeWidth={2} aria-hidden />
-        )}
+        <span className="flex items-center gap-0.5">
+          Programs
+          {open ? (
+            <ChevronUp className="size-4 shrink-0" strokeWidth={2} aria-hidden />
+          ) : (
+            <ChevronDown className="size-4 shrink-0" strokeWidth={2} aria-hidden />
+          )}
+        </span>
+        <PrimaryNavUnderline pinned={open} />
       </button>
       {open ? (
         <div
