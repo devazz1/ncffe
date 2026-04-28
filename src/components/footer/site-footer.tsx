@@ -42,13 +42,13 @@ export function SiteFooter({ categories }: SiteFooterProps) {
                 <Image
                   src="/ncf_logo_nobg.png"
                   alt="Nand Care Foundation logo"
-                  width={32}
-                  height={32}
-                  className="h-10 w-10 rounded-[10px] object-cover"
+                  width={20}
+                  height={20}
+                  className="h-8 w-8 rounded-[10px] object-cover"
                 />
                 <div>
-                  <p className="text-xs text-zinc-900">Nand Care</p>
-                  <p className="text-sm font-semibold text-zinc-900">Foundation</p>
+                  <p className="text-xs font-light">Nand Care</p>
+                  <p className="text-sm font-normal">Foundation</p>
                 </div>
               </div>
               <p className="mt-4 max-w-84 text-xs leading-6 text-[#767676] lg:max-w-2xl lg:text-sm lg:leading-8">
