@@ -1,9 +1,17 @@
 import Image from "next/image";
 
-type GalleryImage = {
+export type GalleryImage = {
   src: string;
   alt: string;
 };
+
+export type MarqueeGalleryRow = {
+  images: GalleryImage[];
+  durationSec: number;
+  reverse?: boolean;
+};
+
+const ROW_TILE_REPEAT_COUNT = 14;
 
 /** Repeats the base set so each row is wide enough for a smooth infinite loop. */
 function buildRowImages(base: GalleryImage[], count: number): GalleryImage[] {
@@ -85,34 +93,24 @@ function MarqueeRow({
   );
 }
 
-export function SupportingLivesGallerySection() {
-  const rowCount = 14;
-  const row1 = buildRowImages(ROW1_GALLERY, rowCount);
-  const row2 = buildRowImages(ROW2_GALLERY, rowCount);
-  const row3 = buildRowImages(ROW3_GALLERY, rowCount);
+/** Default rows for the home page “Supporting Lives” strip (Dhanbad gallery assets). */
+export const supportingLivesGalleryRows: MarqueeGalleryRow[] = [
+  { images: ROW1_GALLERY, durationSec: 72 },
+  { images: ROW2_GALLERY, durationSec: 68, reverse: true },
+  { images: ROW3_GALLERY, durationSec: 32 },
+];
 
+export function MarqueeGallery({ rows }: { rows: MarqueeGalleryRow[] }) {
   return (
-    <section
-      className="py-8 lg:py-14"
-      aria-labelledby="supporting-lives-gallery-heading"
-    >
-      <div className="mx-auto max-w-[1920px] px-3 sm:px-6 lg:px-16">
-        <h2
-          id="supporting-lives-gallery-heading"
-          className="mb-8 text-center text-lg font-semibold tracking-tight text-zinc-400 sm:text-xl lg:mb-10 lg:text-4xl"
-        >
-          Supporting Lives Across Dhanbad{" "}
-          <span className="not-italic" aria-hidden>
-            ❤️
-          </span>
-        </h2>
-      </div>
-
-      <div className="flex flex-col gap-1 sm:gap-1.5">
-        <MarqueeRow tiles={row1} durationSec={72} />
-        <MarqueeRow tiles={row2} durationSec={68} reverse />
-        <MarqueeRow tiles={row3} durationSec={32} />
-      </div>
-    </section>
+    <div className="flex flex-col gap-1 sm:gap-1.5">
+      {rows.map((row, i) => (
+        <MarqueeRow
+          key={i}
+          tiles={buildRowImages(row.images, ROW_TILE_REPEAT_COUNT)}
+          durationSec={row.durationSec}
+          reverse={row.reverse}
+        />
+      ))}
+    </div>
   );
 }

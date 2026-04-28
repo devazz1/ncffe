@@ -5,7 +5,10 @@ import { ImpactStatsSection } from "@/components/home/impact-stats-section";
 import { DonateCtaSection } from "@/components/home/donate-cta-section";
 import { HomeStoriesSection } from "@/components/home/home-stories-section";
 import { MissionSection } from "@/components/home/mission-section";
-import { SupportingLivesGallerySection } from "@/components/supporting-lives-gallery-section";
+import {
+  MarqueeGallery,
+  supportingLivesGalleryRows,
+} from "@/components/supporting-lives-gallery-section";
 
 export default async function HomePage() {
   let categories = [] as Awaited<ReturnType<typeof getCategories>>["data"]["items"];
@@ -57,9 +60,24 @@ export default async function HomePage() {
         <DonateCtaSection donateHref={donateCtaHref} />
       </div>
 
-      <div>
-        <SupportingLivesGallerySection />
-      </div>
+      <section
+        className="py-8 lg:py-14"
+        aria-labelledby="supporting-lives-gallery-heading"
+      >
+        <div className="mx-auto max-w-[1920px] px-3 sm:px-6 lg:px-16">
+          <h2
+            id="supporting-lives-gallery-heading"
+            className="mb-8 text-center text-lg font-semibold tracking-tight text-zinc-400 sm:text-xl lg:mb-10 lg:text-4xl"
+          >
+            Supporting Lives Across Dhanbad{" "}
+            <span className="not-italic" aria-hidden>
+              ❤️
+            </span>
+          </h2>
+        </div>
+
+        <MarqueeGallery rows={supportingLivesGalleryRows} />
+      </section>
     </>
   );
 }
