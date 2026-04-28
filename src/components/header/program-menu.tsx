@@ -66,7 +66,7 @@ export function ProgramMenu() {
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-0.5 rounded px-1 py-1 text-sm hover:bg-zinc-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-400"
+        className="flex items-center gap-0.5 rounded px-1 py-1 text-sm hover:cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-400"
         aria-expanded={open}
         aria-haspopup="menu"
       >

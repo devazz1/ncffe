@@ -34,11 +34,11 @@ export function SiteHeader({ categories }: SiteHeaderProps) {
               alt="Nand Care Foundation logo"
               width={20}
               height={20}
-              className="h-10 w-10 rounded-[10px] object-cover bg-white"
+              className="h-8 w-8 rounded-[10px] object-cover bg-white"
             />
             <div>
-              <p className="text-xs">Nand Care</p>
-              <p className="text-sm font-semibold">Foundation</p>
+              <p className="text-xs font-light">Nand Care</p>
+              <p className="text-sm font-normal">Foundation</p>
             </div>
           </div>
         </div>
@@ -54,7 +54,7 @@ export function SiteHeader({ categories }: SiteHeaderProps) {
         </nav>        
         <div className="flex min-w-0 flex-1 justify-end">
           <nav
-            className="flex items-center gap-4 text-sm"
+            className="flex items-center gap-1 text-sm"
             aria-label="Account"
           >
             <AccountMenu />

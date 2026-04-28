@@ -69,13 +69,13 @@ export function MobilePrimaryNav({ categories }: MobilePrimaryNavProps) {
         ref={menuButtonRef}
         type="button"
         onClick={() => setOpen(true)}
-        className="rounded p-2 text-zinc-900 hover:bg-zinc-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-400"
+        className="rounded p-1 text-zinc-900 hover:cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-400"
         aria-expanded={open}
         aria-controls={open ? panelId : undefined}
         aria-haspopup="dialog"
         aria-label="Open menu"
       >
-        <Menu className="size-6" strokeWidth={2} aria-hidden />
+        <Menu className="size-6 text-zinc-100" strokeWidth={2} aria-hidden />
       </button>
 
       {open ? (
