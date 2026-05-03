@@ -57,6 +57,38 @@
   }
 }
 
+/* Category strip: expanded panel rises from the thumbnail row (minimal motion). */
+@keyframes category-strip-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes category-strip-panel-in-reduced {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Duration matches STRIP_MOTION_MS in category-card-strip.tsx */
+.category-strip-panel-animate {
+  animation: category-strip-panel-in 280ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .category-strip-panel-animate {
+    animation: category-strip-panel-in-reduced 0.18s ease-out both;
+  }
+}
+
 body {
   background: var(--background);
   color: var(--foreground);

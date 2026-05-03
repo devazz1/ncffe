@@ -29,7 +29,7 @@ export function HeroOverlayContent({
         <button
           type="button"
           onClick={onDonateClick}
-          className="inline-flex h-10 min-w-0 items-center justify-center gap-1 rounded-sm bg-cta-gradient px-2 text-xs leading-none text-white shadow-lg transition hover:opacity-95 sm:h-11  sm:gap-1 sm:px-3 sm:text-sm md:h-12 md:gap-3 md:px-4 md:text-lg lg:h-14"
+          className="inline-flex h-10 min-w-0 items-center justify-center gap-1 rounded-sm bg-cta-gradient px-2 text-xs leading-none text-white shadow-lg cursor-pointer transition hover:opacity-95 sm:h-11  sm:gap-1 sm:px-3 sm:text-sm md:h-12 md:gap-3 md:px-4 md:text-lg lg:h-14"
         >
           <span className="min-w-0 truncate">Donate Now</span>
           <Heart className="size-3.5 shrink-0 sm:size-4 md:size-5 lg:size-6" aria-hidden />

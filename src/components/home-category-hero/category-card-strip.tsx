@@ -6,11 +6,14 @@ import {
   useCallback,
   useEffect,
   useLayoutEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
 import type { CSSProperties } from "react";
 import { CircleChevronRight, Info, Users } from "lucide-react";
+
+import { SpeechTooltip } from "@/components/ui/speech-tooltip";
 
 import type { HeroCategorySlide } from "./hero-category-slide";
 import { CategoryHeroHeartIcon } from "./category-hero-heart-icon";
@@ -20,6 +23,17 @@ const FALLBACK_POSTER =
   encodeURIComponent(
     `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#27272a"/><stop offset="100%" stop-color="#52525b"/></linearGradient></defs><rect width="1200" height="675" fill="url(#g)"/></svg>`,
   );
+
+/** Shared with `.category-strip-panel-animate` duration in `globals.css`. */
+const STRIP_MOTION_MS = 280;
+const STRIP_MOTION_EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
+const STRIP_MOTION_CSS = `${STRIP_MOTION_MS}ms ${STRIP_MOTION_EASE}`;
+
+const HOVER_LEAVE_DELAY_MS = 160;
+const PORTAL_PANEL_MAX_WIDTH_PX = 340;
+const PORTAL_PANEL_WIDTH_FACTOR = 1.35;
+const PORTAL_EDGE_MARGIN_PX = 10;
+const CARD_HOVER_SCALE = 1.02;
 
 export function posterFor(slide: HeroCategorySlide): string {
   const p = slide.heroPoster?.trim();
@@ -35,7 +49,7 @@ function StripExpandedCard({
 }) {
   return (
     <div className="flex max-h-[min(72vh,720px)] flex-col overflow-hidden rounded-b-xl border border-zinc-200/80 bg-white shadow-2xl">
-      <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden bg-zinc-200">
+      <div className="relative aspect-16/10 w-full shrink-0 overflow-hidden bg-zinc-200">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           alt=""
@@ -49,17 +63,19 @@ function StripExpandedCard({
           <p className="flex-1 text-sm font-semibold leading-snug text-zinc-900">
             {slide.title}
           </p>
-          <button
-            type="button"
-            aria-label={`Donate to ${slide.name}`}
-            onClick={(e) => {
-              e.stopPropagation();
-              onDonateClick(slide);
-            }}
-            className="rounded-full transition hover:opacity-90"
-          >
-            <CategoryHeroHeartIcon className="size-9 shrink-0" />
-          </button>
+          <SpeechTooltip label="Donate Now">
+            <button
+              type="button"
+              aria-label={`Donate to ${slide.name}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                onDonateClick(slide);
+              }}
+              className="cursor-pointer rounded-full transition hover:opacity-90"
+            >
+              <CategoryHeroHeartIcon className="size-9 shrink-0" />
+            </button>
+          </SpeechTooltip>
         </div>
         <p className="flex items-center gap-1.5 text-xs text-zinc-600">
           <Users className="size-3.5 shrink-0 text-zinc-500" aria-hidden />
@@ -72,11 +88,15 @@ function StripExpandedCard({
           </span>
           <Link
             href={slide.detailsHref}
-            className="inline-flex items-center gap-1 text-sm font-medium hover:underline"
+            className="group inline-flex items-center gap-1 text-sm font-normal hover:underline"
             onClick={(e) => e.stopPropagation()}
           >
             More Details
-            <CircleChevronRight className="size-3.5" />
+            <CircleChevronRight
+              strokeWidth={1}
+              className="size-6 shrink-0 transition-transform duration-200 ease-out group-hover:-rotate-30"
+              aria-hidden
+            />
           </Link>
         </div>
       </div>
@@ -127,7 +147,7 @@ export function CategoryCardStrip({
     clearLeaveTimer();
     leaveTimerRef.current = setTimeout(() => {
       onLeave();
-    }, 160);
+    }, HOVER_LEAVE_DELAY_MS);
   }, [clearLeaveTimer, onLeave]);
 
   const updateAnchor = useCallback(() => {
@@ -169,28 +189,21 @@ export function CategoryCardStrip({
   const hoveredSlide =
     hoveredIndex !== null ? slides[hoveredIndex] : undefined;
 
-  const portalExpanded =
-    typeof document !== "undefined" &&
-    hoveredSlide &&
-    hoveredIndex !== null &&
-    anchorRect;
-
-  let portalStyle: CSSProperties | undefined;
-  if (portalExpanded && anchorRect) {
+  const portalStyle = useMemo((): CSSProperties | undefined => {
+    if (hoveredIndex === null || !anchorRect) return undefined;
     const vw =
       typeof window !== "undefined" ? window.innerWidth : anchorRect.width;
     const panelWidth = Math.min(
-      340,
-      Math.max(anchorRect.width * 1.35, anchorRect.width),
+      PORTAL_PANEL_MAX_WIDTH_PX,
+      anchorRect.width * PORTAL_PANEL_WIDTH_FACTOR,
     );
     const centerX = anchorRect.left + anchorRect.width / 2;
     const half = panelWidth / 2;
-    const margin = 10;
     const clampedCenter = Math.min(
-      Math.max(centerX, half + margin),
-      vw - half - margin,
+      Math.max(centerX, half + PORTAL_EDGE_MARGIN_PX),
+      vw - half - PORTAL_EDGE_MARGIN_PX,
     );
-    portalStyle = {
+    return {
       position: "fixed",
       left: clampedCenter,
       bottom:
@@ -201,7 +214,10 @@ export function CategoryCardStrip({
       transform: "translateX(-50%)",
       zIndex: 200,
     };
-  }
+  }, [hoveredIndex, anchorRect]);
+
+  const portalExpanded =
+    typeof document !== "undefined" && Boolean(hoveredSlide) && portalStyle;
 
   return (
     <div className={`w-full overflow-visible ${className}`}>
@@ -223,6 +239,7 @@ export function CategoryCardStrip({
               className={`group relative shrink-0 cursor-pointer rounded-sm text-left shadow-md transition-[box-shadow] duration-300 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 ${
                 expanded ? "z-30 shadow-xl" : "z-0 hover:z-20 hover:shadow-lg"
               }`}
+              style={{ transitionTimingFunction: STRIP_MOTION_EASE }}
               onMouseEnter={() => {
                 clearLeaveTimer();
                 onPick(index);
@@ -241,6 +258,11 @@ export function CategoryCardStrip({
                   slotRefs.current[index] = el;
                 }}
                 className="relative w-[min(72vw,280px)] overflow-visible rounded-[4px] md:w-[240px]"
+                style={{
+                  transition: `transform ${STRIP_MOTION_CSS}`,
+                  transform: expanded ? `scale(${CARD_HOVER_SCALE})` : "scale(1)",
+                  transformOrigin: "center bottom",
+                }}
               >
                 <div className="relative aspect-[16/10] w-full overflow-hidden rounded-t-[4px] bg-zinc-200">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -283,14 +305,22 @@ export function CategoryCardStrip({
         ? createPortal(
             <div
               className="pointer-events-auto"
-              style={portalStyle}
+              style={{
+                ...portalStyle,
+                transition: `left ${STRIP_MOTION_CSS}, width ${STRIP_MOTION_CSS}, bottom ${STRIP_MOTION_CSS}`,
+              }}
               onMouseEnter={() => {
                 clearLeaveTimer();
-                onHover(hoveredIndex);
+                if (hoveredIndex !== null) onHover(hoveredIndex);
               }}
               onMouseLeave={() => onLeave()}
             >
-              <StripExpandedCard slide={hoveredSlide} onDonateClick={onDonateClick} />
+              <div
+                key={hoveredIndex}
+                className="category-strip-panel-animate"
+              >
+                <StripExpandedCard slide={hoveredSlide} onDonateClick={onDonateClick} />
+              </div>
             </div>,
             document.body,
           )

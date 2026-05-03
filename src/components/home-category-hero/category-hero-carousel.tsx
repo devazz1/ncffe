@@ -38,34 +38,49 @@ function HeroBackground({
   onTimeUpdate: (e: React.SyntheticEvent<HTMLVideoElement>) => void;
   onEnded: () => void;
 }) {
-  if (slide.heroVideo && !disableVideo) {
-    return (
-      <video
-        key={`${slide.id}-${slide.heroVideo}`}
-        ref={videoRef}
-        className="absolute inset-0 h-full w-full object-cover object-top"
-        src={slide.heroVideo}
-        poster={slide.heroPoster}
-        muted={isMuted}
-        playsInline
-        autoPlay
-        onTimeUpdate={onTimeUpdate}
-        onEnded={onEnded}
-      />
-    );
-  }
+  const backgroundKey = `${slide.id}-${slide.heroVideo ?? slide.heroPoster}`;
+  const fadeClass = "[animation:heroFadeIn_420ms_ease-out]";
+  const mediaClass = `absolute inset-0 h-full w-full object-cover object-top ${fadeClass}`;
+  const showVideo = Boolean(slide.heroVideo && !disableVideo);
 
   return (
-    <Image
-      key={String(slide.id)}
-      alt=""
-      src={slide.heroPoster}
-      className="absolute inset-0 h-full w-full object-cover object-top"
-      fill
-      sizes="100vw"
-      unoptimized
-      draggable={false}
-    />
+    <>
+      {showVideo ? (
+        <video
+          key={backgroundKey}
+          ref={videoRef}
+          className={mediaClass}
+          src={slide.heroVideo ?? undefined}
+          poster={slide.heroPoster}
+          muted={isMuted}
+          playsInline
+          autoPlay
+          onTimeUpdate={onTimeUpdate}
+          onEnded={onEnded}
+        />
+      ) : (
+        <Image
+          key={backgroundKey}
+          alt=""
+          src={slide.heroPoster}
+          className={mediaClass}
+          fill
+          sizes="100vw"
+          unoptimized
+          draggable={false}
+        />
+      )}
+      <style jsx>{`
+        @keyframes heroFadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+      `}</style>
+    </>
   );
 }
 
