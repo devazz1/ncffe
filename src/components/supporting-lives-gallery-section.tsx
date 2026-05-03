@@ -71,7 +71,7 @@ function MarqueeRow({
                 alt={img.alt}
                 fill
                 className="object-cover"
-                sizes="(max-width: 640px) 42vw, (max-width: 1024px) 260px, 280px"
+                sizes="(max-width: 639px) calc(50vw - 6px), (max-width: 767px) 220px, (max-width: 1023px) 260px, 281px"
               />
             </div>
           ))}
@@ -84,6 +84,7 @@ function MarqueeRow({
                 alt=""
                 fill
                 className="object-cover"
+                sizes="(max-width: 639px) calc(50vw - 6px), (max-width: 767px) 220px, (max-width: 1023px) 260px, 281px"
               />
             </div>
           ))}
