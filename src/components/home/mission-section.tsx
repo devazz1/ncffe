@@ -11,18 +11,20 @@ export function MissionSection() {
       aria-labelledby="mission-heading"
     >
       <div className="mx-auto w-full max-w-screen-2xl px-4 py-6 md:px-12">
-        <div className="flex flex-col gap-0 lg:flex-row lg:items-center lg:justify-between lg:gap-x-12">
+        <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between lg:gap-x-12">
           <div className="order-2 flex min-w-0 flex-col gap-5 lg:order-1 lg:max-w-[891px] lg:flex-1 lg:gap-[60px]">
             <div className="flex flex-col gap-1">
               <h2
                 id="mission-heading"
-                className="text-xl font-light leading-snug tracking-tight text-zinc-900 lg:text-[2.625rem] lg:leading-[1.2] xl:text-[2.75rem]"
+                className="text-base leading-snug tracking-tight lg:text-[2.625rem] lg:leading-[1.2] xl:text-[2.75rem]"
               >
-                <span className="text-zinc-900">One mission.</span>{" "}
-                <span className="text-cta-from">Many lives changed:</span>
+                <span className="font-extralight text-zinc-900">One mission.</span>{" "}
+                <span className="font-light text-cta-from">
+                  Many lives changed:
+                </span>
               </h2>
               <p
-                className={`text-sm font-normal leading-normal text-zinc-400 lg:text-3xl lg:leading-snug`}
+                className={`text-sm font-light leading-normal text-zinc-400 lg:text-3xl lg:leading-snug`}
               >
                 ending hunger, empowering children, and building livelihoods.
               </p>
@@ -31,16 +33,16 @@ export function MissionSection() {
             <div>
               <Link
                 href={MISSION_CTA_HREF}
-                className="inline-flex h-12 w-60 items-center justify-between gap-2 rounded bg-cta-gradient px-4 text-sm font-medium text-white transition hover:opacity-95 lg:h-16 lg:w-75 lg:px-6 lg:text-lg"
+                className="group inline-flex h-12 w-60 items-center justify-between gap-2 rounded bg-cta-gradient px-4 text-sm font-medium text-white transition hover:opacity-95 lg:h-16 lg:w-75 lg:px-6 lg:text-lg"
               >
                 <span className="min-w-0 shrink text-left leading-6 lg:leading-9">
                   Join us on our Mission
                 </span>
                 <span
-                  className="flex size-[30px] shrink-0 items-center justify-center"
+                  className="flex size-7.5 shrink-0 items-center justify-center transition-transform duration-200 ease-out group-hover:-rotate-30"
                   aria-hidden
                 >
-                  <CircleChevronRight className="size-[1.5625rem] text-white" strokeWidth={2} />
+                  <CircleChevronRight className="size-6.25 text-white" strokeWidth={2} />
                 </span>
               </Link>
             </div>
@@ -59,7 +61,7 @@ export function MissionSection() {
                 priority={false}
               />
               <div
-                className="pointer-events-none absolute inset-0 rounded-[25px] bg-black/20 lg:hidden"
+                className="pointer-events-none absolute inset-0 rounded-[25px] lg:hidden"
                 aria-hidden
               />
             </div>
