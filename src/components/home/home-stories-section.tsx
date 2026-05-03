@@ -10,10 +10,11 @@ function StoryCard({ story, index }: { story: Story; index: number }) {
 
   return (
     <article className={showOnMobile ? "" : "hidden md:block"}>
-      <Link
+      {/* <Link
         href={VIEW_MORE_HREF}
         className="group flex flex-col gap-4 md:gap-5"
-      >
+      > */}
+      <div className="gap-4">
         <div className="relative aspect-3/2 w-full overflow-hidden rounded-2xl bg-zinc-100">
           {imageUrl ? (
             // eslint-disable-next-line @next/next/no-img-element -- CMS-provided URLs
@@ -28,15 +29,16 @@ function StoryCard({ story, index }: { story: Story; index: number }) {
             aria-hidden
           />
         </div>
-        <div className="flex flex-col gap-1.5">
-          <h3 className="text-sm font-semibold leading-snug text-black md:text-lg">
+        <div className="flex flex-col mt-4 gap-1.5">
+          <h3 className="text-base font-normal leading-snug text-black md:text-lg">
             {story.title}
           </h3>
           <p className="text-xs leading-snug text-zinc-600 md:text-sm">
             {story.description ?? ""}
           </p>
         </div>
-      </Link>
+      </div>
+      {/* </Link> */}
     </article>
   );
 }
