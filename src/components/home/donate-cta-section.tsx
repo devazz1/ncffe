@@ -9,7 +9,7 @@ type DonateCtaSectionProps = {
 export function DonateCtaSection({ donateHref = "/" }: DonateCtaSectionProps) {
   return (
     <section
-      className="relative overflow-visible bg-[#fdf0e0] lg:h-[468px]"
+      className="relative overflow-visible bg-[#fdf0e0] lg:h-117"
       aria-labelledby="donate-cta-heading"
       style={{
         background: "linear-gradient(to right, #FFEDD7, #FFFAF4)",
@@ -19,7 +19,7 @@ export function DonateCtaSection({ donateHref = "/" }: DonateCtaSectionProps) {
         <div className="flex flex-col lg:flex-row lg:items-stretch h-full">
 
           {/* ── Left column ── */}
-          <div className="flex flex-1 flex-col justify-center gap-6 py-12 lg:py-0 lg:gap-10 lg:max-w-[55%]">
+          <div className="flex min-w-0 flex-1 flex-col justify-center gap-6 py-12 lg:py-0 lg:gap-10 lg:max-w-[55%]">
             {/* Heading */}
             <div className="flex flex-col gap-3">
               <h2
@@ -58,15 +58,14 @@ export function DonateCtaSection({ donateHref = "/" }: DonateCtaSectionProps) {
           </div>
 
           {/* ── Right column – image overflows top ── */}
-          <div className="relative hidden lg:flex lg:w-[45%] lg:items-end lg:justify-end">
+          <div className="relative hidden shrink-0 lg:flex lg:w-[45%] lg:items-end lg:justify-end">
             {/*
               The image is anchored to the bottom of the section
-              and overflows above via a negative top offset.
+              and overflows above. Fixed width (no maxWidth: 100% of the column)
+              so the photo does not shrink when the viewport narrows; the left
+              column wraps instead (min-w-0 on the text stack).
             */}
-            <div
-              className="absolute bottom-0 right-0"
-              style={{ width: "617px", maxWidth: "100%" }}
-            >
+            <div className="absolute bottom-0 right-0 w-154.25 shrink-0">
               <Image
                 src="/ncf-img-kid-food-02.png"
                 alt="Children with meals from community feeding programs."
