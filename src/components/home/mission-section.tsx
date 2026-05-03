@@ -48,16 +48,16 @@ export function MissionSection() {
             </div>
           </div>
 
-          <div className="order-1 w-full shrink-0 lg:order-2 lg:w-[467px] lg:max-w-none">
+          <div className="order-1 w-full shrink-0 lg:order-2 lg:w-[420px] lg:max-w-none">
             <div
-              className="relative aspect-336/324 w-full overflow-hidden rounded-[25px] border-2 border-white lg:aspect-square lg:max-w-md lg:rounded-[56px] lg:border-0"
+              className="relative aspect-336/324 w-full overflow-hidden rounded-[25px] border-2 border-white lg:aspect-square lg:max-w-[364px] lg:rounded-[56px] lg:border-0"
             >
               <Image
                 src="/ncf-img-kid-food-01.png"
                 alt="A child smiling while sharing a meal, representing the foundation’s food and care programs."
                 fill
                 className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 467px"
+                sizes="(max-width: 1024px) 100vw, 420px"
                 priority={false}
               />
               <div
@@ -66,6 +66,7 @@ export function MissionSection() {
               />
             </div>
           </div>
+   
         </div>
       </div>
     </section>
