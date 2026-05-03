@@ -40,10 +40,11 @@ export function DonateCtaSection({ donateHref = "/" }: DonateCtaSectionProps) {
             <div>
               <Link
                 href={donateHref}
-                className="inline-flex items-center justify-between gap-3 rounded px-5 py-3 text-sm font-semibold text-white transition-opacity hover:opacity-90 lg:px-7 lg:py-4 lg:text-lg"
+                className="group inline-flex items-center justify-between gap-3 rounded px-5 py-3 text-sm font-semibold text-white transition-opacity hover:opacity-90 lg:px-7 lg:py-4 lg:text-lg"
                 style={{
                   background: "linear-gradient(135deg, #e84c1e 0%, #f5a623 100%)",
                   minWidth: "160px",
+
                 }}
               >
                 <span>Start Donating</span>
@@ -51,7 +52,7 @@ export function DonateCtaSection({ donateHref = "/" }: DonateCtaSectionProps) {
                   className="flex size-5 items-center justify-center rounded-full border border-white/40"
                   aria-hidden
                 >
-                  <ChevronRight className="size-3.5" strokeWidth={2.5} />
+                  <ChevronRight className="size-3.5 group-hover:-rotate-30 transition-transform duration-200 ease-out" strokeWidth={2.5} />
                 </span>
               </Link>
             </div>
