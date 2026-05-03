@@ -30,7 +30,7 @@ function StoryCard({ story, index }: { story: Story; index: number }) {
           />
         </div>
         <div className="flex flex-col mt-4 gap-1.5">
-          <h3 className="text-base font-normal leading-snug text-black md:text-lg">
+          <h3 className="text-lg font-normal leading-snug text-black md:text-xl">
             {story.title}
           </h3>
           <p className="text-xs leading-snug text-zinc-600 md:text-sm">
