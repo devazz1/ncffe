@@ -24,15 +24,33 @@ export function CampaignProductCard({
   const imageSrc = product.imageUrl?.trim() ?? "";
 
   return (
-    <article className="flex h-[175px] w-[202.5px] max-w-full min-w-0 flex-col overflow-hidden rounded-lg border border-[#E8E9EA] bg-white">
-      <div className="relative h-[116px] w-full shrink-0 bg-zinc-100">
+    <article
+      className="
+        flex flex-col overflow-hidden rounded-lg border border-[#E8E9EA] bg-white
+        min-w-0
+        w-full max-w-[202.5px] h-[175px]
+        sm:w-[48%] sm:max-w-[202.5px] sm:h-[175px]
+        xs:w-[48%] xs:max-w-[202.5px] xs:h-[175px]
+        max-[420px]:w-[48%] max-[420px]:h-[160px] max-[420px]:max-w-[180px]
+      "
+      // The classes above ensure: 
+      // - At small screens (xs < 640px), width is 48% so two in row, but cannot exceed original max
+      // - For very small screens, slightly smaller height
+    >
+      <div
+        className="
+          relative w-full shrink-0 bg-zinc-100
+          h-[116px]
+          max-[420px]:h-[98px]
+        "
+      >
         {imageSrc ? (
           <Image
             src={imageSrc}
             alt={product.name}
             fill
             className="object-cover"
-            sizes="(max-width: 640px) 50vw, 220px"
+            sizes="(max-width: 640px) 48vw, 202px"
             unoptimized
           />
         ) : null}
