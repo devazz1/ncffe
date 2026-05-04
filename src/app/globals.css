@@ -90,7 +90,6 @@
 }
 
 html {
-  overflow-x: hidden;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* legacy Edge */
 }
@@ -100,7 +99,6 @@ html::-webkit-scrollbar {
 }
 
 body {
-  overflow-x: hidden;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;

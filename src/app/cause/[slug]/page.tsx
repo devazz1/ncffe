@@ -158,30 +158,33 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   return (
     <SitePageContainer>
       <CampaignCartScope campaignId={campaignId}>
-        <section className="grid gap-6 lg:gap-12 lg:grid-cols-[1fr_minmax(380px,585px)]">
-          <CategoryCampaignOverview
-            category={category}
-            campaignId={campaignId}
-            products={products}
-          />
-          <DonationForm
-            campaignName={category.activeCampaign?.name ?? ""}
-            campaignId={campaignId}
-            products={products}
-          />
+        <section className="grid grid-cols-1 gap-0 lg:grid-cols-[1fr_minmax(380px,585px)] lg:gap-x-12 lg:items-start">
+          <div className="order-1 min-w-0 max-lg:mb-6 lg:col-start-1 lg:row-start-1">
+            <CategoryCampaignOverview
+              category={category}
+              campaignId={campaignId}
+              products={products}
+            />
+          </div>
+          <div className="order-3 min-w-0 lg:col-start-1 lg:row-start-2">
+            <CategoryAboutCampaignSection items={aboutItems} />
+            <CategoryImpactSection stats={impactStats} />
+            <CategoryHowWeWorkSection steps={howWeWorkSteps} />
+            <CategoryFaqSection items={faqItems} />
+            <CategoryTopDonationsSection items={topDonationItems} />
+            <SupportRealImpactCta />
+          </div>
+          <div className="order-2 min-h-0 min-w-0 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-stretch">
+            <div className="lg:sticky lg:top-6">
+              <DonationForm
+                campaignName={category.activeCampaign?.name ?? ""}
+                campaignId={campaignId}
+                products={products}
+              />
+            </div>
+          </div>
         </section>
- 
       </CampaignCartScope>
-      <section className="grid gap-6 lg:gap-12 lg:grid-cols-[1fr_minmax(380px,585px)]">
-        <div>
-          <CategoryAboutCampaignSection items={aboutItems} />
-          <CategoryImpactSection stats={impactStats} />
-          <CategoryHowWeWorkSection steps={howWeWorkSteps} />
-          <CategoryFaqSection items={faqItems} />
-          <CategoryTopDonationsSection items={topDonationItems} />
-          <SupportRealImpactCta />
-        </div>
-      </section>
     </SitePageContainer>
   );
 }
