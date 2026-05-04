@@ -53,7 +53,7 @@ export function CampaignOverviewSummary({
 
   return (
     <>
-      <h1 className="mt-4 text-2xl font-semibold">{name}</h1>
+      <h1 id="campaign-name" className="mt-4 text-2xl font-semibold">{name}</h1>
 
       <div className="mt-3 flex flex-col items-start justify-between gap-4 md:min-h-24 md:flex-row md:justify-between">
         <div className="space-y-1">

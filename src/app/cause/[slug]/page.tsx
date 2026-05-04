@@ -83,12 +83,12 @@ function SupportRealImpactCta() {
       </div>
       <div>
         <Link
-          href="#donation"
-          className="inline-flex h-10 min-w-50 max-w-full items-center justify-between gap-3 rounded bg-cta-gradient px-4 text-sm font-semibold text-white transition hover:opacity-95"
+          href="#campaign-name"
+          className="group inline-flex h-10 min-w-50 max-w-full items-center justify-between gap-3 rounded bg-cta-gradient px-4 text-sm font-semibold text-white transition hover:opacity-95"
         >
           <span className="min-w-0 shrink leading-6">Start Monthly Donation</span>
           <span className="flex size-5 shrink-0 items-center justify-center" aria-hidden>
-            <CircleChevronRight className="size-4 text-white" strokeWidth={2} />
+            <CircleChevronRight className="size-4 text-white group-hover:-rotate-30 transition-transform duration-200" strokeWidth={2} />
           </span>
         </Link>
       </div>

@@ -117,7 +117,7 @@ export function CategoryCampaignOverview({
       />
 
       {products.length > 0 && (
-        <div className="mt-6 space-y-3">
+        <div id="products" className="mt-6 space-y-3">
           <h2 className="text-xl font-medium">
             Donate a price of product
           </h2>
