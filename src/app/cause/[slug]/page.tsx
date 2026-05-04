@@ -3,10 +3,11 @@ import Link from "next/link";
 import { CircleChevronRight } from "lucide-react";
 import {
   getCampaignProducts,
+  getCategories,
   getCategoryBySlug,
   getTopDonations,
 } from "@/lib/api";
-import { ServerHttpError } from "@/lib/api/server";
+import { ServerHttpError, ServerNetworkError } from "@/lib/api/server";
 import { CampaignCartScope } from "@/components/campaign-cart-scope";
 import { CategoryAboutCampaignSection } from "@/components/category/category-about-campaign-section";
 import { CategoryCampaignOverview } from "@/components/category/category-campaign-overview";
@@ -24,9 +25,29 @@ import {
 import type { BodyDetails } from "@/lib/types";
 import { SitePageContainer } from "@/components/site-page-container";
 
+/** Matches ISR window used by `serverGet` for category APIs (see `@/lib/api`). */
+export const revalidate = 300;
+
 type CategoryPageProps = {
   params: Promise<{ slug: string }>;
 };
+
+/** Pre-render known slugs at build when the API is reachable; runtime unknown slugs stay on-demand. */
+export async function generateStaticParams() {
+  try {
+    const res = await getCategories();
+    return res.data.items.map((c) => ({ slug: c.slug }));
+  } catch {
+    return [];
+  }
+}
+
+/** Route-level API failures render the global 404 instead of an opaque runtime error. */
+function shouldUseNotFoundForCauseApiError(error: unknown): boolean {
+  return (
+    error instanceof ServerNetworkError || error instanceof ServerHttpError
+  );
+}
 
 function isBodyDetails(value: unknown): value is Partial<BodyDetails> {
   if (!value || typeof value !== "object") {
@@ -87,11 +108,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       getTopDonations(),
     ]);
   } catch (error) {
-    if (
-      error instanceof ServerHttpError &&
-      error.status === 404 &&
-      error.path === `/categories/slug/${slug}`
-    ) {
+    if (shouldUseNotFoundForCauseApiError(error)) {
       notFound();
     }
     throw error;
@@ -116,7 +133,15 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     );
   }
 
-  const productsResponse = await getCampaignProducts(category.activeCampaignId);
+  let productsResponse: Awaited<ReturnType<typeof getCampaignProducts>>;
+  try {
+    productsResponse = await getCampaignProducts(category.activeCampaignId);
+  } catch (error) {
+    if (shouldUseNotFoundForCauseApiError(error)) {
+      notFound();
+    }
+    throw error;
+  }
   const products = productsResponse.data;
 
   const bodyDetailsSource = category.bodyDetails;

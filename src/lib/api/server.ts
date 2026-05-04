@@ -26,14 +26,33 @@ export class ServerHttpError extends Error {
   }
 }
 
+/** Network/DNS/TLS failures — `fetch` throws before `response.ok` (e.g. ECONNREFUSED). */
+export class ServerNetworkError extends Error {
+  readonly path: string;
+
+  constructor(path: string, options?: { cause?: unknown }) {
+    super(`Server fetch failed (network): ${path}`);
+    this.name = "ServerNetworkError";
+    this.path = path;
+    if (options?.cause !== undefined) {
+      this.cause = options.cause;
+    }
+  }
+}
+
 export async function serverGet<T>(
   path: string,
   options: FetchOptions = {},
 ): Promise<T> {
   const url = `${env.apiBaseUrl}${path}`;
-  const response = await fetch(url, {
-    next: options.revalidate ? { revalidate: options.revalidate } : undefined,
-  });
+  let response: Response;
+  try {
+    response = await fetch(url, {
+      next: options.revalidate ? { revalidate: options.revalidate } : undefined,
+    });
+  } catch (cause) {
+    throw new ServerNetworkError(path, { cause });
+  }
 
   if (!response.ok) {
     throw new ServerHttpError(response.status, path);
