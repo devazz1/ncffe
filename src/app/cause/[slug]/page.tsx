@@ -158,7 +158,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   return (
     <SitePageContainer>
       <CampaignCartScope campaignId={campaignId}>
-        <section className="grid gap-6 lg:grid-cols-[1fr_minmax(380px,525px)]">
+        <section className="grid gap-6 lg:gap-12 lg:grid-cols-[1fr_minmax(380px,585px)]">
           <CategoryCampaignOverview
             category={category}
             campaignId={campaignId}
@@ -170,8 +170,9 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             products={products}
           />
         </section>
+ 
       </CampaignCartScope>
-      <section className="grid gap-6 lg:grid-cols-[1fr_minmax(380px,525px)]">
+      <section className="grid gap-6 lg:gap-12 lg:grid-cols-[1fr_minmax(380px,585px)]">
         <div>
           <CategoryAboutCampaignSection items={aboutItems} />
           <CategoryImpactSection stats={impactStats} />

@@ -176,20 +176,20 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
 
   return (
     <section id="donation" className="rounded-lg border border-zinc-200 bg-white p-4 self-start">
-      <h3 className="text-lg font-semibold text-center">Donation</h3>
+      {/* <h3 className="text-lg font-semibold text-center">Donation</h3> */}
 
       <div className="mt-3 flex justify-center">
         <button
           type="button"
           onClick={() => setTab("once")}
-          className={`rounded-l px-3 py-1 text-sm ${tab === "once" ? "bg-cta-gradient text-white" : "border border-zinc-300"}`}
+          className={`rounded-l px-6 py-2 text-xs ${tab === "once" ? "bg-cta-gradient text-white" : "border border-zinc-300"}`}
         >
           One Time
         </button>
         <button
           type="button"
           onClick={() => setTab("monthly")}
-          className="rounded-r border border-zinc-300 px-3 py-1 text-sm opacity-60"
+          className="rounded-r border border-zinc-300 px-6 py-2 text-xs opacity-60"
           title="Monthly flow not implemented yet"
         >
           Monthly
@@ -336,7 +336,7 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
 
           <fieldset className="space-y-2 border-0 p-0">
             <legend className="text-sm font-medium mb-1">Donor residency</legend>
-            <label className="flex items-center gap-2 text-sm">
+            <label className="flex items-center gap-2 text-xs text-zinc-500">
               <input
                 type="radio"
                 name="isIndian"
@@ -345,7 +345,7 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
               />
               Indian Individual
             </label>
-            <label className="flex items-center gap-2 text-sm">
+            <label className="flex items-center gap-2 text-xs text-zinc-500">
               <input
                 type="radio"
                 name="isIndian"
@@ -392,7 +392,7 @@ export function DonationForm({ campaignName, campaignId, products }: DonationFor
               checked={isAnonymous}
               onChange={(e) => setIsAnonymous(e.target.checked)}
             />
-            <span className="text-sm text-zinc-600">Make my donation Anonymous</span>
+            <span className="text-xs text-zinc-500">Make my donation Anonymous</span>
           </label>
 
         </div>
