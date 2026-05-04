@@ -31,15 +31,15 @@ export default async function HomePage() {
     topDonationItems = [];
   }
 
-  const donateCtaHref =
-    categories.length > 0 ? `/cause/${categories[0].slug}` : "/";
+  // const donateCtaHref = categories.length > 0 ? `/cause/${categories[0].slug}` : "/";
+  const donateCtaHref = "#hero-carousel";
 
   const heroSlides = categories.map(categoryToHeroSlide);
 
   return (
     <>
       {heroSlides.length > 0 ? (
-        <div className="mb-5 lg:mb-10">
+        <div className="mb-5 lg:mb-10" id="hero-carousel">
           <CategoryHeroCarousel categories={heroSlides} topDonationItems={topDonationItems} />
         </div>
       ) : null}

@@ -36,10 +36,10 @@ export function HeroOverlayContent({
         </button>
         <Link
           href={detailsHref}
-          className="inline-flex h-10 min-w-0 items-center justify-center gap-1 rounded-sm bg-[#6d6d6eb3] px-2 text-xs leading-none text-white backdrop-blur-sm transition hover:bg-[#6d6d6ecc] sm:h-11 sm:gap-1 sm:px-3 sm:text-sm md:h-12 md:gap-3 md:px-4 md:text-lg lg:h-14"
+          className=" group inline-flex h-10 min-w-0 items-center justify-center gap-1 rounded-sm bg-[#6d6d6eb3] px-2 text-xs leading-none text-white backdrop-blur-sm transition hover:bg-[#6d6d6ecc] sm:h-11 sm:gap-1 sm:px-3 sm:text-sm md:h-12 md:gap-3 md:px-4 md:text-lg lg:h-14"
         >
           <span className="min-w-0 truncate">More Details</span>
-          <CircleChevronRight className="size-3.5 shrink-0 sm:size-4 md:size-5 lg:size-6" aria-hidden />
+          <CircleChevronRight className="size-3.5 shrink-0 sm:size-4 md:size-5 lg:size-6 group-hover:-rotate-30 transition-transform duration-200 ease-out" aria-hidden />
         </Link>
         {hasVideo && (
           <button
