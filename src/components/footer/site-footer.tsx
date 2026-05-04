@@ -2,8 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Category } from "@/lib/types";
 
-const primaryLinks = ["Home", "About us", "Impact Stories", "our Works", "Annual reports"] as const;
-const supportLinks = ["FAQ", "Blogs", "Terms & Condition", "Privacy Policy"] as const;
+const primaryLinks = ["Home", "About us", "Impact Stories", "Annual reports"] as const;
+const supportLinks = ["Terms & Condition", "Privacy Policy"] as const;
 const socialLinks = [
   {
     label: "Facebook",
