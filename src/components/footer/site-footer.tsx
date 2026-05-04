@@ -2,7 +2,12 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Category } from "@/lib/types";
 
-const primaryLinks = ["Home", "About us", "Impact Stories", "Annual reports"] as const;
+const primaryLinks = [
+  { label: "Home", href: "/" },
+  { label: "About us", href: "/about" },
+  { label: "Impact Stories", href: "/stories" },
+  { label: "Annual reports", href: "#" },
+] as const;
 const supportLinks = [
   { label: "Terms of Use", href: "/terms-of-use" },
   { label: "Privacy Policy", href: "/privacy-policy" },
@@ -65,8 +70,13 @@ export function SiteFooter({ categories }: SiteFooterProps) {
             <div className="flex flex-col gap-3 pt-1 text-xs text-[#1e1e1e] sm:flex-row sm:gap-12 lg:gap-20 lg:pt-0 lg:text-sm">
               <nav className="space-y-2" aria-label="Primary links">
                 {primaryLinks.map((item) => (
-                  <Link key={item} href="#" className="block transition hover:text-zinc-900/75">
-                    {item}
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    className="block transition hover:text-zinc-900/75"
+                    scroll={item.href !== "#"}
+                  >
+                    {item.label}
                   </Link>
                 ))}
               </nav>
