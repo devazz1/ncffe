@@ -19,6 +19,7 @@ import type {
   UserProfile,
 } from "@/lib/types";
 
+const ONE_MINUTE = 60;
 const FIVE_MINUTES = 300;
 // const ONE_HOUR = 3600;
 const TWO_HOURS = 7200;
