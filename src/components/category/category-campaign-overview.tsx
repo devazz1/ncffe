@@ -1,8 +1,9 @@
- "use client";
+"use client";
 
+import { CampaignOverviewSummary } from "@/components/category/campaign-overview-summary";
 import { CampaignProductCard } from "@/components/campaign-product-card";
 import type { CampaignProduct, Category } from "@/lib/types";
-import { BadgePercent, Users, Volume2, VolumeX } from "lucide-react";
+import { Volume2, VolumeX } from "lucide-react";
 import { useRef, useState } from "react";
 
 type CategoryCampaignOverviewProps = {
@@ -17,33 +18,7 @@ type HeroMediaProps = {
   name: string;
 };
 
-function formatIndianCurrencyCompact(value?: number) {
-  if (typeof value !== "number" || Number.isNaN(value)) {
-    return "₹0";
-  }
-
-  return new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    notation: "compact",
-    maximumFractionDigits: 1,
-  }).format(value);
-}
-
-function parseAmount(value?: string | number | null) {
-  if (typeof value === "number") {
-    return Number.isFinite(value) ? value : 0;
-  }
-
-  if (typeof value !== "string") {
-    return 0;
-  }
-
-  const parsedValue = Number.parseFloat(value.replace(/[^0-9.-]/g, ""));
-  return Number.isFinite(parsedValue) ? parsedValue : 0;
-}
-
-function HeroMedia({ heroVideo, heroPoster, name }: HeroMediaProps) {
+export function HeroMedia({ heroVideo, heroPoster, name }: HeroMediaProps) {
   const ratioClass = "aspect-[1015/567]";
   const mediaClass = "h-full w-full object-cover";
   const [isMuted, setIsMuted] = useState(true);
@@ -66,7 +41,7 @@ function HeroMedia({ heroVideo, heroPoster, name }: HeroMediaProps) {
 
   return (
     <section className="w-full overflow-hidden">
-      <div className={`relative w-full rounded-t-2xl overflow-hidden ${ratioClass}`}>
+      <div className={`relative w-full overflow-hidden ${ratioClass}`}>
         {heroVideo ? (
           <video
             ref={videoRef}
@@ -121,64 +96,25 @@ export function CategoryCampaignOverview({
 }: CategoryCampaignOverviewProps) {
   const heroVideo = category.heroVideo;
   const heroPoster = category.heroPoster;
-  const description = category.description;
-  const name = category.name;
+
+  const description = category.activeCampaign?.description ?? category.description;
+  const name = category.activeCampaign?.name ?? category.name;
 
   const donationCount = category.activeCampaign?.successDonations.count;
-
   const goalAmount = category.activeCampaign?.goalAmount;
   const amountRaised = category.activeCampaign?.successDonations.totalAmount;
-  const normalizedGoalAmount = Math.max(parseAmount(goalAmount), 0);
-  const normalizedAmountRaised = Math.max(parseAmount(amountRaised), 0);
-
-  const progressPercentage =
-    normalizedGoalAmount > 0
-      ? Math.min((normalizedAmountRaised / normalizedGoalAmount) * 100, 100)
-      : 0;
 
   return (
-    <div>
+    <div className="rounded-t-2xl overflow-hidden">
       <HeroMedia heroVideo={heroVideo} heroPoster={heroPoster} name={name} />
 
-      <h1 className="text-2xl font-semibold mt-4">{name}</h1>
-
-      <div className="mt-3 flex flex-col items-start justify-between gap-4 md:min-h-24 md:flex-row md:justify-between">
-        <div className="space-y-1">
-          <div className="inline-flex items-center gap-1 whitespace-nowrap">
-            <Users className="size-4 text-[#FF847C]" />
-            <span className="text-sm text-zinc-500">
-              {donationCount ?? 0} Peoples helped us
-            </span>
-          </div>
-          <div>
-            <span className="inline-flex h-9 items-center gap-2 rounded-[5px] border border-slate-500 px-2 text-sm font-medium text-slate-600">
-              <span>Tax Benefit</span>
-              <BadgePercent className="size-5" aria-hidden />
-            </span>
-          </div>
-        </div>
-
-        <div className="w-[197px] max-w-full space-y-1">
-          <div className="flex items-center justify-between gap-2 text-sm">
-            <span className="font-medium text-slate-400">
-              {formatIndianCurrencyCompact(normalizedAmountRaised)}
-            </span>
-            <span className="text-zinc-900">
-              of {formatIndianCurrencyCompact(normalizedGoalAmount)}
-            </span>
-          </div>
-          <div className="h-3 w-full overflow-hidden rounded-full bg-[#e0e0e0]">
-            <div
-              className="h-full rounded-full bg-cta-gradient transition-[width] duration-500"
-              style={{ width: `${progressPercentage}%` }}
-            />
-          </div>
-        </div>
-      </div>
-
-      <p className="text-sm text-zinc-500">
-        {description ?? " "}
-      </p>
+      <CampaignOverviewSummary
+        name={name}
+        donationCount={donationCount}
+        goalAmount={goalAmount}
+        amountRaised={amountRaised}
+        description={description}
+      />
 
       {products.length > 0 && (
         <div className="mt-6 space-y-3">

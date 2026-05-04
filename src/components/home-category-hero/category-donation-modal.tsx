@@ -6,7 +6,9 @@ import { X } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api/client";
 import { CampaignCartScope } from "@/components/campaign-cart-scope";
-import { CategoryCampaignOverview } from "@/components/category/category-campaign-overview";
+import { CampaignProductCard } from "@/components/campaign-product-card";
+import { CampaignOverviewSummary } from "@/components/category/campaign-overview-summary";
+import { HeroMedia } from "@/components/category/category-campaign-overview";
 import { CategoryHowWeWorkSection } from "@/components/category/category-how-we-work-section";
 import { CategoryImpactSection } from "@/components/category/category-impact-section";
 import { CategoryTopDonationsSection } from "@/components/category/category-top-donations-section";
@@ -62,6 +64,13 @@ export function CategoryDonationModal({
   const impactStats = slide?.bodyDetails?.impact ?? IMPACT_DUMMY;
   const howWeWorkSteps = slide?.bodyDetails?.howWeWork ?? HOW_WE_WORK_DUMMY;
 
+  const heroVideo = slide?.heroVideo;
+  const heroPoster = slide?.heroPoster;
+  const description = slide?.activeCampaign?.description ?? slide?.description;
+  const donationCount = slide?.activeCampaign?.successDonations.count ?? 0;
+  const goalAmount = slide?.activeCampaign?.goalAmount;
+  const amountRaised = slide?.activeCampaign?.successDonations.totalAmount;
+
   const productsQuery = useCampaignProducts(campaignId, open);
 
   if (!open || !slide) {
@@ -81,50 +90,71 @@ export function CategoryDonationModal({
       aria-label="Category donation modal"
     >
       <div
-        className="max-h-[100vh] w-full max-w-3xl overflow-y-auto bg-white shadow-2xl"
+        className="relative max-h-[100vh] w-full max-w-3xl overflow-y-auto bg-white shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="sticky top-0 z-20 flex items-center justify-end border-b border-zinc-200 bg-white/95 px-4 py-3 backdrop-blur md:px-6">
-          <button
-            type="button"
-            aria-label="Close donation modal"
-            onClick={onClose}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-zinc-300 text-zinc-600 transition hover:bg-zinc-100 hover:text-zinc-900"
-          >
-            <X className="h-4 w-4" aria-hidden />
-          </button>
-        </div>
+        <button
+          type="button"
+          aria-label="Close donation modal"
+          onClick={onClose}
+          className="absolute right-3 top-3 z-30 inline-flex h-9 w-9 items-center justify-center rounded-full bg-black/95 text-white shadow-md backdrop-blur transition hover:bg-zinc-100 hover:text-zinc-900"
+        >
+          <X className="h-4 w-4" aria-hidden />
+        </button>
 
         {campaignId == null ? (
-          <div className="p-6">
+          <div className="p-6 pt-14">
             <p className="text-sm text-zinc-700">
               This category currently has no active campaign.
             </p>
             <CategoryTopDonationsSection items={topDonationItems} />
           </div>
         ) : productsQuery.isLoading ? (
-          <div className="p-6 text-sm text-zinc-600">Loading campaign details...</div>
+          <div className="p-6 pt-14 text-sm text-zinc-600">Loading campaign details...</div>
         ) : productsQuery.isError ? (
-          <div className="p-6 text-sm text-red-600">
+          <div className="p-6 pt-14 text-sm text-red-600">
             Unable to load campaign products right now. Please try again.
           </div>
         ) : (
-          <div className="p-4 md:p-6">
+          <div>
             <CampaignCartScope campaignId={campaignId}>
               <section className="space-y-6">
-                <CategoryCampaignOverview
-                  category={slide}
-                  campaignId={campaignId}
-                  products={productsQuery.data ?? []}
-                />
-                <DonationForm
-                  campaignName={campaignName}
-                  campaignId={campaignId}
-                  products={productsQuery.data ?? []}
-                />
+                <HeroMedia heroVideo={heroVideo} heroPoster={heroPoster} name={campaignName} />
+                <div className="p-4 md:p-6">
+                  <CampaignOverviewSummary
+                    name={campaignName}
+                    donationCount={donationCount}
+                    goalAmount={goalAmount}
+                    amountRaised={amountRaised}
+                    description={description}
+                  />
+                </div>
+                {(productsQuery.data ?? []).length > 0 ? (
+                  <div className="p-4 md:p-6">
+                    <h2 className="text-xl font-medium">
+                      Donate a price of product
+                    </h2>
+                    <div className="flex flex-wrap gap-2">
+                      {(productsQuery.data ?? []).map((product) => (
+                        <CampaignProductCard
+                          key={product.campaignProductId}
+                          campaignId={campaignId}
+                          product={product}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+                <div className="p-4 md:p-6">
+                  <DonationForm
+                    campaignName={campaignName}
+                    campaignId={campaignId}
+                    products={productsQuery.data ?? []}
+                  />
+                </div>
               </section>
             </CampaignCartScope>
-            <div className="mt-6">
+            <div className="mt-6 p-4 md:p-6">
               <CategoryImpactSection stats={impactStats} />
               <CategoryHowWeWorkSection steps={howWeWorkSteps} />
               <CategoryTopDonationsSection items={topDonationItems} />
