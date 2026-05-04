@@ -3,7 +3,10 @@ import Image from "next/image";
 import type { Category } from "@/lib/types";
 
 const primaryLinks = ["Home", "About us", "Impact Stories", "Annual reports"] as const;
-const supportLinks = ["Terms & Condition", "Privacy Policy"] as const;
+const supportLinks = [
+  { label: "Terms of Use", href: "/terms-of-use" },
+  { label: "Privacy Policy", href: "/privacy-policy" },
+] as const;
 const socialLinks = [
   {
     label: "Facebook",
@@ -86,8 +89,12 @@ export function SiteFooter({ categories }: SiteFooterProps) {
 
               <nav className="space-y-2" aria-label="Support links">
                 {supportLinks.map((item) => (
-                  <Link key={item} href="#" className="block transition hover:text-zinc-900/75">
-                    {item}
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="block transition hover:text-zinc-900/75"
+                  >
+                    {item.label}
                   </Link>
                 ))}
               </nav>
