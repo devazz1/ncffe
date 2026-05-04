@@ -55,7 +55,7 @@ export function CategoriesMenu({ categories }: CategoriesMenuProps) {
         aria-haspopup="menu"
       >
         <span className="flex items-center gap-0.5">
-          Categories
+          Causes
           {open ? (
             <ChevronUp className="size-4 shrink-0" strokeWidth={2} aria-hidden />
           ) : (

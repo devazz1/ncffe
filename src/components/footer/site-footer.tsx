@@ -80,7 +80,7 @@ export function SiteFooter({ categories }: SiteFooterProps) {
                     </Link>
                   ))
                 ) : (
-                  <p className="text-[#767676]">No categories available</p>
+                  <p className="text-[#767676]">No causes available</p>
                 )}
               </nav>
 
