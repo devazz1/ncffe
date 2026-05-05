@@ -40,16 +40,8 @@ export default function WomensLivelihoodEconomicEmpowermentPage() {
             </p>
           </div>
 
-          <div className="relative mx-auto mt-10 w-full max-w-[1792px] overflow-hidden rounded-[38px]">
-            <div className="absolute inset-0 z-10 bg-black/30" />
-            <Image
-              src="/program/img-13.jpeg"
-              alt="Children learning together"
-              fill
-              sizes="(max-width: 768px) 100vw, 1792px"
-              className="object-cover"
-            />
-            <div className="h-[275px] md:h-[454px] lg:h-[618px]" />
+          <div className="mx-auto mt-10 w-full max-w-[1792px] overflow-hidden rounded-[38px]">
+            <MediaContentBlock imageUrl="/program/img-13.jpeg" />
           </div>
 
 					<div className="mx-auto flex w-full max-w-[1689px] px-5 flex-col items-center text-center">

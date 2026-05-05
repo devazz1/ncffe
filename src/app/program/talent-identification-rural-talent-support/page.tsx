@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { MediaContentBlock } from "@/components/media-content-block";
 import { MarqueeGallery, supportingLivesGalleryRows } from "@/components/supporting-lives-gallery-section";
 
 export default function TalentIdentificationRuralTalentSupportPage() {
@@ -39,16 +40,8 @@ export default function TalentIdentificationRuralTalentSupportPage() {
             </p>
           </div>
 
-          <div className="relative mx-auto mt-10 w-full max-w-[1792px] overflow-hidden rounded-[38px]">
-            <div className="absolute inset-0 z-10 bg-black/30" />
-            <Image
-              src="/program/img-26.jpeg"
-              alt="Children learning together"
-              fill
-              sizes="(max-width: 768px) 100vw, 1792px"
-              className="object-cover"
-            />
-            <div className="h-[275px] md:h-[454px] lg:h-[618px]" />
+          <div className="mx-auto mt-10 w-full max-w-[1792px] overflow-hidden rounded-[38px]">
+            <MediaContentBlock imageUrl="/program/img-26.jpeg" videoUrl="https://www.youtube.com/watch?v=0WupPWurgAg" />
           </div>
         </div>
       </section>

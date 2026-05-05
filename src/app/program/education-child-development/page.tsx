@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { GraduationCap } from "lucide-react";
 import { SitePageContainer } from "@/components/site-page-container";
+import { MediaContentBlock } from "@/components/media-content-block";
 
 export default function EducationChildDevelopmentPage() {
   const learningHighlights = [
@@ -26,16 +27,8 @@ export default function EducationChildDevelopmentPage() {
             </p>
           </div>
 
-          <div className="relative mx-auto mt-10 w-full max-w-[1792px] overflow-hidden rounded-[38px]">
-            <div className="absolute inset-0 z-10 bg-black/30" />
-            <Image
-            src="/program/img-1.jpeg"
-            alt="Children learning together"
-            fill
-            sizes="(max-width: 768px) 100vw, 1792px"
-            className="object-cover"
-            />
-            <div className="h-[340px] md:h-[560px] lg:h-[764px]" />
+          <div className="mx-auto mt-10 w-full max-w-[1792px] overflow-hidden rounded-[38px]">
+            <MediaContentBlock imageUrl="/program/img-1.jpeg" />
           </div>
         </div>
       </section>
