@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getStories } from "@/lib/api";
 import { MediaContentBlock } from "@/components/media-content-block";
 import { SitePageContainer } from "@/components/site-page-container";
+import { MarqueeGallery, supportingLivesGalleryRows } from "@/components/supporting-lives-gallery-section";
 
 type StoriesPageProps = {
   searchParams?: Promise<{ page?: string }>;
@@ -40,63 +41,83 @@ export default async function StoriesPage({ searchParams }: StoriesPageProps) {
   const prevPageHref = `/stories?page=${currentPage - 1}`;
 
   return (
-    <SitePageContainer>
-      <section className="mx-auto flex max-w-4xl flex-col gap-6 rounded-lg p-6 md:gap-8 lg:gap-20">
-        <div>
-          <h1 className="text-xl text-center font-medium md:text-3xl lg:text-4xl">Stories of Hope, Dignity, and Change</h1>
-          <p className="mt-2 text-sm text-zinc-400 text-center md:text-base lg:text-lg lg:mt-6">
-            Discover how small actions can create a big impact in the lives of many.
-          </p>
+    <>
+      <SitePageContainer>
+        <section className="mx-auto flex max-w-4xl flex-col gap-6 rounded-lg p-6 md:gap-8 lg:gap-20">
+          <div>
+            <h1 className="text-xl text-center font-medium md:text-3xl lg:text-4xl">Stories of Hope, Dignity, and Change</h1>
+            <p className="mt-2 text-sm text-zinc-400 text-center md:text-base lg:text-lg lg:mt-6">
+              Discover how small actions can create a big impact in the lives of many.
+            </p>
+          </div>
+
+          {hasError ? (
+            <p className="rounded border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
+              Unable to load stories right now. Please try again shortly.
+            </p>
+          ) : items.length === 0 ? (
+            <p className="text-sm text-zinc-700">No stories available right now.</p>
+          ) : (
+            <>
+              <div className="flex flex-col gap-8">
+                {items.map((story) => (
+                  <MediaContentBlock
+                    key={story.storyId}
+                    videoUrl={story.heroVideo}
+                    imageUrl={story.heroPoster}
+                    heading={story.title}
+                    description={story.description}
+                  />
+                ))}
+              </div>
+
+              {meta ? (
+                <div className="flex flex-wrap items-center justify-between gap-3 border-t border-zinc-100 pt-4">
+                  <p className="text-sm text-zinc-700">
+                    Page {meta.page} of {meta.totalPages} ({meta.total} total)
+                  </p>
+                  <div className="flex gap-2">
+                    {hasPrevPage ? (
+                      <Link
+                        href={prevPageHref}
+                        className="rounded border border-zinc-300 bg-white px-3 py-1.5 text-sm hover:bg-zinc-50"
+                      >
+                        Previous
+                      </Link>
+                    ) : null}
+                    {hasNextPage ? (
+                      <Link
+                        href={nextPageHref}
+                        className="rounded bg-cta-gradient px-3 py-1.5 text-sm text-white transition hover:opacity-95"
+                      >
+                        Load more
+                      </Link>
+                    ) : null}
+                  </div>
+                </div>
+              ) : null}
+            </>
+          )}
+        </section>
+      </SitePageContainer>
+      <section
+        className="py-8 lg:pt-14"
+        aria-labelledby="supporting-lives-gallery-heading"
+      >
+        <div className="mx-auto max-w-[1920px] px-3 sm:px-6 lg:px-16">
+          <h2
+            id="supporting-lives-gallery-heading"
+            className="mb-8 text-center text-lg font-semibold tracking-tight text-zinc-400 sm:text-xl lg:mb-10 lg:text-4xl"
+          >
+            Supporting Lives Across Dhanbad{" "}
+            <span className="not-italic" aria-hidden>
+              ❤️
+            </span>
+          </h2>
         </div>
 
-        {hasError ? (
-          <p className="rounded border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
-            Unable to load stories right now. Please try again shortly.
-          </p>
-        ) : items.length === 0 ? (
-          <p className="text-sm text-zinc-700">No stories available right now.</p>
-        ) : (
-          <>
-            <div className="flex flex-col gap-8">
-              {items.map((story) => (
-                <MediaContentBlock
-                  key={story.storyId}
-                  videoUrl={story.heroVideo}
-                  imageUrl={story.heroPoster}
-                  heading={story.title}
-                  description={story.description}
-                />
-              ))}
-            </div>
-
-            {meta ? (
-              <div className="flex flex-wrap items-center justify-between gap-3 border-t border-zinc-100 pt-4">
-                <p className="text-sm text-zinc-700">
-                  Page {meta.page} of {meta.totalPages} ({meta.total} total)
-                </p>
-                <div className="flex gap-2">
-                  {hasPrevPage ? (
-                    <Link
-                      href={prevPageHref}
-                      className="rounded border border-zinc-300 bg-white px-3 py-1.5 text-sm hover:bg-zinc-50"
-                    >
-                      Previous
-                    </Link>
-                  ) : null}
-                  {hasNextPage ? (
-                    <Link
-                      href={nextPageHref}
-                      className="rounded bg-cta-gradient px-3 py-1.5 text-sm text-white transition hover:opacity-95"
-                    >
-                      Load more
-                    </Link>
-                  ) : null}
-                </div>
-              </div>
-            ) : null}
-          </>
-        )}
+        <MarqueeGallery rows={supportingLivesGalleryRows} />
       </section>
-    </SitePageContainer>
+    </>
   );
 }
