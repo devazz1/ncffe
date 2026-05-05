@@ -41,17 +41,17 @@ export default function EducationChildDevelopmentPage() {
               <h2 className="text-3xl font-normal leading-tight text-black md:text-3xl">
                 Community Remedial Learning Centres
               </h2>
-              <p className="mt-4 text-base leading-relaxed text-[#8c8c8c] md:mt-6 md:text-2xl md:leading-relaxed">
+              <p className="text-base leading-relaxed text-[#8c8c8c] md:mt-2 md:text-2xl md:leading-relaxed">
                 To address learning gaps among rural children, the foundation has
                 established 100+ remedial education centres across remote
                 communities.
               </p>
 
-              <div className="mt-8 grid grid-cols-1 gap-4 md:mt-10 md:grid-cols-2 md:gap-5">
+              <div className="mt-4 grid grid-cols-1 gap-2 md:mt-6 md:grid-cols-2 md:gap-3">
                 {learningHighlights.map((item) => (
                   <div
                     key={item}
-                    className="flex min-h-[122px] items-center gap-5 rounded-[25px] bg-white px-6 py-6 shadow-[0_1px_10px_rgba(0,0,0,0.05)]"
+                    className="flex items-center gap-5 rounded-[25px] bg-white px-4 py-6"
                   >
                     <div className="flex h-[54px] w-[54px] shrink-0 items-center justify-center rounded-[13px] bg-[#FFF6EE]">
                       <GraduationCap className="size-6 text-[#FF7C01]" />
@@ -64,12 +64,12 @@ export default function EducationChildDevelopmentPage() {
               </div>
             </div>
 
-            <div className="relative h-[360px] w-full overflow-hidden rounded-[22px] md:h-[500px] xl:h-[601px] xl:max-w-[681px]">
+            <div className="relative h-[291.6px] w-full overflow-hidden rounded-[22px] md:h-[405px] xl:h-[486.81px] xl:max-w-[551.61px]">
               <Image
                 src="/program/img-2.jpeg"
                 alt="Community remedial learning class"
                 fill
-                sizes="(max-width: 1280px) 100vw, 681px"
+                sizes="(max-width: 1280px) 100vw, 551.61px"
                 className="object-cover"
               />
             </div>
@@ -92,8 +92,8 @@ export default function EducationChildDevelopmentPage() {
       {/* section 4 */}
       <section className="pb-12 mt-12 md:pb-16">
         <div className="mx-auto w-full max-w-[1920px] px-4 md:px-10 lg:px-16">
-          <div className="relative mx-auto w-full max-w-[1729px] overflow-visible rounded-[32px] border border-[#ffbe6e] bg-gradient-to-r from-[#fffaf4] to-[#ffedd7] px-6 py-10 md:px-12 md:py-14 lg:min-h-[503px] lg:rounded-[57px] lg:px-[60px] lg:py-[107px]">
-            <div className="relative z-10 max-w-[900px]">
+          <div className="relative mx-auto flex w-full max-w-[1729px] flex-col-reverse overflow-visible rounded-[32px] border border-[#ffbe6e] bg-gradient-to-r from-[#fffaf4] to-[#ffedd7] px-6 py-10 md:px-12 md:py-14 lg:block lg:min-h-[388px] lg:rounded-[57px] lg:px-[60px] lg:py-[82px]">
+            <div className="relative z-10 w-full max-w-[900px] lg:max-w-[calc(100%-426px)]">
               <h2 className="text-xl font-normal leading-tight text-[#d12019] md:text-4xl md:leading-[1.2]">
                 Ready to <span className="font-semibold">Make</span> a
                 Difference?
@@ -116,13 +116,13 @@ export default function EducationChildDevelopmentPage() {
               </Link>
             </div>
 
-            <div className="pointer-events-none mt-8 flex justify-center lg:absolute lg:-top-[152px] lg:right-[52px] lg:mt-0">
+            <div className="pointer-events-none mb-8 flex justify-center lg:absolute lg:-top-[117px] lg:right-[40px] lg:mb-0">
               <Image
                 src="/program/img-3.png"
                 alt="Smiling child holding a board"
                 width={501}
                 height={655}
-                className="h-auto w-[250px] max-w-full object-contain md:w-[340px] lg:w-[501px]"
+                className="h-auto w-[250px] max-w-full object-contain md:w-[340px] lg:w-[386px]"
               />
             </div>
           </div>
