@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Star } from "lucide-react";
 import { SitePageContainer } from "@/components/site-page-container";
+import { MediaContentBlock } from "@/components/media-content-block";
 
 export default function WomensLivelihoodEconomicEmpowermentPage() {
 	const livelihoodInitiativesHighlights = [
