@@ -1,6 +1,6 @@
 "use client";
 
-import { Play } from "lucide-react";
+import { Pause, Play, Volume2, VolumeX } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
 
 export type MediaContentBlockProps = {
@@ -21,24 +21,44 @@ export function MediaContentBlock({
   const i = imageUrl?.trim() ?? "";
   const hasVideo = v.length > 0;
   const hasImage = i.length > 0;
-  const [showPlayOverlay, setShowPlayOverlay] = useState(hasVideo);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
 
-  const handleOverlayPlay = useCallback(() => {
-    void videoRef.current?.play();
+  const handleTogglePlay = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) {
+      return;
+    }
+
+    if (video.paused || video.ended) {
+      void video.play();
+      return;
+    }
+
+    video.pause();
   }, []);
 
   const handlePlay = useCallback(() => {
-    setShowPlayOverlay(false);
+    setIsPlaying(true);
   }, []);
 
   const handlePause = useCallback(() => {
-    if (hasVideo) {
-      setShowPlayOverlay(true);
-    }
-  }, [hasVideo]);
+    setIsPlaying(false);
+  }, []);
 
   const handleEnded = useCallback(() => {
-    setShowPlayOverlay(true);
+    setIsPlaying(false);
+  }, []);
+
+  const handleToggleMute = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) {
+      return;
+    }
+
+    const nextMutedState = !video.muted;
+    video.muted = nextMutedState;
+    setIsMuted(nextMutedState);
   }, []);
 
   const imageAlt =
@@ -52,7 +72,6 @@ export function MediaContentBlock({
         <video
           ref={videoRef}
           className="h-full w-full object-cover"
-          controls
           playsInline
           preload={hasImage ? "none" : "metadata"}
           poster={hasImage ? i : undefined}
@@ -62,22 +81,35 @@ export function MediaContentBlock({
         >
           <source src={v} />
         </video>
-        {showPlayOverlay ? (
-          <div
-            className="pointer-events-none absolute inset-0 bg-black/20"
-            aria-hidden
-          />
+        {!isPlaying ? (
+          <div className="pointer-events-none absolute inset-0 bg-black/20" aria-hidden />
         ) : null}
-        {showPlayOverlay ? (
+        <div className="pointer-events-none absolute bottom-4 right-4 flex items-center gap-3">
           <button
             type="button"
-            className="pointer-events-auto absolute bottom-4 right-4 flex size-17 items-center justify-center rounded-full bg-white/10 text-white shadow-sm backdrop-blur-[2px] transition hover:bg-white/20"
-            onClick={handleOverlayPlay}
-            aria-label="Play video"
+            className="pointer-events-auto flex size-10 items-center justify-center rounded-full bg-white/10 text-white shadow-sm backdrop-blur-[2px] transition hover:bg-white/20"
+            onClick={handleTogglePlay}
+            aria-label={isPlaying ? "Pause video" : "Play video"}
           >
-            <Play className="size-8 translate-x-0.5 fill-current opacity-90" aria-hidden />
+            {isPlaying ? (
+              <Pause className="size-4 opacity-90" aria-hidden />
+            ) : (
+              <Play className="size-4 translate-x-0.5 fill-current opacity-90" aria-hidden />
+            )}
           </button>
-        ) : null}
+          <button
+            type="button"
+            className="pointer-events-auto flex size-10 items-center justify-center rounded-full bg-white/10 text-white shadow-sm backdrop-blur-[2px] transition hover:bg-white/20"
+            onClick={handleToggleMute}
+            aria-label={isMuted ? "Unmute video" : "Mute video"}
+          >
+            {isMuted ? (
+              <VolumeX className="size-4 opacity-90" aria-hidden />
+            ) : (
+              <Volume2 className="size-4 opacity-90" aria-hidden />
+            )}
+          </button>
+        </div>
       </div>
     ) : hasImage ? (
       <div className="relative aspect-896/437 w-full overflow-hidden rounded-2xl bg-zinc-100">

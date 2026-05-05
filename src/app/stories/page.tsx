@@ -41,10 +41,10 @@ export default async function StoriesPage({ searchParams }: StoriesPageProps) {
 
   return (
     <SitePageContainer>
-      <section className="mx-auto flex max-w-4xl flex-col gap-6 rounded-lg p-6">
+      <section className="mx-auto flex max-w-4xl flex-col gap-6 rounded-lg p-6 md:gap-8 lg:gap-20">
         <div>
-          <h1 className="text-xl text-center font-normal md:text-3xl">Stories of Hope, Dignity, and Change</h1>
-          <p className="mt-2 text-sm text-zinc-500 text-center md:text-base">
+          <h1 className="text-xl text-center font-medium md:text-3xl lg:text-4xl">Stories of Hope, Dignity, and Change</h1>
+          <p className="mt-2 text-sm text-zinc-400 text-center md:text-base lg:text-lg lg:mt-6">
             Discover how small actions can create a big impact in the lives of many.
           </p>
         </div>
