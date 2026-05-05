@@ -104,12 +104,12 @@ export default function EducationChildDevelopmentPage() {
               </p>
               <Link
                 href="/"
-                className="mt-8 inline-flex items-center gap-3 rounded-[4px] bg-gradient-to-r from-[#d01a1a] to-[#ffb43c] px-6 py-4 text-base text-white transition-opacity hover:opacity-90 md:mt-12 md:min-h-[68px] md:px-6 md:py-4 md:text-lg"
+                className="group mt-8 inline-flex items-center gap-3 rounded-[4px] bg-gradient-to-r from-[#d01a1a] to-[#ffb43c] px-6 py-4 text-base text-white transition-opacity hover:opacity-90 md:mt-12 md:min-h-[68px] md:px-6 md:py-4 md:text-lg"
               >
                 <span>Start Donating</span>
                 <span
                   aria-hidden
-                  className="flex size-7 items-center justify-center rounded-full border border-white/50 text-base md:size-[30px]"
+                  className="group-hover:-rotate-30 transition-transform duration-200 ease-out flex size-7 items-center justify-center rounded-full border border-white/50 text-base md:size-[30px]"
                 >
                   &gt;
                 </span>
