@@ -10,6 +10,43 @@ export type MediaContentBlockProps = {
   description?: string | null;
 };
 
+const extractYouTubeVideoId = (url: string): string | null => {
+  try {
+    const parsed = new URL(url);
+    const hostname = parsed.hostname.toLowerCase();
+
+    if (hostname === "youtu.be" || hostname.endsWith(".youtu.be")) {
+      const candidate = parsed.pathname.split("/").filter(Boolean)[0];
+      return candidate ?? null;
+    }
+
+    const isYouTubeHost =
+      hostname === "youtube.com" ||
+      hostname.endsWith(".youtube.com") ||
+      hostname === "youtube-nocookie.com" ||
+      hostname.endsWith(".youtube-nocookie.com");
+
+    if (!isYouTubeHost) {
+      return null;
+    }
+
+    const queryId = parsed.searchParams.get("v");
+    if (queryId) {
+      return queryId;
+    }
+
+    const parts = parsed.pathname.split("/").filter(Boolean);
+    const key = parts[0];
+    if (key === "embed" || key === "shorts" || key === "live") {
+      return parts[1] ?? null;
+    }
+
+    return null;
+  } catch {
+    return null;
+  }
+};
+
 export function MediaContentBlock({
   videoUrl,
   imageUrl,
@@ -19,7 +56,12 @@ export function MediaContentBlock({
   const videoRef = useRef<HTMLVideoElement>(null);
   const v = videoUrl?.trim() ?? "";
   const i = imageUrl?.trim() ?? "";
+  const youTubeVideoId = v ? extractYouTubeVideoId(v) : null;
+  const youTubeEmbedUrl = youTubeVideoId
+    ? `https://www.youtube.com/embed/${youTubeVideoId}?rel=0&modestbranding=1&playsinline=1`
+    : null;
   const hasVideo = v.length > 0;
+  const hasYouTubeVideo = Boolean(youTubeEmbedUrl);
   const hasImage = i.length > 0;
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
@@ -67,7 +109,19 @@ export function MediaContentBlock({
     "Media";
 
   const media =
-    hasVideo ? (
+    hasYouTubeVideo ? (
+      <div className="relative aspect-896/437 w-full overflow-hidden rounded-2xl bg-zinc-100">
+        <iframe
+          src={youTubeEmbedUrl ?? undefined}
+          title={heading?.trim() || "YouTube video"}
+          className="h-full w-full"
+          loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerPolicy="strict-origin-when-cross-origin"
+          allowFullScreen
+        />
+      </div>
+    ) : hasVideo ? (
       <div className="relative aspect-896/437 w-full overflow-hidden rounded-2xl bg-zinc-100">
         <video
           ref={videoRef}
