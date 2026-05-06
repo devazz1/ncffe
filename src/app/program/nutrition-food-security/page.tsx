@@ -10,7 +10,7 @@ export default function NutritionFoodSecurityPage() {
       <section className="bg-[#f2f2f9] py-14 md:py-20">
         <div className="mx-auto w-full max-w-[1920px] px-4 md:px-10 lg:px-16">
           <div className="mx-auto flex w-full max-w-[1689px] px-10 flex-col items-center text-center">
-            <p className="mt-5 max-w-[1561px] text-base leading-relaxed text-black md:text-2xl md:leading-[1.7] lg:text-5xl">
+            <p className="mt-5 max-w-[1561px] text-base leading-relaxed text-black md:text-2xl md:leading-[1.7] lg:text-4xl">
             <span className="text-[#D01A1A]"> Malnutrition remains one of the most pressing </span>{" "}
             <span className="text-zinc-500"> challenges in rural and tribal communities. </span>{" "}
             Nand Care Foundation addresses this through direct food support as well as long-term nutritional interventions.
@@ -106,13 +106,13 @@ export default function NutritionFoodSecurityPage() {
           aria-labelledby="nutrition-donate-cta-heading"
         >
           <div
-            className="overflow-hidden rounded-[24px] shadow-sm ring-1 ring-black/[0.04] md:rounded-[32px]"
+            className="overflow-hidden rounded-3xl shadow-sm ring-1 ring-black/4 md:rounded-4xl"
             style={{
               background:
-                "linear-gradient(105deg, #ffffff 0%, #fff8f9 42%, #fce8ee 100%)",
+                "linear-gradient(105deg, #ffffff 0%, #fdedef 42%, ##ffdfdf 100%)",
             }}
           >
-            <div className="flex flex-col gap-10 p-6 md:flex-row md:items-center md:justify-between md:gap-10 md:p-8 lg:p-10">
+            <div className="flex flex-col gap-10 p-6 md:flex-row md:items-center md:justify-between md:gap-10 md:p-8 lg:p-6">
        
               {/* Copy + action */}
               <div className="order-2 md:order-1 flex min-w-0 flex-col gap-5 md:gap-6">
@@ -131,14 +131,14 @@ export default function NutritionFoodSecurityPage() {
                 <div className="pt-1 md:pt-2">
                   <Link
                     href="/"
-                    className="inline-flex items-center gap-3 rounded-xl bg-gradient-to-r from-[#d01a1a] to-[#ffb43c] px-6 py-3.5 text-base font-semibold text-white shadow-sm transition-opacity hover:opacity-90 md:px-7 md:py-4 md:text-lg"
+                    className="group inline-flex items-center gap-3 rounded-sm bg-gradient-to-r from-[#d01a1a] to-[#ffb43c] px-6 py-3.5 text-base font-semibold text-white shadow-sm transition-opacity hover:opacity-90 md:px-7 md:py-4 md:text-lg"
                   >
                     <span>Start Donating</span>
                     <span
                       aria-hidden
-                      className="flex size-8 shrink-0 items-center justify-center rounded-full border border-white/45 md:size-[34px]"
+                      className="group-hover:-rotate-30 transition-transform duration-200 ease-out flex size-7 items-center justify-center rounded-full border border-white/50 text-base md:size-6"
                     >
-                      <ChevronRight className="size-[18px] md:size-5" strokeWidth={2.5} />
+                      <ChevronRight className="size-4 md:size-5" strokeWidth={2.5} />
                     </span>
                   </Link>
                 </div>
@@ -146,7 +146,7 @@ export default function NutritionFoodSecurityPage() {
 
               {/* Supporting image */}
               <div className="order-1 md:order-2 relative mx-auto w-full md:mx-0 md:max-w-sm">
-                <div className="relative aspect-[5/4] w-full overflow-hidden rounded-2xl md:aspect-square md:rounded-[22px]">
+                <div className="relative aspect-[5/4] w-full overflow-hidden rounded-3xl md:aspect-square md:rounded-4xl">
                   <Image
                     src="/program/img-9.jpeg"
                     alt="Children benefiting from community nutrition and meal programs"
