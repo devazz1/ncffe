@@ -32,8 +32,8 @@ export default function TalentIdentificationRuralTalentSupportPage() {
       {/* section 1 */}
       <section className="py-14 md:py-20">
         <div className="mx-auto w-full max-w-[1920px] px-4 md:px-10 lg:px-16">
-          <div className="mx-auto flex w-full max-w-[1689px] px-10 flex-col items-center text-center">
-            <p className="mt-5 max-w-[1561px] text-base leading-relaxed text-black md:text-2xl md:leading-[1.7] lg:text-4xl">
+          <div className="mx-auto flex w-full max-w-[1689px] flex-col items-center text-center">
+            <p className="mt-5 max-w-[1561px] text-base leading-relaxed text-black md:text-2xl md:leading-[1.7] lg:text-5xl">
               <span className="text-[#D01A1A]"> Recognizing that talent exists </span>{" "}
               <span className="text-zinc-500"> everywhere but opportunity does not, </span>{" "}
               the foundation runs a Rural Talent Scouting Initiative.
@@ -47,9 +47,9 @@ export default function TalentIdentificationRuralTalentSupportPage() {
       </section>
 
       {/* section 2 */}
-      <section className="bg-white py-12 mb-6 md:py-16">
+      <section className="bg-white py-6 md:py-8">
         <div className="mx-auto w-full max-w-[1920px] px-4 md:px-10 lg:px-16">
-          <p className="mt-4 text-base leading-relaxed text-zinc-600 md:text-2xl md:leading-relaxed">
+          <p className="mt-1 text-base font-medium leading-relaxed md:text-2xl md:leading-relaxed lg:text-3xl">
             Talented children from underserved communities are identified and supported in multiple areas including :-
           </p>
 
@@ -68,7 +68,7 @@ export default function TalentIdentificationRuralTalentSupportPage() {
                     className="object-cover"
                   />
                 </div>
-                <p className="mt-4 max-w-sm text-base font-medium leading-snug text-black md:mt-5 md:text-lg">
+                <p className="mt-4 max-w-sm text-base font-medium leading-snug text-zinc-600 md:mt-5 md:text-lg lg:text-2xl">
                   {item.caption}
                 </p>
               </div>
@@ -84,7 +84,7 @@ export default function TalentIdentificationRuralTalentSupportPage() {
         <div className="mx-auto max-w-[1920px] px-3 sm:px-6 lg:px-16">
           <h2
             id="supporting-lives-gallery-heading"
-            className="mb-8 text-lg tracking-tight text-zinc-400 sm:text-xl lg:mb-10 lg:text-4xl"
+            className="mb-8 text-lg tracking-tight text-zinc-700 sm:text-xl lg:mb-10 lg:text-4xl"
           >
             <span className="text-[#D01A1A]">Selected students </span>{" "}
             receive mentorship, training support, and opportunities to showcase their talents beyond their{" "}
