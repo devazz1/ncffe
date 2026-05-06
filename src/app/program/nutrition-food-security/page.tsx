@@ -109,7 +109,7 @@ export default function NutritionFoodSecurityPage() {
             className="overflow-hidden rounded-3xl shadow-sm ring-1 ring-black/4 md:rounded-4xl"
             style={{
               background:
-                "linear-gradient(105deg, #ffffff 0%, #fdedef 42%, ##ffdfdf 100%)",
+                "linear-gradient(105deg, #ffffff 0%, #fdedef 42%, #ffdfdf 100%)",
             }}
           >
             <div className="flex flex-col gap-10 p-6 md:flex-row md:items-center md:justify-between md:gap-10 md:p-8 lg:p-6">
