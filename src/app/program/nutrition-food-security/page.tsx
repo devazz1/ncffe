@@ -106,7 +106,7 @@ export default function NutritionFoodSecurityPage() {
           aria-labelledby="nutrition-donate-cta-heading"
         >
           <div
-            className="overflow-hidden rounded-3xl shadow-sm ring-1 ring-black/4 md:rounded-4xl"
+            className="overflow-hidden rounded-3xl md:rounded-4xl"
             style={{
               background:
                 "linear-gradient(105deg, #ffffff 0%, #fdedef 42%, #ffdfdf 100%)",
