@@ -22,19 +22,19 @@ export default function WinterReliefClothingDistributionPage() {
       </section>
 
       {/* section 2 — image left / text right */}
-      <section className="py-12 md:py-16 lg:py-20">
+      <section className="py-12 md:py-16 lg:py-20 lg:px-10">
         <div className="mx-auto w-full max-w-[1920px] px-4 md:px-10 lg:px-16">
           <div className="mx-auto flex w-full max-w-[1792px] flex-col gap-8 md:flex-row md:items-center md:gap-10 lg:gap-14">
-            <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden rounded-2xl md:aspect-[16/11] md:w-[min(52%,896px)] md:max-w-none">
+            <div className="relative aspect-[5.5/4] w-full shrink-0 overflow-hidden rounded-2xl md:w-[566.6067px] md:max-w-none">
               <Image
-                src="/program/img-24.jpeg"
+                src="/program/img-19.jpeg"
                 alt="Winter blanket distribution with communities gathered outdoors"
                 fill
-                sizes="(max-width: 768px) 100vw, 896px"
+                sizes="(max-width: 768px) 100vw, 566.6067px"
                 className="object-cover"
               />
             </div>
-            <p className="text-center text-xl leading-snug text-black md:flex-1 md:text-left md:text-2xl md:leading-tight lg:text-3xl lg:leading-snug">
+            <p className="text-center text-xl leading-snug text-black md:flex-1 md:text-left md:text-2xl md:leading-tight lg:text-4xl lg:leading-snug">
               Distribution of {" "}
               <span className="font-semibold">800+ winter blankets across tribal villages</span> 
             </p>
@@ -43,19 +43,19 @@ export default function WinterReliefClothingDistributionPage() {
       </section>
 
       {/* section 3 — text left / image right */}
-      <section className="pb-14 pt-10 md:pb-20 md:pt-14 lg:pb-24 lg:pt-16">
+      <section className="pb-14 pt-10 md:pb-20 md:pt-14 lg:pb-24 lg:pt-16 lg:px-10">
         <div className="mx-auto w-full max-w-[1920px] px-4 md:px-10 lg:px-16">
           <div className="mx-auto flex w-full max-w-[1792px] flex-col gap-8 md:flex-row-reverse md:items-center md:gap-10 lg:gap-14">
-            <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden rounded-2xl md:aspect-[16/11] md:w-[min(52%,896px)] md:max-w-none">
+            <div className="relative aspect-[5.5/4] w-full shrink-0 overflow-hidden rounded-2xl md:w-[566.6067px] md:max-w-none">
               <Image
-                src="/program/img-25.jpeg"
-                alt="Volunteers handing clothing packages to families in line"
+                src="/program/img-24.jpeg"
+                alt="Winter blanket distribution with communities gathered outdoors"
                 fill
-                sizes="(max-width: 768px) 100vw, 896px"
+                sizes="(max-width: 768px) 100vw, 566.6067px"
                 className="object-cover"
               />
             </div>
-            <p className="text-center text-xl leading-snug text-black md:flex-1 md:text-left md:text-2xl md:leading-tight lg:text-3xl lg:leading-snug">
+            <p className="text-center text-xl leading-snug text-black md:flex-1 md:text-left md:text-2xl md:leading-tight lg:text-4xl lg:leading-snug">
               <span className="font-semibold">Clothing distribution </span>{" "} 
               drives for vulnerable families
             </p>
@@ -64,19 +64,19 @@ export default function WinterReliefClothingDistributionPage() {
       </section>
 
       {/* section 4 */}
-      <section className="py-12 md:py-16 lg:py-20">
+      <section className="py-12 md:py-16 lg:py-20 lg:px-10">
         <div className="mx-auto w-full max-w-[1920px] px-4 md:px-10 lg:px-16">
           <div className="mx-auto flex w-full max-w-[1792px] flex-col gap-8 md:flex-row md:items-center md:gap-10 lg:gap-14">
-            <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden rounded-2xl md:aspect-[16/11] md:w-[min(52%,896px)] md:max-w-none">
+            <div className="relative aspect-[5.5/4] w-full shrink-0 overflow-hidden rounded-2xl md:w-[566.6067px] md:max-w-none">
               <Image
-                src="/program/img-24.jpeg"
+                src="/program/img-25.jpeg"
                 alt="Winter blanket distribution with communities gathered outdoors"
                 fill
-                sizes="(max-width: 768px) 100vw, 896px"
+                sizes="(max-width: 768px) 100vw, 566.6067px"
                 className="object-cover"
               />
             </div>
-            <p className="text-center text-xl leading-snug text-black md:flex-1 md:text-left md:text-2xl md:leading-tight lg:text-3xl lg:leading-snug">
+            <p className="text-center text-xl leading-snug text-black md:flex-1 md:text-left md:text-2xl md:leading-tight lg:text-4xl lg:leading-snug">
               <span className="font-semibold">Community support for elderly </span>{" "} 
               residents and children during extreme weather conditions
               
