@@ -51,13 +51,13 @@ export default function HungerReliefCommunitySupportPage() {
             The foundation regularly organizes food distribution drives to support vulnerable households.
           </p>
 
-          <div className="mt-8 grid grid-cols-1 gap-8 sm:gap-10 md:mt-10 md:grid-cols-3 md:gap-6 lg:gap-8">
+          <div className="mt-6 grid grid-cols-1 gap-8 sm:gap-10 md:mt-8 md:grid-cols-3 md:gap-6 lg:gap-8">
             {foundationSupportsWomen.map((item) => (
               <div
                 key={item.caption}
                 className="flex flex-col items-center text-center"
               >
-                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[22px]">
+                <div className="relative aspect-[16/9] w-full overflow-hidden rounded-[22px]">
                   <Image
                     src={item.src}
                     alt={item.alt}
@@ -79,41 +79,41 @@ export default function HungerReliefCommunitySupportPage() {
       <SitePageContainer>
         <section
           className="relative mb-10 md:mb-14"
-          aria-labelledby="hunger-relief-donate-cta-heading"
+          aria-labelledby="hunger-relief-donate-cta"
         >
           <div
-            className="overflow-hidden rounded-[24px] shadow-sm ring-1 ring-black/[0.04] md:rounded-[32px]"
+            className="overflow-hidden rounded-3xl md:rounded-4xl"
             style={{
               background:
                 "linear-gradient(105deg, #ffffff 0%, #edfce8 42%, #E4FFDF 100%)",
             }}
           >
-            <div className="flex flex-col gap-10 p-6 md:flex-row md:items-center md:justify-between md:gap-10 md:p-8 lg:p-10">
+            <div className="flex flex-col gap-10 p-6 md:flex-row md:items-center md:justify-between md:gap-10 md:p-8 lg:p-6">
        
               {/* Copy + action */}
               <div className="order-2 md:order-1 flex min-w-0 flex-col gap-5 md:gap-6">
                 <h2
                   id="hunger-relief-donate-cta-heading"
-                  className="text-2xl font-normal leading-snug tracking-tight text-[#8B2F2F] md:text-3xl md:leading-[1.15] lg:text-4xl lg:leading-[1.2]"
+                  className="text-2xl font-normal leading-snug tracking-tight text-cta-from md:text-3xl md:leading-[1.15] lg:text-4xl lg:leading-[1.2]"
                 >
                   Your Donation can{" "}
                   <span className="font-semibold text-[#c41e1e]">Make</span> a
                   Difference !
                 </h2>
                 <p className="max-w-2xl text-[15px] leading-relaxed text-zinc-700 md:text-lg md:leading-relaxed">
-                  The foundation has also collaborated with humanitarian initiatives such as Crypto Relief Fund to support the distribution of essential medicines to vulnerable communities.
+								  The foundation has also collaborated with humanitarian initiatives such as Crypto Relief Fund to support the distribution of essential medicines to vulnerable communities.
                 </p>
                 <div className="pt-1 md:pt-2">
                   <Link
                     href="/"
-                    className="inline-flex items-center gap-3 rounded-sm bg-gradient-to-r from-[#d01a1a] to-[#ffb43c] px-6 py-3.5 text-base font-semibold text-white shadow-sm transition-opacity hover:opacity-90 md:px-7 md:py-4 md:text-lg"
+                    className="group inline-flex items-center gap-3 rounded-sm bg-gradient-to-r from-[#d01a1a] to-[#ffb43c] px-6 py-3.5 text-base font-semibold text-white shadow-sm transition-opacity hover:opacity-90 md:px-7 md:py-4 md:text-lg"
                   >
                     <span>Start Donating</span>
                     <span
                       aria-hidden
-                      className="flex size-8 shrink-0 items-center justify-center rounded-full border border-white/45 md:size-[34px]"
+                      className="group-hover:-rotate-30 transition-transform duration-200 ease-out flex size-7 items-center justify-center rounded-full border border-white/50 text-base md:size-6"
                     >
-                      <ChevronRight className="size-[18px] md:size-5" strokeWidth={2.5} />
+                      <ChevronRight className="size-4 md:size-5" strokeWidth={2.5} />
                     </span>
                   </Link>
                 </div>
@@ -121,7 +121,7 @@ export default function HungerReliefCommunitySupportPage() {
 
               {/* Supporting image */}
               <div className="order-1 md:order-2 relative mx-auto w-full md:mx-0 md:max-w-sm">
-                <div className="relative aspect-[5/4] w-full overflow-hidden rounded-2xl md:aspect-square md:rounded-[22px]">
+                <div className="relative aspect-[5/4] w-full overflow-hidden rounded-3xl md:aspect-square md:rounded-4xl">
                   <Image
                     src="/program/img-22.jpeg"
                     alt="Children benefiting from community nutrition and meal programs"
@@ -136,6 +136,7 @@ export default function HungerReliefCommunitySupportPage() {
           </div>
         </section>
       </SitePageContainer>
+
     </>
   );
 }
