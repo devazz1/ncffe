@@ -174,7 +174,7 @@ export function MobilePrimaryNav({ categories }: MobilePrimaryNavProps) {
               {sortedCategories.length > 0 ? (
                 <details className="group rounded-lg border border-transparent open:border-zinc-100 open:bg-zinc-50/80">
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-2 rounded-lg px-3 py-3 text-zinc-900 [&::-webkit-details-marker]:hidden">
-                    <span>Categories</span>
+                    <span>Causes</span>
                     <ChevronDown
                       className="size-4 shrink-0 transition-transform duration-200 group-open:rotate-180"
                       strokeWidth={2}
