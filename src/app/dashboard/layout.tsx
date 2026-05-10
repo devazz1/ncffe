@@ -63,7 +63,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   return (
     <div className="mx-auto w-full max-w-screen-2xl px-4 py-6 gap-6 grid md:px-12 md:grid-cols-[220px_minmax(0,1fr)]">
-      <aside className="h-fit p-3">
+      <aside className="hidden h-fit p-3 md:block">
         <nav className="grid gap-1">
           {DASHBOARD_LINKS.map((item) => {
             const isActive = pathname === item.href;

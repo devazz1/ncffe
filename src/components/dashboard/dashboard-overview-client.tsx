@@ -142,7 +142,7 @@ export function DashboardOverviewClient() {
           </div>
         )}
       </section>
-      <section className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_380px]">
+      <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
         <div className="min-w-0">
           <DashboardDonationsTable />
         </div>

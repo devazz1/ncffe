@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { AuthModal } from "@/components/auth-modal";
-import { getDonationStatus } from "@/lib/api";
+import { getCurrentUser, getDonationStatus } from "@/lib/api";
 import { useAuthStore } from "@/lib/auth-store";
 
 const MAX_AUTO_RETRIES = 2;
@@ -40,6 +40,12 @@ export function DonationStatusClient() {
   const token = useAuthStore((s) => s.accessToken);
   const hasHydrated = useAuthStore((s) => s.hasHydrated);
 
+  const userQuery = useQuery({
+    queryKey: ["users", "me"],
+    queryFn: getCurrentUser,
+    enabled: hasHydrated && Boolean(token),
+  });
+
   const query = useQuery({
     queryKey: ["donation-status", receipt, manualCount],
     queryFn: () => getDonationStatus(receipt),
@@ -65,7 +71,7 @@ export function DonationStatusClient() {
       <div className="mx-auto w-full max-w-2xl rounded-lg border border-zinc-200 bg-white p-6">
         <h1 className="text-xl font-semibold">Donation status</h1>
         <p className="mt-2 text-sm text-zinc-800">
-          Missing receipt. Please return to a category and start your donation again.
+          Missing receipt. Please return to a Home page and start your donation again.
         </p>
       </div>
     );
@@ -101,15 +107,23 @@ export function DonationStatusClient() {
 
   const status = query.data?.data.status;
 
+  const trimmedProfileName = userQuery.data?.data.fullName?.trim();
+  const greetingName =
+    trimmedProfileName?.split(/\s+/).filter(Boolean)[0] ?? trimmedProfileName;
+  const successTitle =
+    hasHydrated && token && greetingName
+      ? `Thank you for your donation, ${greetingName}`
+      : "Thank you for your donation";
+
   if (status === "success") {
     return (
       <StatusShell
-        title="Thank you for your donation"
+        title={successTitle}
         receipt={receipt}
         toneClasses="border-emerald-200 bg-emerald-50/50 text-emerald-900"
       >
         <p className="text-sm text-emerald-800">
-          You will receive a confirmation message shortly on your registered email.
+          You may have already received, or will soon receive, a confirmation email on the provided email address.
         </p>
         {hasHydrated && token ? (
           <div className="mt-4 rounded-lg bg-white/70 p-3 text-sm text-emerald-900">
@@ -117,18 +131,21 @@ export function DonationStatusClient() {
               You are already logged in. Please check your dashboard for donation details,
               certificates, and more.
             </p>
-            <Link
-              href="/dashboard"
-              className="mt-3 inline-flex rounded-md border border-emerald-300 bg-white px-3 py-2 text-sm font-medium text-emerald-900 hover:bg-emerald-100"
-            >
-              Checkout dashboard
-            </Link>
+            <div className="mt-3 flex justify-center">
+              <Link
+                href="/dashboard"
+                className="inline-flex rounded-md border border-emerald-300 px-3 py-2 text-sm font-medium bg-cta-gradient bg-clip-text text-transparent hover:bg-emerald-100"
+              >
+                Checkout dashboard
+              </Link>
+         
+            </div>
           </div>
+     
         ) : hasHydrated ? (
           <div className="mt-4 rounded-lg bg-white/70 p-3 text-sm text-emerald-900">
             <p>
-              To get your certificate and see donation details, please login or register with the
-              same email used for this donation.
+            To access your certificate and donation details, please log in or register if you haven’t yet created an account on the platform.
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
               <button

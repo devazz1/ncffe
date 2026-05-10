@@ -28,7 +28,7 @@ export function AccountMenu() {
             setPurpose("register");
             setIsAuthOpen(true);
           }}
-          className="rounded bg-cta-gradient bg-clip-text px-1 py-1 text-transparent"
+          className="rounded bg-cta-gradient bg-clip-text px-1 py-1 text-transparent cursor-pointer"
         >
           Register
         </button>
@@ -39,7 +39,7 @@ export function AccountMenu() {
             setPurpose("login");
             setIsAuthOpen(true);
           }}
-          className="rounded bg-cta-gradient bg-clip-text px-1 py-1 text-transparent"
+          className="rounded bg-cta-gradient bg-clip-text px-1 py-1 text-transparent cursor-pointer"
         >
           Login
         </button>
